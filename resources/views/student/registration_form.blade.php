@@ -122,6 +122,8 @@ GE Registration
 					title: 'Something went wrong',
 					showConfirmButton: false
 				});
+				document.querySelector("#program").innerHTML = `<option value=''>--select any program--</option>`;
+				document.querySelector("#course").innerHTML = `<option value=''>--select any course--</option>`;
 			}
 		});
 		document.querySelector("#program").innerHTML = `<option value=''>--select any program--</option>`;
