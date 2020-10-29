@@ -33,6 +33,12 @@ GE Registration
 								@endforeach
 							</select>
 						</div>
+						<div class="form-group p-1">
+							<label class="my-0 p-0 mx-2 control-label">UG</label>
+							<input type="radio" id="degree" name="degree" value="UG"  onchange="load_department(document.querySelector('#institute').value)" checked="">
+							<label class="my-0 p-0 mx-2 control-label">PG</label>
+							<input type="radio" id="degree" name="degree" value="PG" onchange="load_department(document.querySelector('#institute').value)" >
+						</div>
 						<div class="form-group">
 							<label for="department">Select Department</label>
 							<select name="department_id" class="custom-select" id="department" onchange="load_program(this.value);load_course(this.value);">
@@ -71,7 +77,7 @@ GE Registration
 						</div>
 						<div class="form-group">
 							<label for="full_name">Enter Full Name</label>
-							<input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control" placeholder="Sir name middle name last name">
+							<input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control" placeholder="Sir name Your name Father name">
 						</div>
 						<div class="form-group">
 							<label for="gender">Gender&nbsp;&nbsp;&nbsp;</label>
@@ -104,7 +110,8 @@ GE Registration
 	document.querySelector("#course").innerHTML = `<option value=''>--select any course--</option>`;
 
 	function load_department(i_id){
-		axios.get(`{{ route('load_department') }}/${i_id}`).then(function(response){
+		var degree = $('input[name="degree"]:checked').val();
+		axios.get(`{{ route('load_department') }}/${i_id}/${degree}`).then(function(response){
 			var department = document.querySelector("#department");
 			if(response.data.check){
 				department.innerHTML = response.data.departments;
@@ -153,5 +160,7 @@ GE Registration
 			}
 		});
 	}
+
+
 </script>
 @endsection

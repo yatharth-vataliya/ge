@@ -18,11 +18,11 @@ class StudentController extends Controller
 		return view('student.registration_form',compact('institutes'));
 	}
 
-	public function loadDepartment($institute_id = NULL){
-		if($institute_id == NULL)
+	public function loadDepartment($institute_id = NULL,?string $degree = NULL){
+		if($institute_id == NULL || $degree == NULL)
 		return response()->json([ 'check' => false ]);
 
-		$departments = Department::where('institute_id',$institute_id)->latest()->get();
+		$departments = Department::where('institute_id',$institute_id)->where('type',$degree)->latest()->get();
 
 		if(!empty($departments[0]->id)){
 			$options = "<option value=''>--select department--</option>";

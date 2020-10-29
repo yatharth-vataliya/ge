@@ -15,7 +15,7 @@
 @section('content')
 
 <div class="jumbotron">
-  <h1 class="display-4">KOYA Corporation</h1>
+  <h1 class="display-4">Main point is trust.</h1>
   <p class="lead">Contact :- 8758721807</p>
 </div>
 

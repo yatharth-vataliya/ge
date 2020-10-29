@@ -59,7 +59,7 @@ Route::middleware('auth')->group(function(){
 });
 
 Route::get('/ge_registration','StudentController@showRegistrationForm')->name('ge_registration');
-Route::get('/load_department/{institute_id?}','StudentController@loadDepartment')->name('load_department');
+Route::get('/load_department/{institute_id?}/{degree?}','StudentController@loadDepartment')->name('load_department');
 Route::get('/load_program/{department_id?}','StudentController@loadProgram')->name('load_program');
 Route::get('/load_course/{department_id?}/{institute_id?}','StudentController@loadCourse')->name('load_course');
 Route::post('/register_student','StudentController@registerStudent')->name('register_student');
@@ -70,29 +70,6 @@ Route::get('/news',function(){
 	return view('student.news',compact('brochures'));
 })->name('news');
 
-Route::get('/api/departments',function(){
-	// return \App\Models\Department::all();
-
-	$departments;
-	$recordes = \Illuminate\Support\Facades\DB::select('SELECT * FROM departments');
-	foreach ($recordes as $value) {
-		// $department['Department Id'] = $value->id;
-		// $department['Institute Id'] = $value->institute_id;
-		// $department['Department Name'] = $value->department_name;
-		// $department['Department Type'] = $value->type;
-		// $department['Department Status'] = $value->status;
-		// // $department['Department Created At'] = $value->created_at;
-		// // $department['Department Updated At'] = $value->updated_at;
-		// $departments[] = (object)$department;
-		// $departments[] = $department;
-		// unset($department);
-		$departments[]=["Department ID" => $value->id, "Department Name" => $value->department_name];
-	}
-
-	return $departments;
-	// var_dump(($departments[0]));
-
-});
 
 Route::fallback(function(){
 	return view('fallback');
