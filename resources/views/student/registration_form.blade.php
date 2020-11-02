@@ -33,11 +33,10 @@ GE Registration
 								@endforeach
 							</select>
 						</div>
-						<div class="form-group p-1">
-							<label class="my-0 p-0 mx-2 control-label">UG</label>
-							<input type="radio" id="degree" name="degree" value="UG"  onchange="load_department(document.querySelector('#institute').value)" checked="">
-							<label class="my-0 p-0 mx-2 control-label">PG</label>
-							<input type="radio" id="degree" name="degree" value="PG" onchange="load_department(document.querySelector('#institute').value)" >
+						<div class="form-group">
+							<label class="my-0 p-0 mx-2 control-label" for="degree">Degree</label>
+							<input type="radio" id="degree" name="degree" value="UG"  class="custom-radio" onchange="load_department(document.querySelector('#institute').value)" checked=""> UG
+							<input type="radio" id="degree" name="degree" value="PG" class="custom-radio" onchange="load_department(document.querySelector('#institute').value)"> PG
 						</div>
 						<div class="form-group">
 							<label for="department">Select Department</label>
@@ -77,7 +76,7 @@ GE Registration
 						</div>
 						<div class="form-group">
 							<label for="full_name">Enter Full Name</label>
-							<input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control" placeholder="Sir name Your name Father name">
+							<input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control" placeholder="Surname Your name Father name">
 						</div>
 						<div class="form-group">
 							<label for="gender">Gender&nbsp;&nbsp;&nbsp;</label>
@@ -85,8 +84,8 @@ GE Registration
 							<input type="radio" name="gender" value="female" class="custom-radio" {{ old('gender') == 'female' ? 'checked' : '' }}> Female
 						</div>
 						<div class="form-group">
-							<label for="contact">Enter Contact</label>
-							<input type="text" name="contact" value="{{ old('contact') }}" class="form-control" placeholder="Enter Contact">
+							<label for="contact">Enter Your Mobile Number</label>
+							<input type="text" name="contact" value="{{ old('contact') }}" class="form-control" placeholder="Enter Your Mobile Number">
 						</div>
 					</div>
 					<div class="card-footer">
