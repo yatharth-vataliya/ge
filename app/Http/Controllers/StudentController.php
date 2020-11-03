@@ -10,17 +10,23 @@ use App\Models\Course;
 use App\Models\Student;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\StudentExport;
+use App\Models\GeneralSetting;
 
 class StudentController extends Controller
 {
 	public function showRegistrationForm(){
 		$institutes = Institute::latest()->get();
-		return view('student.registration_form',compact('institutes'));
+		$setting = GeneralSetting::where('key', '=', 'registration')->first();
+		if($setting->value == 'on'){
+			return view('student.registration_form',compact('institutes'));
+		}else{
+			return view('student.closed');
+		}
 	}
 
 	public function loadDepartment($institute_id = NULL,?string $degree = NULL){
 		if($institute_id == NULL || $degree == NULL)
-		return response()->json([ 'check' => false ]);
+			return response()->json([ 'check' => false ]);
 
 		$departments = Department::where('institute_id',$institute_id)->where('type',$degree)->latest()->get();
 
@@ -40,7 +46,7 @@ class StudentController extends Controller
 
 	public function loadProgram($department_id = NULL){
 		if($department_id == NULL)
-		return response()->json([ 'check' => false ]);
+			return response()->json([ 'check' => false ]);
 
 		$programs = Program::where('department_id',$department_id)->latest()->get();
 
@@ -59,17 +65,17 @@ class StudentController extends Controller
 
 	public function loadCourse($department_id = NULL, $institute_id = NUll){
 		if($department_id == NULL || $institute_id == NULL)
-		return response()->json([ 'check' => false ]);
+			return response()->json([ 'check' => false ]);
 
 		$department = Department::find($department_id);
 
 		if(empty($department->id))
-		return response()->json([ 'check' => false ]);
+			return response()->json([ 'check' => false ]);
 
 		$departments = Department::where('id','<>',$department_id)->where('institute_id',$institute_id)->where('type',$department->type)->latest()->get();
 
 		if(empty($departments[0]->id))
-		return response()->json([ 'check' => false ]);
+			return response()->json([ 'check' => false ]);
 
 		$options = "<option value=''>--select any course--</option>";
 
@@ -112,7 +118,7 @@ class StudentController extends Controller
 		$course = Course::find($request->input('course_id'));
 
 		if(empty($course->id))
-		return back()->wiht('error','Something went wrong please try again.');
+			return back()->wiht('error','Something went wrong please try again.');
 
 		$course_limit = $course->course_limit;
 
@@ -121,7 +127,7 @@ class StudentController extends Controller
 		++$course_count;
 
 		if($course_count > $course_limit)
-		return back()->with('error','This course is completed it\'s limit please select another one.');
+			return back()->with('error','This course is completed it\'s limit please select another one.');
 
 		$course->course_count = $course_count;
 
@@ -134,7 +140,7 @@ class StudentController extends Controller
 
 	public function removeRegistration($student_id = NULL){
 		if($student_id == NULL)
-		return back()->wit('error','Something went wrong please try again.');
+			return back()->wit('error','Something went wrong please try again.');
 
 		Student::destroy([$student_id]);
 

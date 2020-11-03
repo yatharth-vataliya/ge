@@ -56,6 +56,10 @@ Route::middleware('auth')->group(function(){
 	Route::get('/brochure','BrochureController@index')->name('brochure');
 	Route::post('/brochure/store','BrochureController@store')->name('brochure.store');
 	Route::get('/delete_brochure/{brochure_id?}','BrochureController@destroy')->name('brochure.delete');
+
+	Route::get('/settings','SettingController@index')->name('settings');
+	Route::post('/edit/registrtaion','SettingController@editRegistration')->name('edit.registration');
+
 });
 
 Route::get('/ge_registration','StudentController@showRegistrationForm')->name('ge_registration');

@@ -56,6 +56,9 @@
                             <a href="{{ route('home') }}" class="nav-link">Dashboard</a>
                         </li>
                         <li>
+                            <a href="{{ route('settings') }}" class="nav-link">Settings</a>
+                        </li>
+                        <li>
                             <a href="{{ route('generate_excel_form') }}" class="nav-link">Generate Excel</a>
                         </li>
                         <li>
