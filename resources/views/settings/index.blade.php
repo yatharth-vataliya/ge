@@ -15,7 +15,11 @@ Setting
 @section('content')
 @php
 $setting = $settings->where('key', '=', 'registration')->first();
-$registration = $setting->value;
+if(!empty($setting)){
+	$registration = $setting->value;
+}else{
+	$registration = 'off';
+}
 @endphp
 <div class="container-fluid">
 	<div class="row shadow rounded">
