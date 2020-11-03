@@ -17,7 +17,7 @@ class StudentController extends Controller
 	public function showRegistrationForm(){
 		$institutes = Institute::latest()->get();
 		$setting = GeneralSetting::where('key', '=', 'registration')->first();
-		if($setting->value == 'on'){
+		if(!empty($setting->value) && $setting->value == 'on'){
 			return view('student.registration_form',compact('institutes'));
 		}else{
 			return view('student.closed');
