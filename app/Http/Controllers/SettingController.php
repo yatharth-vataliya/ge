@@ -25,7 +25,10 @@ class SettingController extends Controller
     		]);
     	}
 
-    	GeneralSetting::where('key', '=', 'registration')->update(['value' => $request->registration]);
+    	GeneralSetting::updateOrInsert(
+            ['key' => 'registration'],
+            ['value' => $request->registration]
+    );
 
     	return response()->json([
     		'check' => true,
