@@ -79,6 +79,10 @@ GE Registration
 							<input type="text" name="full_name" value="{{ old('full_name') }}" class="form-control" placeholder="Surname Your name Father name">
 						</div>
 						<div class="form-group">
+							<label for="full_name">Enter Email</label>
+							<input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Enter Email">
+						</div>
+						<div class="form-group">
 							<label for="gender">Gender&nbsp;&nbsp;&nbsp;</label>
 							<input type="radio" name="gender" value="male" class="custom-radio" {{ old('gender') == 'male' ? 'checked' : '' }}> Male
 							<input type="radio" name="gender" value="female" class="custom-radio" {{ old('gender') == 'female' ? 'checked' : '' }}> Female

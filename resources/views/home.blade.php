@@ -22,6 +22,7 @@ Dashboard
                     <tr>
                         <th>No.</th>
                         <th>Full Name</th>
+                        <th>Email</th>
                         <th>Enrollment No.</th>
                         <th>Institute</th>
                         <th>Department</th>
@@ -39,6 +40,7 @@ Dashboard
                     <tr>
                         <td>{{ ++$no }}</td>
                         <td>{{ $student->full_name }}</td>
+                        <td>{{ $student->email }}</td>
                         <td>{{ $student->enrollment_no }}</td>
                         <td>{{ $student->institute->institute_name }}</td>
                         <td>{{ $student->department->department_name }}</td>

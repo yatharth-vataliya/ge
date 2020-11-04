@@ -97,6 +97,7 @@ class StudentController extends Controller
 			'sem' => 'required',
 			'enrollment_no' => 'required|unique:students',
 			'full_name' => 'required|string|max:191|min:15',
+			'email' => 'nullable|email',
 			'gender' => 'required|string',
 			'contact' => 'required|string|max:10|min:10'
 		],[

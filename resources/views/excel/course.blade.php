@@ -34,6 +34,7 @@
 				<th>Sr. No.</th>
 				<th>Enrolment No.</th>
 				<th>Name of Student</th>
+				<th>Email</th>
 				<th>Department</th>
 				<th>Male/Female</th>
 				<th>Phone No</th>
@@ -47,6 +48,7 @@
 				<td>{{ ++$no }}</td>
 				<td>{{ $student->enrollment_no }}</td>
 				<td>{{ $student->full_name }}</td>
+				<td>{{ $student->email }}</td>
 				<td>{{ $student->department->department_name }} ({{ $student->department->type }})</td>
 				<td>{{ $student->gender }}</td>
 				<td>{{ $student->contact }}</td>
