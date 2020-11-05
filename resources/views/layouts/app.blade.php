@@ -12,7 +12,6 @@
     <!-- Scripts -->
     @yield('js_script')
     <script src="{{ asset('js/app.js') }}"></script>
-
     <!-- Fonts -->
     @yield('css')
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,6 +19,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
 </head>
 <body>
     <div id="app">
@@ -110,6 +110,7 @@
     </main>
 </div>
 @include('partials.errors')
+@livewireScripts
 @yield('javascript')
 </body>
 </html>
