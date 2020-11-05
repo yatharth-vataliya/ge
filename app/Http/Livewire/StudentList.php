@@ -23,7 +23,7 @@ class StudentList extends Component
     	->orWhere('email', 'like', '%'.$this->search.'%')
     	->orWhere('contact', 'like', '%'.$this->search.'%')
     	->orWhere('enrollment_no', 'like', '%'.$this->search.'%')
-    	->latest()->paginate(1);
+    	->latest()->paginate(10);
         return view('livewire.student-list',compact('students'));
     }
 }
