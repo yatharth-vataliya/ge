@@ -60,6 +60,8 @@ Route::middleware('auth')->group(function(){
 	Route::get('/settings','SettingController@index')->name('settings');
 	Route::post('/edit/registrtaion','SettingController@editRegistration')->name('edit.registration');
 
+	Route::get('/truncate_students','SettingController@truncateStudents')->name('truncate_students');
+
 });
 
 Route::get('/ge_registration','StudentController@showRegistrationForm')->name('ge_registration');

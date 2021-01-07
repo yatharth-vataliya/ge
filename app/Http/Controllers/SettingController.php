@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Student;
 
 class SettingController extends Controller
 {
@@ -28,13 +29,28 @@ class SettingController extends Controller
     	GeneralSetting::updateOrInsert(
             ['key' => 'registration'],
             ['value' => $request->registration]
-    );
+        );
 
     	return response()->json([
     		'check' => true,
     		'message' => 'Registration is '.$request->registration. ' now'
     	]);
 
+    }
+
+    public function truncateStudents(){
+        $result = Student::truncate();
+        if($result){    
+            return response()->json([
+                'check' => true,
+                'message' => 'Students table truncated successfully'
+            ]);
+        }else{
+            return response()->json([
+                'check' => false,
+                'message' => 'Something won\'t wrong please try again later'
+            ]);
+        }
     }
 
 }
