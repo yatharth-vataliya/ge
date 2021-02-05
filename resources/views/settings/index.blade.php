@@ -16,25 +16,26 @@ Setting
 @php
 $setting = $settings->where('key', '=', 'registration')->first();
 if(!empty($setting)){
-	$registration = $setting->value;
+$registration = $setting->value;
 }else{
-	$registration = 'off';
+$registration = 'off';
 }
 @endphp
 <div class="container-fluid">
 	<div class="row shadow rounded">
-		<div class="col-md-12">
+		<div class="col-md-4">
 			<form method="POST">
 				<div class="form-group">
-					<div class="col-md-4">
-						<label for="registration">Registration</label>
-						<select id="registration" name="registration" class="custom-select">
-							<option value="on" {{ $registration == 'on' ? 'selected' : '' }}>on</option>
-							<option value="off" {{ $registration == 'off' ? 'selected' : '' }}>off</option>
-						</select>
-					</div>
+					<label for="registration">Registration</label>
+					<select id="registration" name="registration" class="custom-select">
+						<option value="on" {{ $registration == 'on' ? 'selected' : '' }}>on</option>
+						<option value="off" {{ $registration == 'off' ? 'selected' : '' }}>off</option>
+					</select>
 				</div>
 			</form>
+		</div>
+		<div class="col-md-4 p-2 mt-4">
+			<button id="truncate_student" class="btn btn-outline-danger">Truncate Students Data</button>
 		</div>
 	</div>
 </div>
@@ -70,6 +71,48 @@ if(!empty($setting)){
 			}
 		}).catch(error => {});
 	});
+
+	$("#truncate_student").click(function(){
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+			if (result.value) {
+				axios.get(`{{ route('truncate_students') }}`)
+				.then(function (response) {
+					let res = response.data;
+					if(res.check){
+						Swal.fire({
+							icon: 'success',
+							showConfirmButton: false,
+							title: 'All students data is deleted from database.',
+							timer:2000
+						});
+						let row = document.querySelector("#row"+c_id);
+						row.remove();
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'something went wrong. don not mess with the code.',
+							showConfirmButton: true
+						});
+					}
+				});
+			}else{
+				Swal.fire({
+					icon: 'info',
+					showConfirmButton: true,
+					title: 'Everything is safe.',
+				});
+			}
+		});
+	});
+
 </script>
 
 @endsection

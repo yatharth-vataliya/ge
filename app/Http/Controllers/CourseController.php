@@ -38,7 +38,8 @@ class CourseController extends Controller
 
     public function deleteCourse($course_id = NULL){
         if($course_id == NULL)
-            return back()->with('error','Something went wrong please try again.');
+            return response()->json([ 'check' => false ]);
+            // return back()->with('error','Something went wrong please try again.');
 
         $deleted_course = Course::where('id',$course_id)->delete();
 
