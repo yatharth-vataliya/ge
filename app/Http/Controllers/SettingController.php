@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Student;
+use App\Models\Course;
 
 class SettingController extends Controller
 {
@@ -40,7 +41,8 @@ class SettingController extends Controller
 
     public function truncateStudents(){
         $result = Student::truncate();
-        if($result){    
+        Course::where([])->update(['course_count'=> 0]);
+        if($result){
             return response()->json([
                 'check' => true,
                 'message' => 'Students table truncated successfully'
