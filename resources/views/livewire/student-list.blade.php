@@ -31,14 +31,14 @@
 							<td>{{ $student->full_name }}</td>
 							<td>{{ $student->email }}</td>
 							<td>{{ $student->enrollment_no }}</td>
-							<td>{{ $student->institute->institute_name }}</td>
-							<td>{{ $student->department->department_name }}</td>
-							<td>{{ $student->program->program_name }}</td>
-							<td>{{ $student->course->course_name }}</td>
+							<td>{{ $student->institute?->institute_name }}</td>
+							<td>{{ $student->department?->department_name }}</td>
+							<td>{{ $student->program?->program_name }}</td>
+							<td>{{ $student->course?->course_name }}</td>
 							<td>{{ $student->sem }}</td>
 							<td>{{ $student->gender }}</td>
 							<td>{{ $student->contact }}</td>
-							<td><button type="button" class="btn btn-danger" onclick="remove_registration({{ $student->id }});">Delete</button></a></td>
+							<td><button type="button" class="btn btn-danger" onclick="remove_registration({{ $student->id }});">Delete</button></td>
 						</tr>
 						@endforeach
 					</tbody>

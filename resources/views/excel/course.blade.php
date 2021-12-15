@@ -49,10 +49,10 @@
 				<td>{{ $student->enrollment_no }}</td>
 				<td>{{ $student->full_name }}</td>
 				<td>{{ $student->email }}</td>
-				<td>{{ $student->department->department_name }} ({{ $student->department->type }})</td>
+				<td>{{ $student->department?->department_name }} ({{ $student->department?->type }})</td>
 				<td>{{ $student->gender }}</td>
 				<td>{{ $student->contact }}</td>
-				<td>{{ $student->course->course_name }} ({{ $student->course->department->type }})</td>
+				<td>{{ $student->course?->course_name }} ({{ $student->course?->department?->type }})</td>
 			</tr>
 			@endforeach
 		</tbody>
