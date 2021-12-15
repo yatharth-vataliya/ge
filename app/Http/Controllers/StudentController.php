@@ -90,11 +90,11 @@ class StudentController extends Controller
 
 	public function registerStudent(Request $request){
 		$validated = $request->validate([
-			'institute_id' => 'required',
-			'department_id' => 'required',
-			'program_id' => 'required',
-			'course_id' => 'required',
-			'sem' => 'required',
+			'institute_id' => 'required|integer',
+			'department_id' => 'required|integer',
+			'program_id' => 'required|integer',
+			'course_id' => 'required|integer',
+			'sem' => 'required|integer',
 			'enrollment_no' => 'required|unique:students',
 			'full_name' => 'required|string|max:191|min:15',
 			'email' => 'nullable|email',
@@ -143,6 +143,13 @@ class StudentController extends Controller
 		if($student_id == NULL)
 			return back()->wit('error','Something went wrong please try again.');
 
+		$student = Student::findOrFail($student_id);
+		$courseId = $student->course_id;
+		$course = Course::findOrFail($courseId);
+		$courseCount = (int)$course->course_count;
+		$courseCount--;
+		$course->course_count = $courseCount;
+		$course->save();
 		Student::destroy([$student_id]);
 
 		return redirect()->route('home')->with('success','Successfully Deleted.');
