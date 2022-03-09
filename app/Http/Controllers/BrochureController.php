@@ -120,7 +120,7 @@ class BrochureController extends Controller
 
     $brochure = Brochure::find($brochure_id);
 
-    if(!empty($brochure)) return response()->download("storage/brochures/{$brochure->file_path}");
+    if(!empty($brochure)) return Storage::download('public/brochures/'.$brochure->file_path);
   }
 
 }

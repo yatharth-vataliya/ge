@@ -82,7 +82,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(\App\User::latest()->get() as $user)
+                    @foreach(\App\Models\User::latest()->get() as $user)
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
