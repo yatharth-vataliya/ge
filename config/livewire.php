@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Http\\Livewire',
+    'class_namespace' => 'App\\Livewire',
 
     /*
     |--------------------------------------------------------------------------
@@ -35,11 +35,11 @@ return [
     |--------------------------------------------------------------------------
     | The default layout view that will be used when rendering a component via
     | Route::get('/some-endpoint', SomeComponent::class);. In this case the
-    | the view returned by SomeComponent will be wrapped in "layouts.app"
+    | the view returned by SomeComponent will be wrapped in "components.layouts.app"
     |
     */
 
-    'layout' => 'layouts.app',
+    'layout' => 'components.layouts.app',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ return [
             'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
             'mov', 'avi', 'wmv', 'mp3', 'm4a',
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
-            'pdf', 'xlsx'
+            'pdf', 'xlsx',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload gets invalidated.
     ],
