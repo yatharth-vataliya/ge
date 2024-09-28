@@ -27,11 +27,11 @@ class NodeTableContainer extends NodeDatabaseChildContainer
             'text' => Url::getFromRoute('/database/structure', [
                 'server' => $GLOBALS['server'],
                 'tbl_type' => 'table',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
             'icon' => Url::getFromRoute('/database/structure', [
                 'server' => $GLOBALS['server'],
                 'tbl_type' => 'table',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
         ];
         $this->realName = 'tables';
         $this->classes = 'tableContainer subContainer';
@@ -45,10 +45,10 @@ class NodeTableContainer extends NodeDatabaseChildContainer
         $new->links = [
             'text' => Url::getFromRoute('/table/create', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
             'icon' => Url::getFromRoute('/table/create', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
         ];
         $this->addChild($new);
     }

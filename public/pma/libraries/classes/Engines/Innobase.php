@@ -10,6 +10,4 @@ namespace PhpMyAdmin\Engines;
 /**
  * The Innobase storage engine
  */
-class Innobase extends Innodb
-{
-}
+class Innobase extends Innodb {}

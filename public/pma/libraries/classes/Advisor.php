@@ -7,6 +7,7 @@ namespace PhpMyAdmin;
 use PhpMyAdmin\Server\SysInfo\SysInfo;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Throwable;
+
 use function array_merge;
 use function htmlspecialchars;
 use function implode;
@@ -25,6 +26,7 @@ use function vsprintf;
 class Advisor
 {
     private const GENERIC_RULES_FILE = 'libraries/advisory_rules_generic.php';
+
     private const BEFORE_MYSQL80003_RULES_FILE = 'libraries/advisory_rules_mysql_before80003.php';
 
     /** @var DatabaseInterface */
@@ -46,8 +48,8 @@ class Advisor
     private $expression;
 
     /**
-     * @param DatabaseInterface  $dbi        DatabaseInterface object
-     * @param ExpressionLanguage $expression ExpressionLanguage object
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  ExpressionLanguage  $expression  ExpressionLanguage object
      */
     public function __construct(DatabaseInterface $dbi, ExpressionLanguage $expression)
     {
@@ -59,11 +61,10 @@ class Advisor
          */
         $this->expression->register(
             'round',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param float $num
+             * @param  array  $arguments
+             * @param  float  $num
              */
             static function ($arguments, $num) {
                 return round($num);
@@ -71,13 +72,12 @@ class Advisor
         );
         $this->expression->register(
             'substr',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param string $string
-             * @param int $start
-             * @param int $length
+             * @param  array  $arguments
+             * @param  string  $string
+             * @param  int  $start
+             * @param  int  $length
              */
             static function ($arguments, $string, $start, $length) {
                 return substr($string, $start, $length);
@@ -85,12 +85,11 @@ class Advisor
         );
         $this->expression->register(
             'preg_match',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param string $pattern
-             * @param string $subject
+             * @param  array  $arguments
+             * @param  string  $pattern
+             * @param  string  $subject
              */
             static function ($arguments, $pattern, $subject) {
                 return preg_match($pattern, $subject);
@@ -98,12 +97,11 @@ class Advisor
         );
         $this->expression->register(
             'ADVISOR_bytime',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param float $num
-             * @param int $precision
+             * @param  array  $arguments
+             * @param  float  $num
+             * @param  int  $precision
              */
             static function ($arguments, $num, $precision) {
                 return self::byTime($num, $precision);
@@ -111,11 +109,10 @@ class Advisor
         );
         $this->expression->register(
             'ADVISOR_timespanFormat',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param string $seconds
+             * @param  array  $arguments
+             * @param  string  $seconds
              */
             static function ($arguments, $seconds) {
                 return Util::timespanFormat((int) $seconds);
@@ -123,13 +120,12 @@ class Advisor
         );
         $this->expression->register(
             'ADVISOR_formatByteDown',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param int $value
-             * @param int $limes
-             * @param int $comma
+             * @param  array  $arguments
+             * @param  int  $value
+             * @param  int  $limes
+             * @param  int  $comma
              */
             static function ($arguments, $value, $limes = 6, $comma = 0) {
                 return implode(' ', (array) Util::formatByteDown($value, $limes, $comma));
@@ -137,11 +133,10 @@ class Advisor
         );
         $this->expression->register(
             'fired',
-            static function () {
-            },
+            static function () {},
             /**
-             * @param array $arguments
-             * @param int $value
+             * @param  array  $arguments
+             * @param  int  $value
              */
             function ($arguments, $value) {
                 if (! isset($this->runResult['fired'])) {
@@ -177,8 +172,8 @@ class Advisor
     }
 
     /**
-     * @param string|int $variable Variable to set
-     * @param mixed      $value    Value to set
+     * @param  string|int  $variable  Variable to set
+     * @param  mixed  $value  Value to set
      */
     public function setVariable($variable, $value): void
     {
@@ -188,7 +183,7 @@ class Advisor
     private function setRules(): void
     {
         $isMariaDB = strpos($this->variables['version'], 'MariaDB') !== false;
-        $genericRules = include ROOT_PATH . self::GENERIC_RULES_FILE;
+        $genericRules = include ROOT_PATH.self::GENERIC_RULES_FILE;
 
         if (! $isMariaDB && $this->globals['PMA_MYSQL_INT_VERSION'] >= 80003) {
             $this->rules = $genericRules;
@@ -196,21 +191,15 @@ class Advisor
             return;
         }
 
-        $extraRules = include ROOT_PATH . self::BEFORE_MYSQL80003_RULES_FILE;
+        $extraRules = include ROOT_PATH.self::BEFORE_MYSQL80003_RULES_FILE;
         $this->rules = array_merge($genericRules, $extraRules);
     }
 
-    /**
-     * @return array
-     */
     public function getRunResult(): array
     {
         return $this->runResult;
     }
 
-    /**
-     * @return array
-     */
     public function run(): array
     {
         $this->setVariables();
@@ -223,12 +212,12 @@ class Advisor
     /**
      * Stores current error in run results.
      *
-     * @param string    $description description of an error.
-     * @param Throwable $exception   exception raised
+     * @param  string  $description  description of an error.
+     * @param  Throwable  $exception  exception raised
      */
     private function storeError(string $description, Throwable $exception): void
     {
-        $this->runResult['errors'][] = $description . ' ' . sprintf(
+        $this->runResult['errors'][] = $description.' '.sprintf(
             __('Error when evaluating: %s'),
             $exception->getMessage()
         );
@@ -252,7 +241,7 @@ class Advisor
 
             if (isset($rule['precondition'])) {
                 try {
-                     $precondition = $this->evaluateRuleExpression($rule['precondition']);
+                    $precondition = $this->evaluateRuleExpression($rule['precondition']);
                 } catch (Throwable $e) {
                     $this->storeError(
                         sprintf(
@@ -261,6 +250,7 @@ class Advisor
                         ),
                         $e
                     );
+
                     continue;
                 }
             }
@@ -281,6 +271,7 @@ class Advisor
                     ),
                     $e
                 );
+
                 continue;
             }
 
@@ -307,8 +298,8 @@ class Advisor
     /**
      * Adds a rule to the result list
      *
-     * @param string $type type of rule
-     * @param array  $rule rule itself
+     * @param  string  $type  type of rule
+     * @param  array  $rule  rule itself
      */
     public function addRule(string $type, array $rule): void
     {
@@ -320,7 +311,7 @@ class Advisor
 
         if (isset($rule['justification_formula'])) {
             try {
-                $params = $this->evaluateRuleExpression('[' . $rule['justification_formula'] . ']');
+                $params = $this->evaluateRuleExpression('['.$rule['justification_formula'].']');
             } catch (Throwable $e) {
                 $this->storeError(
                     sprintf(__('Failed formatting string for rule \'%s\'.'), $rule['name']),
@@ -365,26 +356,24 @@ class Advisor
     /**
      * Callback for wrapping links with Core::linkURL
      *
-     * @param array $matches List of matched elements form preg_replace_callback
-     *
+     * @param  array  $matches  List of matched elements form preg_replace_callback
      * @return string Replacement value
      */
     private function replaceLinkURL(array $matches): string
     {
-        return 'href="' . Core::linkURL($matches[2]) . '" target="_blank" rel="noopener noreferrer"';
+        return 'href="'.Core::linkURL($matches[2]).'" target="_blank" rel="noopener noreferrer"';
     }
 
     /**
      * Callback for wrapping variable edit links
      *
-     * @param array $matches List of matched elements form preg_replace_callback
-     *
+     * @param  array  $matches  List of matched elements form preg_replace_callback
      * @return string Replacement value
      */
     private function replaceVariable(array $matches): string
     {
-        return '<a href="' . Url::getFromRoute('/server/variables', ['filter' => $matches[1]])
-                . '">' . htmlspecialchars($matches[1]) . '</a>';
+        return '<a href="'.Url::getFromRoute('/server/variables', ['filter' => $matches[1]])
+                .'">'.htmlspecialchars($matches[1]).'</a>';
     }
 
     /**
@@ -400,9 +389,8 @@ class Advisor
     /**
      * Formats interval like 10 per hour
      *
-     * @param float $num       number to format
-     * @param int   $precision required precision
-     *
+     * @param  float  $num  number to format
+     * @param  int  $precision  required precision
      * @return string formatted string
      */
     public static function byTime(float $num, int $precision): string
@@ -423,9 +411,9 @@ class Advisor
         $num = round($num, $precision);
 
         if ($num == 0) {
-            $num = '<' . pow(10, -$precision);
+            $num = '<'.pow(10, -$precision);
         }
 
-        return $num . ' ' . $per;
+        return $num.' '.$per;
     }
 }

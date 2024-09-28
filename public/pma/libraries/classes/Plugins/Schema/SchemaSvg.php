@@ -31,7 +31,7 @@ class SchemaSvg extends SchemaPlugin
      */
     protected function setProperties()
     {
-        $schemaPluginProperties = new SchemaPluginProperties();
+        $schemaPluginProperties = new SchemaPluginProperties;
         $schemaPluginProperties->setText('SVG');
         $schemaPluginProperties->setExtension('svg');
         $schemaPluginProperties->setMimeType('application/svg');
@@ -66,8 +66,7 @@ class SchemaSvg extends SchemaPlugin
     /**
      * Exports the schema into SVG format.
      *
-     * @param string $db database name
-     *
+     * @param  string  $db  database name
      * @return bool Whether it succeeded
      */
     public function exportSchema($db)

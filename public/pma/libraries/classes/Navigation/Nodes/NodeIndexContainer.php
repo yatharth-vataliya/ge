@@ -26,10 +26,10 @@ class NodeIndexContainer extends Node
         $this->links = [
             'text' => Url::getFromRoute('/table/structure', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
             'icon' => Url::getFromRoute('/table/structure', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
         ];
         $this->realName = 'indexes';
 
@@ -44,12 +44,12 @@ class NodeIndexContainer extends Node
                 'server' => $GLOBALS['server'],
                 'create_index' => 1,
                 'added_fields' => 2,
-            ]) . '&amp;db=%3$s&amp;table=%2$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s',
             'icon' => Url::getFromRoute('/table/indexes', [
                 'server' => $GLOBALS['server'],
                 'create_index' => 1,
                 'added_fields' => 2,
-            ]) . '&amp;db=%3$s&amp;table=%2$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s',
         ];
         $this->addChild($new);
     }

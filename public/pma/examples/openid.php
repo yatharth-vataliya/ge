@@ -36,15 +36,14 @@ $AUTH_MAP = [
 /**
  * Simple function to show HTML page with given content.
  *
- * @param string $contents Content to include in page
- *
+ * @param  string  $contents  Content to include in page
  * @return void
  */
 function Show_page($contents)
 {
     header('Content-Type: text/html; charset=utf-8');
 
-    echo '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+    echo '<?xml version="1.0" encoding="utf-8"?>'."\n";
     echo '<!DOCTYPE HTML>
 <html lang="en" dir="ltr">
 <head>
@@ -56,7 +55,7 @@ function Show_page($contents)
 <body>';
 
     if (isset($_SESSION['PMA_single_signon_error_message'])) {
-        echo '<p class="error">' . $_SESSION['PMA_single_signon_message'] . '</p>';
+        echo '<p class="error">'.$_SESSION['PMA_single_signon_message'].'</p>';
         unset($_SESSION['PMA_single_signon_message']);
     }
 
@@ -67,14 +66,13 @@ function Show_page($contents)
 /**
  * Display error and exit
  *
- * @param Exception $e Exception object
- *
+ * @param  Exception  $e  Exception object
  * @return void
  */
 function Die_error($e)
 {
     $contents = "<div class='relyingparty_results'>\n";
-    $contents .= '<pre>' . htmlspecialchars($e->getMessage()) . "</pre>\n";
+    $contents .= '<pre>'.htmlspecialchars($e->getMessage())."</pre>\n";
     $contents .= "</div class='relyingparty_results'>";
     Show_page($contents);
     exit;
@@ -94,10 +92,10 @@ $base = 'http';
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
     $base .= 's';
 }
-$base .= '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
+$base .= '://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
 
-$realm = $base . '/';
-$returnTo = $base . dirname($_SERVER['PHP_SELF']);
+$realm = $base.'/';
+$returnTo = $base.dirname($_SERVER['PHP_SELF']);
 if ($returnTo[strlen($returnTo) - 1] !== '/') {
     $returnTo .= '/';
 }
@@ -140,7 +138,7 @@ if (isset($_POST['start'])) {
 
     $url = $authRequest->getAuthorizeURL();
 
-    header('Location: ' . $url);
+    header('Location: '.$url);
     exit;
 }
 

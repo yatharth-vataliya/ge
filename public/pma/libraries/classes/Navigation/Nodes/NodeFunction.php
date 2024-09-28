@@ -18,10 +18,10 @@ class NodeFunction extends NodeDatabaseChild
     /**
      * Initialises the class
      *
-     * @param string $name    An identifier for the new node
-     * @param int    $type    Type of node, may be one of CONTAINER or OBJECT
-     * @param bool   $isGroup Whether this object has been created
-     *                        while grouping nodes
+     * @param  string  $name  An identifier for the new node
+     * @param  int  $type  Type of node, may be one of CONTAINER or OBJECT
+     * @param  bool  $isGroup  Whether this object has been created
+     *                         while grouping nodes
      */
     public function __construct($name, $type = Node::OBJECT, $isGroup = false)
     {
@@ -32,12 +32,12 @@ class NodeFunction extends NodeDatabaseChild
                 'server' => $GLOBALS['server'],
                 'item_type' => 'FUNCTION',
                 'edit_item' => 1,
-            ]) . '&amp;db=%2$s&amp;item_name=%1$s',
+            ]).'&amp;db=%2$s&amp;item_name=%1$s',
             'icon' => Url::getFromRoute('/database/routines', [
                 'server' => $GLOBALS['server'],
                 'item_type' => 'FUNCTION',
                 'execute_dialog' => 1,
-            ]) . '&amp;db=%2$s&amp;item_name=%1$s',
+            ]).'&amp;db=%2$s&amp;item_name=%1$s',
         ];
         $this->classes = 'function';
     }

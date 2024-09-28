@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
-
     /*
 |--------------------------------------------------------------------------
 | Model Factories

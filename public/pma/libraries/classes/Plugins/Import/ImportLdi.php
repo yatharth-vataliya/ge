@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Import;
 
+use const PHP_EOL;
+
 use PhpMyAdmin\File;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\TextPropertyItem;
 use PhpMyAdmin\Util;
-use const PHP_EOL;
+
 use function count;
 use function is_array;
 use function preg_split;
@@ -91,15 +93,14 @@ class ImportLdi extends AbstractImportCsv
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
     {
         global $finished, $import_file, $charset_conversion, $table, $dbi;
         global $ldi_local_option, $ldi_replace, $ldi_ignore, $ldi_terminated,
-               $ldi_enclosed, $ldi_escaped, $ldi_new_line, $skip_queries, $ldi_columns;
+        $ldi_enclosed, $ldi_escaped, $ldi_new_line, $skip_queries, $ldi_columns;
 
         $compression = '';
         if ($importHandle !== null) {
@@ -123,25 +124,25 @@ class ImportLdi extends AbstractImportCsv
         if (isset($ldi_local_option)) {
             $sql .= ' LOCAL';
         }
-        $sql .= ' INFILE \'' . $dbi->escapeString($import_file)
-            . '\'';
+        $sql .= ' INFILE \''.$dbi->escapeString($import_file)
+            .'\'';
         if (isset($ldi_replace)) {
             $sql .= ' REPLACE';
         } elseif (isset($ldi_ignore)) {
             $sql .= ' IGNORE';
         }
-        $sql .= ' INTO TABLE ' . Util::backquote($table);
+        $sql .= ' INTO TABLE '.Util::backquote($table);
 
         if (strlen((string) $ldi_terminated) > 0) {
-            $sql .= ' FIELDS TERMINATED BY \'' . $ldi_terminated . '\'';
+            $sql .= ' FIELDS TERMINATED BY \''.$ldi_terminated.'\'';
         }
         if (strlen((string) $ldi_enclosed) > 0) {
             $sql .= ' ENCLOSED BY \''
-                . $dbi->escapeString($ldi_enclosed) . '\'';
+                .$dbi->escapeString($ldi_enclosed).'\'';
         }
         if (strlen((string) $ldi_escaped) > 0) {
             $sql .= ' ESCAPED BY \''
-                . $dbi->escapeString($ldi_escaped) . '\'';
+                .$dbi->escapeString($ldi_escaped).'\'';
         }
         if (strlen((string) $ldi_new_line) > 0) {
             if ($ldi_new_line === 'auto') {
@@ -150,10 +151,10 @@ class ImportLdi extends AbstractImportCsv
                     ? '\n'
                     : '\r\n';
             }
-            $sql .= ' LINES TERMINATED BY \'' . $ldi_new_line . '\'';
+            $sql .= ' LINES TERMINATED BY \''.$ldi_new_line.'\'';
         }
         if ($skip_queries > 0) {
-            $sql .= ' IGNORE ' . $skip_queries . ' LINES';
+            $sql .= ' IGNORE '.$skip_queries.' LINES';
             $skip_queries = 0;
         }
         if (strlen((string) $ldi_columns) > 0) {

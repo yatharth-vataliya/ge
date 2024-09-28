@@ -21,14 +21,13 @@ class Scripts
     /**
      * An array of SCRIPT tags
      *
-     * @access private
      * @var array of strings
      */
     private $files;
+
     /**
      * A string of discrete javascript code snippets
      *
-     * @access private
      * @var string
      */
     private $code;
@@ -41,17 +40,16 @@ class Scripts
      */
     public function __construct()
     {
-        $this->template = new Template();
-        $this->files  = [];
-        $this->code   = '';
+        $this->template = new Template;
+        $this->files = [];
+        $this->code = '';
     }
 
     /**
      * Adds a new file to the list of scripts
      *
-     * @param string $filename The name of the file to include
-     * @param array  $params   Additional parameters to pass to the file
-     *
+     * @param  string  $filename  The name of the file to include
+     * @param  array  $params  Additional parameters to pass to the file
      * @return void
      */
     public function addFile(
@@ -74,8 +72,7 @@ class Scripts
     /**
      * Add new files to the list of scripts
      *
-     * @param array $filelist The array of file names
-     *
+     * @param  array  $filelist  The array of file names
      * @return void
      */
     public function addFiles(array $filelist)
@@ -88,9 +85,8 @@ class Scripts
     /**
      * Determines whether to fire up an onload event for a file
      *
-     * @param string $filename The name of the file to be checked
-     *                         against the exclude list.
-     *
+     * @param  string  $filename  The name of the file to be checked
+     *                            against the exclude list.
      * @return int 1 to fire up the event, 0 not to
      */
     private function hasOnloadEvent($filename)
@@ -110,13 +106,12 @@ class Scripts
     /**
      * Adds a new code snippet to the code to be executed
      *
-     * @param string $code The JS code to be added
-     *
+     * @param  string  $code  The JS code to be added
      * @return void
      */
     public function addCode($code)
     {
-        $this->code .= $code . "\n";
+        $this->code .= $code."\n";
     }
 
     /**

@@ -33,12 +33,9 @@ class IpAllowDeny
     /**
      * Matches for IPv4 or IPv6 addresses
      *
-     * @param string $testRange string of IP range to match
-     * @param string $ipToTest  string of IP to test against range
-     *
+     * @param  string  $testRange  string of IP range to match
+     * @param  string  $ipToTest  string of IP to test against range
      * @return bool whether the IP mask matches
-     *
-     * @access public
      */
     public function ipMaskTest($testRange, $ipToTest)
     {
@@ -68,12 +65,9 @@ class IpAllowDeny
      * Does not match:
      * xxx.xxx.xxx.xx[yyy-zzz]  (range, partial octets not supported)
      *
-     * @param string $testRange string of IP range to match
-     * @param string $ipToTest  string of IP to test against range
-     *
+     * @param  string  $testRange  string of IP range to match
+     * @param  string  $ipToTest  string of IP to test against range
      * @return bool whether the IP mask matches
-     *
-     * @access public
      */
     public function ipv4MaskTest($testRange, $ipToTest)
     {
@@ -85,12 +79,12 @@ class IpAllowDeny
         );
         if ($match) {
             // performs a mask match
-            $ipl    = ip2long($ipToTest);
+            $ipl = ip2long($ipToTest);
             $rangel = ip2long(
-                $regs[1] . '.' . $regs[2] . '.' . $regs[3] . '.' . $regs[4]
+                $regs[1].'.'.$regs[2].'.'.$regs[3].'.'.$regs[4]
             );
 
-            $maskl  = 0;
+            $maskl = 0;
 
             for ($i = 0; $i < 31; $i++) {
                 if ($i >= $regs[5] - 1) {
@@ -105,7 +99,7 @@ class IpAllowDeny
 
         // range based
         $maskocts = explode('.', $testRange);
-        $ipocts   = explode('.', $ipToTest);
+        $ipocts = explode('.', $ipToTest);
 
         // perform a range match
         for ($i = 0; $i < 4; $i++) {
@@ -114,7 +108,7 @@ class IpAllowDeny
                     $result = false;
                 }
             } else {
-                if ($maskocts[$i] <> $ipocts[$i]) {
+                if ($maskocts[$i] != $ipocts[$i]) {
                     $result = false;
                 }
             }
@@ -140,12 +134,9 @@ class IpAllowDeny
      * xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xx[yyy-zzz]
      * (range, partial octets not supported)
      *
-     * @param string $test_range string of IP range to match
-     * @param string $ip_to_test string of IP to test against range
-     *
+     * @param  string  $test_range  string of IP range to match
+     * @param  string  $ip_to_test  string of IP to test against range
      * @return bool whether the IP mask matches
-     *
-     * @access public
      */
     public function ipv6MaskTest($test_range, $ip_to_test)
     {
@@ -177,13 +168,13 @@ class IpAllowDeny
             );
             if ($match) {
                 $range_start = $range_match[1];
-                $range_end   = $range_match[2];
+                $range_end = $range_match[2];
 
                 // get the first and last allowed IPs
-                $first_ip  = str_replace($range_match[0], $range_start, $test_range);
+                $first_ip = str_replace($range_match[0], $range_start, $test_range);
                 $first_hex = bin2hex((string) inet_pton($first_ip));
-                $last_ip   = str_replace($range_match[0], $range_end, $test_range);
-                $last_hex  = bin2hex((string) inet_pton($last_ip));
+                $last_ip = str_replace($range_match[0], $range_end, $test_range);
+                $last_hex = bin2hex((string) inet_pton($last_ip));
 
                 // check if the IP to test is within the range
                 $result = ($ip_hex >= $first_hex && $ip_hex <= $last_hex);
@@ -224,7 +215,7 @@ class IpAllowDeny
 
                 // We processed one nibble, move to previous position
                 $flexbits -= 4;
-                --$pos;
+                $pos--;
             }
 
             // check if the IP to test is within the range
@@ -240,8 +231,6 @@ class IpAllowDeny
      * @see     Core::getIp()
      *
      * @return bool Whether rule has matched
-     *
-     * @access public
      */
     public function allow()
     {
@@ -254,8 +243,6 @@ class IpAllowDeny
      * @see     Core::getIp()
      *
      * @return bool Whether rule has matched
-     *
-     * @access public
      */
     public function deny()
     {
@@ -267,11 +254,8 @@ class IpAllowDeny
      *
      * @see     Core::getIp()
      *
-     * @param string $type 'allow' | 'deny' type of rule to match
-     *
-     * @return bool   Whether rule has matched
-     *
-     * @access public
+     * @param  string  $type  'allow' | 'deny' type of rule to match
+     * @return bool Whether rule has matched
      */
     private function allowDeny($type)
     {
@@ -284,11 +268,11 @@ class IpAllowDeny
         }
 
         // copy username
-        $username  = $cfg['Server']['user'];
+        $username = $cfg['Server']['user'];
 
         // copy rule database
         if (isset($cfg['Server']['AllowDeny']['rules'])) {
-            $rules     = $cfg['Server']['AllowDeny']['rules'];
+            $rules = $cfg['Server']['AllowDeny']['rules'];
             if (! is_array($rules)) {
                 $rules = [];
             }
@@ -298,15 +282,15 @@ class IpAllowDeny
 
         // lookup table for some name shortcuts
         $shortcuts = [
-            'all'       => '0.0.0.0/0',
+            'all' => '0.0.0.0/0',
             'localhost' => '127.0.0.1/8',
         ];
 
         // Provide some useful shortcuts if server gives us address:
         if (Core::getenv('SERVER_ADDR')) {
-            $shortcuts['localnetA'] = Core::getenv('SERVER_ADDR') . '/8';
-            $shortcuts['localnetB'] = Core::getenv('SERVER_ADDR') . '/16';
-            $shortcuts['localnetC'] = Core::getenv('SERVER_ADDR') . '/24';
+            $shortcuts['localnetA'] = Core::getenv('SERVER_ADDR').'/8';
+            $shortcuts['localnetB'] = Core::getenv('SERVER_ADDR').'/16';
+            $shortcuts['localnetC'] = Core::getenv('SERVER_ADDR').'/24';
         }
 
         foreach ($rules as $rule) {

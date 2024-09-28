@@ -16,6 +16,7 @@ use PhpMyAdmin\SqlParser\Utils\Query;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_merge;
 use function implode;
 use function is_array;
@@ -26,9 +27,9 @@ class ExportController extends AbstractController
     private $export;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name.
-     * @param string   $table    Table name.
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
      */
     public function __construct(
         $response,
@@ -76,7 +77,7 @@ class ExportController extends AbstractController
                 if (! empty($where_clause) && is_array($where_clause)) {
                     $replaces[] = [
                         'WHERE',
-                        'WHERE (' . implode(') OR (', $where_clause) . ')',
+                        'WHERE ('.implode(') OR (', $where_clause).')',
                     ];
                 }
 

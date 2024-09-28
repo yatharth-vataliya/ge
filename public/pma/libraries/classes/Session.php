@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use const PHP_SESSION_ACTIVE;
+
 use function defined;
 use function function_exists;
 use function htmlspecialchars;
@@ -80,8 +81,7 @@ class Session
     /**
      * Session failed function
      *
-     * @param array $errors PhpMyAdmin\ErrorHandler array
-     *
+     * @param  array  $errors  PhpMyAdmin\ErrorHandler array
      * @return void
      */
     private static function sessionFailed(array $errors)
@@ -113,20 +113,19 @@ class Session
          */
         Core::fatalError(
             'Error during session start; please check your PHP and/or '
-            . 'webserver log file and configure your PHP '
-            . 'installation properly. Also ensure that cookies are enabled '
-            . 'in your browser.'
-            . '<br><br>'
-            . implode('<br><br>', $messages)
+            .'webserver log file and configure your PHP '
+            .'installation properly. Also ensure that cookies are enabled '
+            .'in your browser.'
+            .'<br><br>'
+            .implode('<br><br>', $messages)
         );
     }
 
     /**
      * Set up session
      *
-     * @param Config       $config       Configuration handler
-     * @param ErrorHandler $errorHandler Error handler
-     *
+     * @param  Config  $config  Configuration handler
+     * @param  ErrorHandler  $errorHandler  Error handler
      * @return void
      */
     public static function setUp(Config $config, ErrorHandler $errorHandler)
@@ -248,7 +247,7 @@ class Session
         }
 
         Core::fatalError(
-            'Failed to store CSRF token in session! ' .
+            'Failed to store CSRF token in session! '.
             'Probably sessions are not working properly.'
         );
     }

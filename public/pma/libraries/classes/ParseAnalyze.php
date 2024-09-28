@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\SqlParser\Utils\Query;
+
 use function count;
 use function strcasecmp;
 
@@ -19,12 +20,9 @@ class ParseAnalyze
     /**
      * Calls the parser on a query
      *
-     * @param string $sql_query the query to parse
-     * @param string $db        the current database
-     *
+     * @param  string  $sql_query  the query to parse
+     * @param  string  $db  the current database
      * @return array
-     *
-     * @access public
      */
     public static function sqlQuery($sql_query, $db)
     {

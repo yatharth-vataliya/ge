@@ -15,8 +15,8 @@ abstract class AbstractController extends Controller
     protected $data;
 
     /**
-     * @param Response $response
-     * @param Data     $data
+     * @param  Response  $response
+     * @param  Data  $data
      */
     public function __construct($response, Template $template, $data)
     {

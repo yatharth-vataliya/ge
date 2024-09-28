@@ -11,6 +11,7 @@ use PhpMyAdmin\Mime;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Util;
+
 use function htmlspecialchars;
 use function ini_set;
 use function sprintf;
@@ -25,10 +26,10 @@ class GetFieldController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, $dbi)
     {
@@ -73,9 +74,9 @@ class GetFieldController extends AbstractController
         }
 
         /* Grab data */
-        $sql = 'SELECT ' . Util::backquote($_GET['transform_key'])
-            . ' FROM ' . Util::backquote($table)
-            . ' WHERE ' . $_GET['where_clause'] . ';';
+        $sql = 'SELECT '.Util::backquote($_GET['transform_key'])
+            .' FROM '.Util::backquote($table)
+            .' WHERE '.$_GET['where_clause'].';';
         $result = $this->dbi->fetchValue($sql);
 
         /* Check return code */
@@ -90,7 +91,7 @@ class GetFieldController extends AbstractController
         ini_set('url_rewriter.tags', '');
 
         Core::downloadHeader(
-            $table . '-' . $_GET['transform_key'] . '.bin',
+            $table.'-'.$_GET['transform_key'].'.bin',
             Mime::detect($result),
             strlen($result)
         );

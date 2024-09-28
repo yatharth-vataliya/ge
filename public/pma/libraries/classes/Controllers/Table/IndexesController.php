@@ -15,6 +15,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function count;
 use function is_array;
 use function json_decode;
@@ -28,10 +29,10 @@ class IndexesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, $dbi)
     {
@@ -60,7 +61,7 @@ class IndexesController extends AbstractController
                 $index = $this->dbi->getTable($this->db, $this->table)->getIndex($_POST['index']);
             }
         } else {
-            $index = new Index();
+            $index = new Index;
         }
 
         if (isset($_POST['do_save_data'])) {
@@ -93,7 +94,7 @@ class IndexesController extends AbstractController
                 $index = $this->dbi->getTable($this->db, $this->table)->getIndex($_POST['index']);
             }
         } else {
-            $index = new Index();
+            $index = new Index;
         }
 
         if (isset($_POST['do_save_data'])) {
@@ -108,7 +109,7 @@ class IndexesController extends AbstractController
     /**
      * Display the rename form to rename an index
      *
-     * @param Index $index An Index instance.
+     * @param  Index  $index  An Index instance.
      */
     public function displayRenameForm(Index $index): void
     {
@@ -136,7 +137,7 @@ class IndexesController extends AbstractController
     /**
      * Display the form to edit/create an index
      *
-     * @param Index $index An Index instance.
+     * @param  Index  $index  An Index instance.
      */
     public function displayForm(Index $index): void
     {
@@ -199,8 +200,8 @@ class IndexesController extends AbstractController
      * run the query to build the new index
      * and moves back to /table/sql
      *
-     * @param Index $index      An Index instance.
-     * @param bool  $renameMode Rename the Index mode
+     * @param  Index  $index  An Index instance.
+     * @param  bool  $renameMode  Rename the Index mode
      */
     public function doSaveData(Index $index, bool $renameMode): void
     {

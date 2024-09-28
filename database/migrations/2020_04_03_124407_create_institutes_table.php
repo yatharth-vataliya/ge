@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateInstitutesTable extends Migration
 {
@@ -16,7 +16,7 @@ class CreateInstitutesTable extends Migration
         Schema::create('institutes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('institute_name')->unique();
-            $table->string('status',20)->default('active');
+            $table->string('status', 20)->default('active');
             $table->timestamps();
         });
     }

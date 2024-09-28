@@ -24,8 +24,8 @@ class SqlController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, SqlQueryForm $sqlQueryForm, $dbi)
     {

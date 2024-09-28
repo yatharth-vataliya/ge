@@ -9,6 +9,7 @@ use PhpMyAdmin\Normalization;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function intval;
 use function json_decode;
 use function json_encode;
@@ -23,7 +24,7 @@ class NormalizationController extends AbstractController
     private $normalization;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct($response, Template $template, Normalization $normalization)
     {
@@ -36,8 +37,8 @@ class NormalizationController extends AbstractController
         global $db, $table;
 
         if (isset($_POST['getColumns'])) {
-            $html = '<option selected disabled>' . __('Select one…') . '</option>'
-                . '<option value="no_such_col">' . __('No such column') . '</option>';
+            $html = '<option selected disabled>'.__('Select one…').'</option>'
+                .'<option value="no_such_col">'.__('No such column').'</option>';
             //get column whose datatype falls under string category
             $html .= $this->normalization->getHtmlForColumnsList(
                 $db,
@@ -59,7 +60,7 @@ class NormalizationController extends AbstractController
         if (isset($_POST['addNewPrimary'])) {
             $num_fields = 1;
             $columnMeta = [
-                'Field' => $table . '_id',
+                'Field' => $table.'_id',
                 'Extra' => 'auto_increment',
             ];
             $html = $this->normalization->getHtmlForCreateNewColumn(

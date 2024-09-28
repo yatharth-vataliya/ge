@@ -23,8 +23,8 @@ class UserPasswordController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, UserPassword $userPassword, $dbi)
     {
@@ -77,7 +77,7 @@ class UserPasswordController extends AbstractController
                     return;
                 }
 
-                $this->response->addHTML('<h1>' . __('Change password') . '</h1>' . "\n\n");
+                $this->response->addHTML('<h1>'.__('Change password').'</h1>'."\n\n");
                 $this->response->addHTML(Generator::getMessage($msg, $sql_query, 'success'));
                 $this->render('user_password');
 

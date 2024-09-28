@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Plugins\Schema\Pdf;
 
 use PhpMyAdmin\Plugins\Schema\RelationStats;
+
 use function sqrt;
 
 /**
@@ -26,11 +27,11 @@ use function sqrt;
 class RelationStatsPdf extends RelationStats
 {
     /**
-     * @param Pdf    $diagram       The PDF diagram
-     * @param string $master_table  The master table name
-     * @param string $master_field  The relation field in the master table
-     * @param string $foreign_table The foreign table name
-     * @param string $foreign_field The relation field in the foreign table
+     * @param  Pdf  $diagram  The PDF diagram
+     * @param  string  $master_table  The master table name
+     * @param  string  $master_field  The relation field in the master table
+     * @param  string  $foreign_table  The foreign table name
+     * @param  string  $foreign_field  The relation field in the foreign table
      */
     public function __construct(
         $diagram,
@@ -54,12 +55,9 @@ class RelationStatsPdf extends RelationStats
      *
      * @see    Pdf
      *
-     * @param bool $showColor Whether to use one color per relation or not
-     * @param int  $i         The id of the link to draw
-     *
+     * @param  bool  $showColor  Whether to use one color per relation or not
+     * @param  int  $i  The id of the link to draw
      * @return void
-     *
-     * @access public
      */
     public function relationDraw($showColor, $i)
     {

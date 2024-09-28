@@ -11,6 +11,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Util;
+
 use function is_array;
 use function str_replace;
 
@@ -26,11 +27,11 @@ class DataDictionaryController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db              Database name
-     * @param Relation          $relation
-     * @param Transformations   $transformations
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  Relation  $relation
+     * @param  Transformations  $transformations
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $relation, $transformations, $dbi)
     {

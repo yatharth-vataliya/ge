@@ -16,6 +16,7 @@ use PhpMyAdmin\Sql;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
+
 use function array_keys;
 use function md5;
 
@@ -27,7 +28,6 @@ class MultiTableQuery
     /**
      * DatabaseInterface instance
      *
-     * @access private
      * @var DatabaseInterface
      */
     private $dbi;
@@ -35,7 +35,6 @@ class MultiTableQuery
     /**
      * Database name
      *
-     * @access private
      * @var string
      */
     private $db;
@@ -43,7 +42,6 @@ class MultiTableQuery
     /**
      * Default number of columns
      *
-     * @access private
      * @var int
      */
     private $defaultNoOfColumns;
@@ -51,7 +49,6 @@ class MultiTableQuery
     /**
      * Table names
      *
-     * @access private
      * @var array
      */
     private $tables;
@@ -60,10 +57,10 @@ class MultiTableQuery
     public $template;
 
     /**
-     * @param DatabaseInterface $dbi                DatabaseInterface instance
-     * @param Template          $template           Template instance
-     * @param string            $dbName             Database name
-     * @param int               $defaultNoOfColumns Default number of columns
+     * @param  DatabaseInterface  $dbi  DatabaseInterface instance
+     * @param  Template  $template  Template instance
+     * @param  string  $dbName  Database name
+     * @param  int  $defaultNoOfColumns  Default number of columns
      */
     public function __construct(
         DatabaseInterface $dbi,
@@ -105,9 +102,9 @@ class MultiTableQuery
     /**
      * Displays multi-table query results
      *
-     * @param string $sqlQuery       The query to parse
-     * @param string $db             The current database
-     * @param string $themeImagePath Uri of the PMA theme image
+     * @param  string  $sqlQuery  The query to parse
+     * @param  string  $db  The current database
+     * @param  string  $themeImagePath  Uri of the PMA theme image
      */
     public static function displayResults($sqlQuery, $db, $themeImagePath): string
     {
@@ -123,8 +120,8 @@ class MultiTableQuery
             $relation,
             new RelationCleanup($dbi, $relation),
             new Operations($dbi, $relation),
-            new Transformations(),
-            new Template()
+            new Transformations,
+            new Template
         );
 
         return $sql->executeQueryAndSendQueryResponse(

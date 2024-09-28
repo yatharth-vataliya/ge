@@ -12,6 +12,7 @@ use PhpMyAdmin\Tracker;
 use PhpMyAdmin\Tracking;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_map;
 use function define;
 use function explode;
@@ -25,9 +26,9 @@ final class TrackingController extends AbstractController
     private $tracking;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name.
-     * @param string   $table    Table name.
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
      */
     public function __construct(
         $response,
@@ -69,7 +70,7 @@ final class TrackingController extends AbstractController
             $msg = Message::notice(
                 sprintf(
                     __('Tracking of %s is activated.'),
-                    htmlspecialchars($GLOBALS['db'] . '.' . $GLOBALS['table'])
+                    htmlspecialchars($GLOBALS['db'].'.'.$GLOBALS['table'])
                 )
             );
             $activeMessage = $msg->getDisplay();
@@ -101,9 +102,9 @@ final class TrackingController extends AbstractController
             if ($_POST['logtype'] === 'schema') {
                 $selection_schema = true;
             } elseif ($_POST['logtype'] === 'data') {
-                $selection_data   = true;
+                $selection_data = true;
             } else {
-                $selection_both   = true;
+                $selection_both = true;
             }
             if (! isset($_POST['date_from'])) {
                 $_POST['date_from'] = $data['date_from'];

@@ -12,6 +12,7 @@ use PhpMyAdmin\Query\Utilities;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Table;
 use PhpMyAdmin\Util;
+
 use function explode;
 use function function_exists;
 use function in_array;
@@ -37,8 +38,7 @@ final class Options
     /**
      * Outputs appropriate checked statement for checkbox.
      *
-     * @param string $str option name
-     *
+     * @param  string  $str  option name
      * @return bool
      */
     private function checkboxCheck($str)
@@ -50,8 +50,7 @@ final class Options
     /**
      * Prints Html For Export Selection Options
      *
-     * @param string $tmpSelect Tmp selected method of export
-     *
+     * @param  string  $tmpSelect  Tmp selected method of export
      * @return array
      */
     public function getDatabasesForSelectOptions($tmpSelect = '')
@@ -75,8 +74,8 @@ final class Options
                 }
             } elseif (! empty($tmpSelect)) {
                 if (mb_strpos(
-                    ' ' . $tmpSelect,
-                    '|' . $currentDb . '|'
+                    ' '.$tmpSelect,
+                    '|'.$currentDb.'|'
                 )) {
                     $isSelected = true;
                 }
@@ -93,14 +92,13 @@ final class Options
     }
 
     /**
-     * @param string         $exportType   export type: server|database|table
-     * @param string         $db           selected DB
-     * @param string         $table        selected table
-     * @param string         $sqlQuery     SQL query
-     * @param int|string     $numTables    number of tables
-     * @param int|string     $unlimNumRows unlimited number of rows
-     * @param ExportPlugin[] $exportList
-     *
+     * @param  string  $exportType  export type: server|database|table
+     * @param  string  $db  selected DB
+     * @param  string  $table  selected table
+     * @param  string  $sqlQuery  SQL query
+     * @param  int|string  $numTables  number of tables
+     * @param  int|string  $unlimNumRows  unlimited number of rows
+     * @param  ExportPlugin[]  $exportList
      * @return array<string, mixed>
      */
     public function getOptions(

@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Import;
 
+use const LIBXML_COMPACT;
+use const PHP_VERSION_ID;
+
 use PhpMyAdmin\File;
 use PhpMyAdmin\Import;
 use PhpMyAdmin\Message;
@@ -19,7 +22,7 @@ use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyRootGroup;
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
 use SimpleXMLElement;
-use const LIBXML_COMPACT;
+
 use function count;
 use function implode;
 use function libxml_disable_entity_loader;
@@ -27,7 +30,6 @@ use function rtrim;
 use function simplexml_load_string;
 use function strcmp;
 use function strlen;
-use const PHP_VERSION_ID;
 
 /**
  * Handles the import for the ODS format
@@ -48,7 +50,7 @@ class ImportOds extends ImportPlugin
      */
     protected function setProperties()
     {
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setText('OpenDocument Spreadsheet');
         $importPluginProperties->setExtension('ods');
         $importPluginProperties->setOptionsText(__('Options'));
@@ -67,8 +69,8 @@ class ImportOds extends ImportPlugin
             'col_names',
             __(
                 'The first line of the file contains the table column names'
-                . ' <i>(if this is unchecked, the first line will become part'
-                . ' of the data)</i>'
+                .' <i>(if this is unchecked, the first line will become part'
+                .' of the data)</i>'
             )
         );
         $generalOptions->addProperty($leaf);
@@ -101,8 +103,7 @@ class ImportOds extends ImportPlugin
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
@@ -157,7 +158,7 @@ class ImportOds extends ImportPlugin
             $GLOBALS['message'] = Message::error(
                 __(
                     'The XML file specified was either malformed or incomplete.'
-                    . ' Please correct the issue and try again.'
+                    .' Please correct the issue and try again.'
                 )
             );
             $GLOBALS['error'] = true;
@@ -181,9 +182,9 @@ class ImportOds extends ImportPlugin
          * Bring accumulated rows into the corresponding table
          */
         $num_tables = count($tables);
-        for ($i = 0; $i < $num_tables; ++$i) {
+        for ($i = 0; $i < $num_tables; $i++) {
             $num_rows = count($rows);
-            for ($j = 0; $j < $num_rows; ++$j) {
+            for ($j = 0; $j < $num_rows; $j++) {
                 if (strcmp($tables[$i][Import::TBL_NAME], $rows[$j][Import::TBL_NAME])) {
                     continue;
                 }
@@ -203,7 +204,7 @@ class ImportOds extends ImportPlugin
         $analyses = [];
 
         $len = count($tables);
-        for ($i = 0; $i < $len; ++$i) {
+        for ($i = 0; $i < $len; $i++) {
             $analyses[] = $this->import->analyzeTable($tables[$i]);
         }
 
@@ -239,9 +240,8 @@ class ImportOds extends ImportPlugin
     /**
      * Get value
      *
-     * @param array $cell_attrs Cell attributes
-     * @param array $text       Texts
-     *
+     * @param  array  $cell_attrs  Cell attributes
+     * @param  array  $text  Texts
      * @return float|string
      */
     protected function getValue($cell_attrs, $text)
@@ -300,8 +300,9 @@ class ImportOds extends ImportPlugin
                         $col_names[] = rtrim((string) $value);
                     }
 
-                    ++$col_count;
+                    $col_count++;
                 }
+
                 continue;
             }
 
@@ -315,16 +316,16 @@ class ImportOds extends ImportPlugin
 
             if ($num_null) {
                 if (! $col_names_in_first_row) {
-                    for ($i = 0; $i < $num_null; ++$i) {
+                    for ($i = 0; $i < $num_null; $i++) {
                         $tempRow[] = 'NULL';
-                        ++$col_count;
+                        $col_count++;
                     }
                 } else {
-                    for ($i = 0; $i < $num_null; ++$i) {
+                    for ($i = 0; $i < $num_null; $i++) {
                         $col_names[] = $this->import->getColumnAlphaName(
                             $col_count + 1
                         );
-                        ++$col_count;
+                        $col_count++;
                     }
                 }
             } else {
@@ -336,7 +337,7 @@ class ImportOds extends ImportPlugin
                     );
                 }
 
-                ++$col_count;
+                $col_count++;
             }
         }
 
@@ -395,8 +396,7 @@ class ImportOds extends ImportPlugin
     }
 
     /**
-     * @param array|SimpleXMLElement $sheets Sheets of the spreadsheet.
-     *
+     * @param  array|SimpleXMLElement  $sheets  Sheets of the spreadsheet.
      * @return array|array[]
      */
     private function iterateOverTables($sheets): array
@@ -428,6 +428,7 @@ class ImportOds extends ImportPlugin
                 $col_names = [];
                 $tempRow = [];
                 $tempRows = [];
+
                 continue;
             }
 
@@ -438,14 +439,14 @@ class ImportOds extends ImportPlugin
              */
 
             /* Fill out column names */
-            for ($i = count($col_names); $i < $max_cols; ++$i) {
+            for ($i = count($col_names); $i < $max_cols; $i++) {
                 $col_names[] = $this->import->getColumnAlphaName($i + 1);
             }
 
             /* Fill out all rows */
             $num_rows = count($tempRows);
-            for ($i = 0; $i < $num_rows; ++$i) {
-                for ($j = count($tempRows[$i]); $j < $max_cols; ++$j) {
+            for ($i = 0; $i < $num_rows; $i++) {
+                for ($j = count($tempRows[$i]); $j < $max_cols; $j++) {
                     $tempRows[$i][] = 'NULL';
                 }
             }

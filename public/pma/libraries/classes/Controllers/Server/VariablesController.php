@@ -12,6 +12,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function header;
 use function htmlspecialchars;
 use function implode;
@@ -33,8 +34,8 @@ class VariablesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $dbi)
     {
@@ -111,7 +112,7 @@ class VariablesController extends AbstractController
     /**
      * Handle the AJAX request for a single variable value
      *
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     public function getValue(array $params): void
     {
@@ -125,7 +126,7 @@ class VariablesController extends AbstractController
         // when server is running in ANSI_QUOTES sql_mode
         $varValue = $this->dbi->fetchSingleRow(
             'SHOW GLOBAL VARIABLES WHERE Variable_name=\''
-            . $this->dbi->escapeString($params['name']) . '\';',
+            .$this->dbi->escapeString($params['name']).'\';',
             'NUM'
         );
 
@@ -148,7 +149,7 @@ class VariablesController extends AbstractController
     /**
      * Handle the AJAX request for setting value for a single variable
      *
-     * @param array $vars Request parameters
+     * @param  array  $vars  Request parameters
      */
     public function setValue(array $vars): void
     {
@@ -188,20 +189,20 @@ class VariablesController extends AbstractController
         }
 
         if (! is_numeric($value)) {
-            $value = "'" . $value . "'";
+            $value = "'".$value."'";
         }
 
         $json = [];
         if (! preg_match('/[^a-zA-Z0-9_]+/', $params['varName'])
             && $this->dbi->query(
-                'SET GLOBAL ' . $params['varName'] . ' = ' . $value
+                'SET GLOBAL '.$params['varName'].' = '.$value
             )
         ) {
             // Some values are rounded down etc.
             $varValue = $this->dbi->fetchSingleRow(
                 'SHOW GLOBAL VARIABLES WHERE Variable_name="'
-                . $this->dbi->escapeString($params['varName'])
-                . '";',
+                .$this->dbi->escapeString($params['varName'])
+                .'";',
                 'NUM'
             );
             [$formattedValue, $isHtmlFormatted] = $this->formatVariable(
@@ -225,9 +226,8 @@ class VariablesController extends AbstractController
     /**
      * Format Variable
      *
-     * @param string     $name  variable name
-     * @param int|string $value variable value
-     *
+     * @param  string  $name  variable name
+     * @param  int|string  $value  variable value
      * @return array formatted string and bool if string is HTML formatted
      */
     private function formatVariable($name, $value): array

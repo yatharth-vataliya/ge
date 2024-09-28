@@ -45,11 +45,11 @@ abstract class NodeDatabaseChild extends Node
             ];
 
             $ret = '<span class="navItemControls">'
-                . '<a href="' . Url::getFromRoute('/navigation') . '" data-post="'
-                . Url::getCommon($params, '') . '"'
-                . ' class="hideNavItem ajax">'
-                . Generator::getImage('hide', __('Hide'))
-                . '</a></span>';
+                .'<a href="'.Url::getFromRoute('/navigation').'" data-post="'
+                .Url::getCommon($params, '').'"'
+                .' class="hideNavItem ajax">'
+                .Generator::getImage('hide', __('Hide'))
+                .'</a></span>';
         }
 
         return $ret;

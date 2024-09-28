@@ -26,8 +26,8 @@ class ViewOperationsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, Operations $operations, $dbi)
     {
@@ -55,7 +55,7 @@ class ViewOperationsController extends AbstractController
 
         $url_params['goto'] = $url_params['back'] = Url::getFromRoute('/view/operations');
 
-        $message = new Message();
+        $message = new Message;
         $type = 'success';
         if (isset($_POST['submitoptions'])) {
             if (isset($_POST['new_name'])) {

@@ -12,6 +12,7 @@ use PhpMyAdmin\Database\CentralColumns;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
+
 use function is_bool;
 use function parse_str;
 use function sprintf;
@@ -22,9 +23,9 @@ class CentralColumnsController extends AbstractController
     private $centralColumns;
 
     /**
-     * @param Response       $response
-     * @param string         $db             Database name
-     * @param CentralColumns $centralColumns
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  CentralColumns  $centralColumns
      */
     public function __construct($response, Template $template, $db, $centralColumns)
     {
@@ -145,7 +146,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     public function main(array $params): void
     {
@@ -176,8 +177,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return array JSON
      */
     public function getColumnList(array $params): array
@@ -195,8 +195,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return true|Message
      */
     public function editSave(array $params)
@@ -221,8 +220,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return true|Message
      */
     public function addNewColumn(array $params)
@@ -247,8 +245,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return true|Message
      */
     public function addColumn(array $params)
@@ -261,7 +258,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     public function editPage(array $params): void
     {
@@ -274,8 +271,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return true|Message
      */
     public function updateMultipleColumn(array $params)
@@ -284,8 +280,7 @@ class CentralColumnsController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return true|Message
      */
     public function deleteSave(array $params)

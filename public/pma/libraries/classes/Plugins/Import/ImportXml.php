@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Import;
 
+use const LIBXML_COMPACT;
+use const PHP_VERSION_ID;
+
 use PhpMyAdmin\File;
 use PhpMyAdmin\Import;
 use PhpMyAdmin\Message;
@@ -16,7 +19,7 @@ use PhpMyAdmin\Plugins\ImportPlugin;
 use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
 use PhpMyAdmin\Util;
 use SimpleXMLElement;
-use const LIBXML_COMPACT;
+
 use function count;
 use function in_array;
 use function libxml_disable_entity_loader;
@@ -24,7 +27,6 @@ use function simplexml_load_string;
 use function str_replace;
 use function strcmp;
 use function strlen;
-use const PHP_VERSION_ID;
 
 /**
  * Handles the import for the XML format
@@ -45,7 +47,7 @@ class ImportXml extends ImportPlugin
      */
     protected function setProperties()
     {
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setText(__('XML'));
         $importPluginProperties->setExtension('xml');
         $importPluginProperties->setMimeType('text/xml');
@@ -58,8 +60,7 @@ class ImportXml extends ImportPlugin
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
@@ -116,7 +117,7 @@ class ImportXml extends ImportPlugin
             echo Message::error(
                 __(
                     'The XML file specified was either malformed or incomplete.'
-                    . ' Please correct the issue and try again.'
+                    .' Please correct the issue and try again.'
                 )
             )->getDisplay();
             unset($xml);
@@ -180,7 +181,7 @@ class ImportXml extends ImportPlugin
             echo Message::error(
                 __(
                     'The XML file specified was either malformed or incomplete.'
-                    . ' Please correct the issue and try again.'
+                    .' Please correct the issue and try again.'
                 )
             )->getDisplay();
             unset($xml);
@@ -214,7 +215,7 @@ class ImportXml extends ImportPlugin
                      */
                     $attrs = $val2->attributes();
                     $create[] = 'USE '
-                        . Util::backquote(
+                        .Util::backquote(
                             $attrs['name']
                         );
 
@@ -253,7 +254,7 @@ class ImportXml extends ImportPlugin
 
                 $isInTables = false;
                 $num_tables = count($tables);
-                for ($i = 0; $i < $num_tables; ++$i) {
+                for ($i = 0; $i < $num_tables; $i++) {
                     if (! strcmp($tables[$i][Import::TBL_NAME], (string) $tbl_attr['name'])) {
                         $isInTables = true;
                         break;
@@ -288,9 +289,9 @@ class ImportXml extends ImportPlugin
              * Bring accumulated rows into the corresponding table
              */
             $num_tables = count($tables);
-            for ($i = 0; $i < $num_tables; ++$i) {
+            for ($i = 0; $i < $num_tables; $i++) {
                 $num_rows = count($rows);
-                for ($j = 0; $j < $num_rows; ++$j) {
+                for ($j = 0; $j < $num_rows; $j++) {
                     if (strcmp($tables[$i][Import::TBL_NAME], $rows[$j][Import::TBL_NAME])) {
                         continue;
                     }
@@ -309,7 +310,7 @@ class ImportXml extends ImportPlugin
                 $analyses = [];
 
                 $len = count($tables);
-                for ($i = 0; $i < $len; ++$i) {
+                for ($i = 0; $i < $len; $i++) {
                     $analyses[] = $this->import->analyzeTable($tables[$i]);
                 }
             }
@@ -360,7 +361,7 @@ class ImportXml extends ImportPlugin
             /* Set database collation/charset */
             $options = [
                 'db_collation' => $collation,
-                'db_charset'   => $charset,
+                'db_charset' => $charset,
             ];
         }
 

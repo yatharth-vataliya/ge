@@ -12,6 +12,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Util;
+
 use function define;
 use function htmlspecialchars;
 use function imagecopyresampled;
@@ -44,8 +45,8 @@ class TransformationWrapperController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -114,15 +115,15 @@ class TransformationWrapperController extends AbstractController
             }
 
             $result = $this->dbi->query(
-                'SELECT * FROM ' . Util::backquote($table)
-                . ' WHERE ' . $where_clause . ';',
+                'SELECT * FROM '.Util::backquote($table)
+                .' WHERE '.$where_clause.';',
                 DatabaseInterface::CONNECT_USER,
                 DatabaseInterface::QUERY_STORE
             );
             $row = $this->dbi->fetchAssoc($result);
         } else {
             $result = $this->dbi->query(
-                'SELECT * FROM ' . Util::backquote($table) . ' LIMIT 1;',
+                'SELECT * FROM '.Util::backquote($table).' LIMIT 1;',
                 DatabaseInterface::CONNECT_USER,
                 DatabaseInterface::QUERY_STORE
             );
@@ -165,7 +166,7 @@ class TransformationWrapperController extends AbstractController
             $mime_type = (! empty($mime_map[$transform_key]['mimetype'])
                     ? str_replace('_', '/', $mime_map[$transform_key]['mimetype'])
                     : $default_ct)
-                . ($mime_options['charset'] ?? '');
+                .($mime_options['charset'] ?? '');
         }
 
         Core::downloadHeader($cn ?? '', $mime_type ?? '');

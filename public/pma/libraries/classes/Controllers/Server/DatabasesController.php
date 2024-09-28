@@ -20,6 +20,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_key_exists;
 use function array_keys;
 use function array_search;
@@ -64,8 +65,8 @@ class DatabasesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -209,7 +210,7 @@ class DatabasesController extends AbstractController
         /**
          * Builds and executes the db creation sql query
          */
-        $sqlQuery = 'CREATE DATABASE ' . Util::backquote($params['new_db']);
+        $sqlQuery = 'CREATE DATABASE '.Util::backquote($params['new_db']);
         if (! empty($params['db_collation'])) {
             [$databaseCharset] = explode('_', $params['db_collation']);
             $charsets = Charsets::getCharsets(
@@ -224,7 +225,7 @@ class DatabasesController extends AbstractController
                 && array_key_exists($params['db_collation'], $collations[$databaseCharset])
             ) {
                 $sqlQuery .= ' DEFAULT'
-                    . Util::getCharsetQueryPart($params['db_collation']);
+                    .Util::getCharsetQueryPart($params['db_collation']);
             }
         }
         $sqlQuery .= ';';
@@ -253,7 +254,7 @@ class DatabasesController extends AbstractController
             $json = [
                 'message' => $message,
                 'sql_query' => Generator::getMessage('', $sqlQuery, 'success'),
-                'url' => $scriptName . Url::getCommon(
+                'url' => $scriptName.Url::getCommon(
                     ['db' => $params['new_db']],
                     strpos($scriptName, '?') === false ? '?' : '&'
                 ),
@@ -306,11 +307,11 @@ class DatabasesController extends AbstractController
 
         for ($i = 0; $i < $numberOfDatabases; $i++) {
             $this->relationCleanup->database($selected[$i]);
-            $aQuery = 'DROP DATABASE ' . Util::backquote($selected[$i]);
+            $aQuery = 'DROP DATABASE '.Util::backquote($selected[$i]);
             $reload = true;
             $rebuildDatabaseList = true;
 
-            $sqlQuery .= $aQuery . ';' . "\n";
+            $sqlQuery .= $aQuery.';'."\n";
             $this->dbi->query($aQuery);
             $this->transformations->clear($selected[$i]);
         }
@@ -342,8 +343,8 @@ class DatabasesController extends AbstractController
     /**
      * Extracts parameters sort order and sort by
      *
-     * @param string|null $sortBy    sort by
-     * @param string|null $sortOrder sort order
+     * @param  string|null  $sortBy  sort by
+     * @param  string|null  $sortOrder  sort order
      */
     private function setSortDetails(?string $sortBy, ?string $sortOrder): void
     {
@@ -377,10 +378,8 @@ class DatabasesController extends AbstractController
     }
 
     /**
-     * @param array $primaryInfo
-     * @param array $replicaInfo
-     *
-     * @return array
+     * @param  array  $primaryInfo
+     * @param  array  $replicaInfo
      */
     private function getDatabases($primaryInfo, $replicaInfo): array
     {
@@ -468,8 +467,6 @@ class DatabasesController extends AbstractController
 
     /**
      * Prepares the statistics columns
-     *
-     * @return array
      */
     private function getStatisticsColumns(): array
     {

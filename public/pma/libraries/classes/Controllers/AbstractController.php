@@ -9,6 +9,7 @@ use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function strlen;
 
 abstract class AbstractController
@@ -20,7 +21,7 @@ abstract class AbstractController
     protected $template;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct($response, Template $template)
     {
@@ -29,7 +30,7 @@ abstract class AbstractController
     }
 
     /**
-     * @param array<string, mixed> $templateData
+     * @param  array<string, mixed>  $templateData
      */
     protected function render(string $templatePath, array $templateData = []): void
     {
@@ -37,7 +38,7 @@ abstract class AbstractController
     }
 
     /**
-     * @param string[] $files
+     * @param  string[]  $files
      */
     protected function addScriptFiles(array $files): void
     {
@@ -82,7 +83,7 @@ abstract class AbstractController
             if (isset($message)) {
                 $params['message'] = $message;
             }
-            $uri = './index.php?route=/' . Url::getCommonRaw($params, '&');
+            $uri = './index.php?route=/'.Url::getCommonRaw($params, '&');
             Core::sendHeaderLocation($uri);
 
             return false;

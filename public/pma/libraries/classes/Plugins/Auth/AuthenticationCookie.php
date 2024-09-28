@@ -22,6 +22,7 @@ use PhpMyAdmin\Utils\SessionCache;
 use phpseclib\Crypt;
 use phpseclib\Crypt\Random;
 use ReCaptcha;
+
 use function base64_decode;
 use function base64_encode;
 use function class_exists;
@@ -77,8 +78,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Forces (not)using of openSSL
      *
-     * @param bool $use The flag
-     *
+     * @param  bool  $use  The flag
      * @return void
      */
     public function setUseOpenSSL($use)
@@ -144,11 +144,11 @@ class AuthenticationCookie extends AuthenticationPlugin
         if ($GLOBALS['cfg']['LoginCookieRecall']
             && ! empty($GLOBALS['cfg']['blowfish_secret'])
         ) {
-            $default_user   = $this->user;
+            $default_user = $this->user;
             $default_server = $GLOBALS['pma_auth_server'];
             $hasAutocomplete = true;
         } else {
-            $default_user   = '';
+            $default_user = '';
             $default_server = '';
             $hasAutocomplete = false;
         }
@@ -184,7 +184,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         $languageSelector = '';
         $hasLanguages = empty($GLOBALS['cfg']['Lang']) && $language_manager->hasChoice();
         if ($hasLanguages) {
-            $languageSelector = $language_manager->getSelectorDisplay(new Template(), true, false);
+            $languageSelector = $language_manager->getSelectorDisplay(new Template, true, false);
         }
 
         $serversOptions = '';
@@ -345,7 +345,7 @@ class AuthenticationCookie extends AuthenticationPlugin
 
             $password = $_POST['pma_password'] ?? '';
             if (strlen($password) >= 1000) {
-                $conn_error = __('Your password is too long. To prevent denial-of-service attacks, ' .
+                $conn_error = __('Your password is too long. To prevent denial-of-service attacks, '.
                     'phpMyAdmin restricts passwords to less than 1000 characters.');
 
                 return false;
@@ -387,7 +387,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         // and $this->password variables from cookies
 
         // check cookies
-        $serverCookie = $GLOBALS['PMA_Config']->getCookie('pmaUser-' . $GLOBALS['server']);
+        $serverCookie = $GLOBALS['PMA_Config']->getCookie('pmaUser-'.$GLOBALS['server']);
         if (empty($serverCookie)) {
             return false;
         }
@@ -437,7 +437,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         }
 
         // check password cookie
-        $serverCookie = $GLOBALS['PMA_Config']->getCookie('pmaAuth-' . $GLOBALS['server']);
+        $serverCookie = $GLOBALS['PMA_Config']->getCookie('pmaAuth-'.$GLOBALS['server']);
 
         if (empty($serverCookie)) {
             return false;
@@ -565,7 +565,7 @@ class AuthenticationCookie extends AuthenticationPlugin
                 ->disable();
 
             Core::sendHeaderLocation(
-                './index.php?route=/' . Url::getCommonRaw($url_params, '&'),
+                './index.php?route=/'.Url::getCommonRaw($url_params, '&'),
                 true
             );
             if (! defined('TESTSUITE')) {
@@ -581,8 +581,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Stores username in a cookie.
      *
-     * @param string $username User name
-     *
+     * @param  string  $username  User name
      * @return void
      */
     public function storeUsernameCookie($username)
@@ -590,7 +589,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         // Name and password cookies need to be refreshed each time
         // Duration = one month for username
         $GLOBALS['PMA_Config']->setCookie(
-            'pmaUser-' . $GLOBALS['server'],
+            'pmaUser-'.$GLOBALS['server'],
             $this->cookieEncrypt(
                 $username,
                 $this->getEncryptionSecret()
@@ -601,8 +600,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Stores password in a cookie.
      *
-     * @param string $password Password
-     *
+     * @param  string  $password  Password
      * @return void
      */
     public function storePasswordCookie($password)
@@ -613,7 +611,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         }
         // Duration = as configured
         $GLOBALS['PMA_Config']->setCookie(
-            'pmaAuth-' . $GLOBALS['server'],
+            'pmaAuth-'.$GLOBALS['server'],
             $this->cookieEncrypt(
                 json_encode($payload),
                 $this->getSessionEncryptionSecret()
@@ -632,8 +630,7 @@ class AuthenticationCookie extends AuthenticationPlugin
      * this function MUST exit/quit the application,
      * currently done by call to showLoginForm()
      *
-     * @param string $failure String describing why authentication has failed
-     *
+     * @param  string  $failure  String describing why authentication has failed
      * @return void
      */
     public function showFailure($failure)
@@ -643,7 +640,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         parent::showFailure($failure);
 
         // Deletes password cookie and displays the login form
-        $GLOBALS['PMA_Config']->removeCookie('pmaAuth-' . $GLOBALS['server']);
+        $GLOBALS['PMA_Config']->removeCookie('pmaAuth-'.$GLOBALS['server']);
 
         $conn_error = $this->getErrorMessage($failure);
 
@@ -694,8 +691,7 @@ class AuthenticationCookie extends AuthenticationPlugin
      * This doesn't add any security, just ensures the secret
      * is long enough by copying it.
      *
-     * @param string $secret Original secret
-     *
+     * @param  string  $secret  Original secret
      * @return string
      */
     public function enlargeSecret($secret)
@@ -710,8 +706,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Derives MAC secret from encryption secret.
      *
-     * @param string $secret the secret
-     *
+     * @param  string  $secret  the secret
      * @return string the MAC secret
      */
     public function getMACSecret($secret)
@@ -731,8 +726,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Derives AES secret from encryption secret.
      *
-     * @param string $secret the secret
-     *
+     * @param  string  $secret  the secret
      * @return string the AES secret
      */
     public function getAESSecret($secret)
@@ -777,9 +771,8 @@ class AuthenticationCookie extends AuthenticationPlugin
      * Encryption using openssl's AES or phpseclib's AES
      * (phpseclib uses another extension when it is available)
      *
-     * @param string $data   original data
-     * @param string $secret the secret
-     *
+     * @param  string  $data  original data
+     * @param  string  $secret  the secret
      * @return string the encrypted result
      */
     public function cookieEncrypt($data, $secret)
@@ -807,7 +800,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         return json_encode(
             [
                 'iv' => $iv,
-                'mac' => hash_hmac('sha1', $iv . $result, $mac_secret),
+                'mac' => hash_hmac('sha1', $iv.$result, $mac_secret),
                 'payload' => $result,
             ]
         );
@@ -817,9 +810,8 @@ class AuthenticationCookie extends AuthenticationPlugin
      * Decryption using openssl's AES or phpseclib's AES
      * (phpseclib uses another extension when it is available)
      *
-     * @param string $encdata encrypted data
-     * @param string $secret  the secret
-     *
+     * @param  string  $encdata  encrypted data
+     * @param  string  $secret  the secret
      * @return string|false original data, false on error
      */
     public function cookieDecrypt($encdata, $secret)
@@ -837,7 +829,7 @@ class AuthenticationCookie extends AuthenticationPlugin
 
         $mac_secret = $this->getMACSecret($secret);
         $aes_secret = $this->getAESSecret($secret);
-        $newmac = hash_hmac('sha1', $data['iv'] . $data['payload'], $mac_secret);
+        $newmac = hash_hmac('sha1', $data['iv'].$data['payload'], $mac_secret);
 
         if (! hash_equals($data['mac'], $newmac)) {
             return false;
@@ -906,8 +898,7 @@ class AuthenticationCookie extends AuthenticationPlugin
      *
      * This is for testing only!
      *
-     * @param string $vector The IV
-     *
+     * @param  string  $vector  The IV
      * @return void
      */
     public function setIV($vector)
@@ -918,8 +909,7 @@ class AuthenticationCookie extends AuthenticationPlugin
     /**
      * Callback when user changes password.
      *
-     * @param string $password New password to set
-     *
+     * @param  string  $password  New password to set
      * @return void
      */
     public function handlePasswordChange($password)
@@ -939,15 +929,15 @@ class AuthenticationCookie extends AuthenticationPlugin
         // -> delete password cookie(s)
         if ($GLOBALS['cfg']['LoginCookieDeleteAll']) {
             foreach ($GLOBALS['cfg']['Servers'] as $key => $val) {
-                $PMA_Config->removeCookie('pmaAuth-' . $key);
-                if (! $PMA_Config->issetCookie('pmaAuth-' . $key)) {
+                $PMA_Config->removeCookie('pmaAuth-'.$key);
+                if (! $PMA_Config->issetCookie('pmaAuth-'.$key)) {
                     continue;
                 }
 
-                $PMA_Config->removeCookie('pmaAuth-' . $key);
+                $PMA_Config->removeCookie('pmaAuth-'.$key);
             }
         } else {
-            $cookieName = 'pmaAuth-' . $GLOBALS['server'];
+            $cookieName = 'pmaAuth-'.$GLOBALS['server'];
             $PMA_Config->removeCookie($cookieName);
             if ($PMA_Config->issetCookie($cookieName)) {
                 $PMA_Config->removeCookie($cookieName);

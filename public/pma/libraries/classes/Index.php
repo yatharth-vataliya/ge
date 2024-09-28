@@ -14,10 +14,14 @@ use function strlen;
  */
 class Index
 {
-    public const PRIMARY  = 1;
-    public const UNIQUE   = 2;
-    public const INDEX    = 4;
-    public const SPATIAL  = 8;
+    public const PRIMARY = 1;
+
+    public const UNIQUE = 2;
+
+    public const INDEX = 4;
+
+    public const SPATIAL = 8;
+
     public const FULLTEXT = 16;
 
     /**
@@ -97,7 +101,7 @@ class Index
     private $parser = null;
 
     /**
-     * @param array $params parameters
+     * @param  array  $params  parameters
      */
     public function __construct(array $params = [])
     {
@@ -107,17 +111,16 @@ class Index
     /**
      * Creates(if not already created) and returns the corresponding Index object
      *
-     * @param string $schema     database name
-     * @param string $table      table name
-     * @param string $index_name index name
-     *
+     * @param  string  $schema  database name
+     * @param  string  $table  table name
+     * @param  string  $index_name  index name
      * @return Index corresponding Index object
      */
     public static function singleton($schema, $table, $index_name = '')
     {
         self::loadIndexes($table, $schema);
         if (! isset(self::$registry[$schema][$table][$index_name])) {
-            $index = new Index();
+            $index = new Index;
             if (strlen($index_name) > 0) {
                 $index->setName($index_name);
                 self::$registry[$schema][$table][$index->getName()] = $index;
@@ -132,10 +135,9 @@ class Index
     /**
      * returns an array with all indexes from the given table
      *
-     * @param string $table  table
-     * @param string $schema schema
-     *
-     * @return Index[]  array of indexes
+     * @param  string  $table  table
+     * @param  string  $schema  schema
+     * @return Index[] array of indexes
      */
     public static function getFromTable($table, $schema)
     {
@@ -151,10 +153,9 @@ class Index
     /**
      * Returns an array with all indexes from the given table of the requested types
      *
-     * @param string $table   table
-     * @param string $schema  schema
-     * @param int    $choices choices
-     *
+     * @param  string  $table  table
+     * @param  string  $schema  schema
+     * @param  int  $choices  choices
      * @return Index[] array of indexes
      */
     public static function getFromTableByChoice($table, $schema, $choices = 31)
@@ -196,9 +197,8 @@ class Index
     /**
      * return primary if set, false otherwise
      *
-     * @param string $table  table
-     * @param string $schema schema
-     *
+     * @param  string  $table  table
+     * @param  string  $schema  schema
      * @return Index|false primary index or false if no one exists
      */
     public static function getPrimary($table, $schema)
@@ -215,9 +215,8 @@ class Index
     /**
      * Load index data for table
      *
-     * @param string $table  table
-     * @param string $schema schema
-     *
+     * @param  string  $table  table
+     * @param  string  $schema  schema
      * @return bool whether loading was successful
      */
     private static function loadIndexes($table, $schema)
@@ -248,8 +247,7 @@ class Index
     /**
      * Add column to index
      *
-     * @param array $params column params
-     *
+     * @param  array  $params  column params
      * @return void
      */
     public function addColumn(array $params)
@@ -266,8 +264,7 @@ class Index
     /**
      * Adds a list of columns to the index
      *
-     * @param array $columns array containing details about the columns
-     *
+     * @param  array  $columns  array containing details about the columns
      * @return void
      */
     public function addColumns(array $columns)
@@ -281,8 +278,8 @@ class Index
             foreach ($columns['names'] as $key => $name) {
                 $sub_part = $columns['sub_parts'][$key] ?? '';
                 $_columns[] = [
-                    'Column_name'   => $name,
-                    'Sub_part'      => $sub_part,
+                    'Column_name' => $name,
+                    'Sub_part' => $sub_part,
                 ];
             }
         } else {
@@ -301,8 +298,7 @@ class Index
     /**
      * Returns true if $column indexed in this index
      *
-     * @param string $column the column
-     *
+     * @param  string  $column  the column
      * @return bool true if $column indexed in this index
      */
     public function hasColumn($column)
@@ -313,8 +309,7 @@ class Index
     /**
      * Sets index details
      *
-     * @param array $params index details
-     *
+     * @param  array  $params  index details
      * @return void
      */
     public function set(array $params)
@@ -513,8 +508,7 @@ class Index
     /**
      * Returns whether the index is a 'Unique' index
      *
-     * @param bool $as_text whether to output should be in text
-     *
+     * @param  bool  $as_text  whether to output should be in text
      * @return mixed whether the index is a 'Unique' index
      */
     public function isUnique($as_text = false)
@@ -547,8 +541,7 @@ class Index
     /**
      * Sets the name of the index
      *
-     * @param string $name index name
-     *
+     * @param  string  $name  index name
      * @return void
      */
     public function setName($name)
@@ -574,8 +567,8 @@ class Index
     public function getCompareData()
     {
         $data = [
-            'Packed'        => $this->packed,
-            'Index_choice'    => $this->choice,
+            'Packed' => $this->packed,
+            'Index_choice' => $this->choice,
         ];
 
         foreach ($this->columns as $column) {
@@ -588,18 +581,15 @@ class Index
     /**
      * Function to check over array of indexes and look for common problems
      *
-     * @param string $table  table name
-     * @param string $schema schema name
-     *
-     * @return string  Output HTML
-     *
-     * @access public
+     * @param  string  $table  table name
+     * @param  string  $schema  schema name
+     * @return string Output HTML
      */
     public static function findDuplicates($table, $schema)
     {
         $indexes = self::getFromTable($table, $schema);
 
-        $output  = '';
+        $output = '';
 
         // count($indexes) < 2:
         //   there is no need to check if there less than two indexes
@@ -622,7 +612,7 @@ class Index
                 $message = Message::notice(
                     __(
                         'The indexes %1$s and %2$s seem to be equal and one of them '
-                        . 'could possibly be removed.'
+                        .'could possibly be removed.'
                     )
                 );
                 $message->addParam($each_index->getName());

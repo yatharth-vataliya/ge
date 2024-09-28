@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Config\Forms;
 
 use PhpMyAdmin\Config\ConfigFile;
+
 use function array_merge;
 use function in_array;
 
@@ -35,8 +36,7 @@ class BaseFormList
     }
 
     /**
-     * @param string $name Name
-     *
+     * @param  string  $name  Name
      * @return bool
      */
     public static function isValid($name)
@@ -45,21 +45,20 @@ class BaseFormList
     }
 
     /**
-     * @param string $name Name
-     *
+     * @param  string  $name  Name
      * @return string|null
      */
     public static function get($name)
     {
         if (static::isValid($name)) {
-            return static::$ns . $name . 'Form';
+            return static::$ns.$name.'Form';
         }
 
         return null;
     }
 
     /**
-     * @param ConfigFile $cf Config file instance
+     * @param  ConfigFile  $cf  Config file instance
      */
     public function __construct(ConfigFile $cf)
     {
@@ -73,10 +72,9 @@ class BaseFormList
     /**
      * Processes forms, returns true on successful save
      *
-     * @param bool $allowPartialSave allows for partial form saving
-     *                               on failed validation
-     * @param bool $checkFormSubmit  whether check for $_POST['submit_save']
-     *
+     * @param  bool  $allowPartialSave  allows for partial form saving
+     *                                  on failed validation
+     * @param  bool  $checkFormSubmit  whether check for $_POST['submit_save']
      * @return bool whether processing was successful
      */
     public function process($allowPartialSave = true, $checkFormSubmit = true)

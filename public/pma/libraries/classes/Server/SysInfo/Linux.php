@@ -95,12 +95,12 @@ class Linux extends Base
         }
 
         $defaults = [
-            'MemTotal'   => 0,
-            'MemFree'    => 0,
-            'Cached'     => 0,
-            'Buffers'    => 0,
-            'SwapTotal'  => 0,
-            'SwapFree'   => 0,
+            'MemTotal' => 0,
+            'MemFree' => 0,
+            'Cached' => 0,
+            'Buffers' => 0,
+            'SwapTotal' => 0,
+            'SwapFree' => 0,
             'SwapCached' => 0,
         ];
 

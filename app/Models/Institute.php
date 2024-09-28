@@ -8,12 +8,13 @@ class Institute extends Model
 {
     protected $guarded = [];
 
-    public function departments(){
-    	return $this->hasMany(\App\Models\Department::class);
+    public function departments()
+    {
+        return $this->hasMany(\App\Models\Department::class);
     }
 
-    public function students(){
+    public function students()
+    {
         return $this->hasMany(\App\Models\Student::class);
     }
-
 }

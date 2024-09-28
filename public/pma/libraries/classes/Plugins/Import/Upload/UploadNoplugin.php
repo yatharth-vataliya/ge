@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Plugins\Import\Upload;
 
 use PhpMyAdmin\Plugins\UploadInterface;
+
 use function array_key_exists;
 use function trim;
 
@@ -32,8 +33,7 @@ class UploadNoplugin implements UploadInterface
      * This is implementation when no webserver support exists,
      * so it returns just zeroes.
      *
-     * @param string $id upload id
-     *
+     * @param  string  $id  upload id
      * @return array|null
      */
     public static function getUploadStatus($id)
@@ -45,12 +45,12 @@ class UploadNoplugin implements UploadInterface
         }
         if (! array_key_exists($id, $_SESSION[$SESSION_KEY])) {
             $_SESSION[$SESSION_KEY][$id] = [
-                'id'       => $id,
+                'id' => $id,
                 'finished' => false,
-                'percent'  => 0,
-                'total'    => 0,
+                'percent' => 0,
+                'total' => 0,
                 'complete' => 0,
-                'plugin'   => self::getIdKey(),
+                'plugin' => self::getIdKey(),
             ];
         }
 

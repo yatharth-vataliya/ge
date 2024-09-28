@@ -11,8 +11,7 @@ use PhpMyAdmin\Setup\ConfigGenerator;
 class ConfigController extends AbstractController
 {
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return string HTML
      */
     public function index(array $params): string

@@ -11,6 +11,7 @@ use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\UtfString;
 use PhpMyAdmin\SqlParser\Utils\Error as ParserError;
+
 use function defined;
 use function htmlspecialchars;
 use function mb_strlen;
@@ -25,8 +26,7 @@ class Linter
     /**
      * Gets the starting position of each line.
      *
-     * @param string $str String to be analyzed.
-     *
+     * @param  string  $str  String to be analyzed.
      * @return array
      */
     public static function getLines($str)
@@ -57,7 +57,7 @@ class Linter
             $str->length() : strlen($str);
 
         $lines = [0];
-        for ($i = 0; $i < $len; ++$i) {
+        for ($i = 0; $i < $len; $i++) {
             if ($str[$i] !== "\n") {
                 continue;
             }
@@ -71,9 +71,8 @@ class Linter
     /**
      * Computes the number of the line and column given an absolute position.
      *
-     * @param array $lines The starting position of each line.
-     * @param int   $pos   The absolute position
-     *
+     * @param  array  $lines  The starting position of each line.
+     * @param  int  $pos  The absolute position
      * @return array
      */
     public static function findLineNumberAndColumn(array $lines, $pos)
@@ -95,8 +94,7 @@ class Linter
     /**
      * Runs the linting process.
      *
-     * @param string $query The query to be checked.
-     *
+     * @param  string  $query  The query to be checked.
      * @return array
      */
     public static function lint($query)
@@ -107,7 +105,7 @@ class Linter
                 [
                     'message' => __(
                         'Linting is disabled for this query because it exceeds the '
-                        . 'maximum length.'
+                        .'maximum length.'
                     ),
                     'fromLine' => 0,
                     'fromColumn' => 0,

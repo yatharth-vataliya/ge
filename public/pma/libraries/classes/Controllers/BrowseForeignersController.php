@@ -21,9 +21,9 @@ class BrowseForeignersController extends AbstractController
     private $relation;
 
     /**
-     * @param Response         $response
-     * @param BrowseForeigners $browseForeigners
-     * @param Relation         $relation
+     * @param  Response  $response
+     * @param  BrowseForeigners  $browseForeigners
+     * @param  Relation  $relation
      */
     public function __construct($response, Template $template, $browseForeigners, $relation)
     {

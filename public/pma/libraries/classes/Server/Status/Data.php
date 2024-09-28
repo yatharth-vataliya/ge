@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Server\Status;
 
 use PhpMyAdmin\ReplicationInfo;
 use PhpMyAdmin\Url;
+
 use function basename;
 use function mb_strpos;
 use function mb_strtolower;
@@ -69,9 +70,8 @@ class Data
     /**
      * An empty setter makes the above properties read-only
      *
-     * @param string $a key
-     * @param mixed  $b value
-     *
+     * @param  string  $a  key
+     * @param  mixed  $b  value
      * @return void
      */
     public function __set($a, $b)
@@ -90,46 +90,46 @@ class Data
             // variable name => section
             // variable names match when they begin with the given string
 
-            'Com_'              => 'com',
-            'Innodb_'           => 'innodb',
-            'Ndb_'              => 'ndb',
-            'Handler_'          => 'handler',
-            'Qcache_'           => 'qcache',
-            'Threads_'          => 'threads',
+            'Com_' => 'com',
+            'Innodb_' => 'innodb',
+            'Ndb_' => 'ndb',
+            'Handler_' => 'handler',
+            'Qcache_' => 'qcache',
+            'Threads_' => 'threads',
             'Slow_launch_threads' => 'threads',
 
-            'Binlog_cache_'     => 'binlog_cache',
-            'Created_tmp_'      => 'created_tmp',
-            'Key_'              => 'key',
+            'Binlog_cache_' => 'binlog_cache',
+            'Created_tmp_' => 'created_tmp',
+            'Key_' => 'key',
 
-            'Delayed_'          => 'delayed',
+            'Delayed_' => 'delayed',
             'Not_flushed_delayed_rows' => 'delayed',
 
-            'Flush_commands'    => 'query',
-            'Last_query_cost'   => 'query',
-            'Slow_queries'      => 'query',
-            'Queries'           => 'query',
+            'Flush_commands' => 'query',
+            'Last_query_cost' => 'query',
+            'Slow_queries' => 'query',
+            'Queries' => 'query',
             'Prepared_stmt_count' => 'query',
 
-            'Select_'           => 'select',
-            'Sort_'             => 'sort',
+            'Select_' => 'select',
+            'Sort_' => 'sort',
 
-            'Open_tables'       => 'table',
-            'Opened_tables'     => 'table',
+            'Open_tables' => 'table',
+            'Opened_tables' => 'table',
             'Open_table_definitions' => 'table',
             'Opened_table_definitions' => 'table',
-            'Table_locks_'      => 'table',
+            'Table_locks_' => 'table',
 
-            'Rpl_status'        => 'repl',
-            'Slave_'            => 'repl',
+            'Rpl_status' => 'repl',
+            'Slave_' => 'repl',
 
-            'Tc_'               => 'tc',
+            'Tc_' => 'tc',
 
-            'Ssl_'              => 'ssl',
+            'Ssl_' => 'ssl',
 
-            'Open_files'        => 'files',
-            'Open_streams'      => 'files',
-            'Opened_files'      => 'files',
+            'Open_files' => 'files',
+            'Open_streams' => 'files',
+            'Opened_files' => 'files',
         ];
     }
 
@@ -142,25 +142,25 @@ class Data
     {
         return [
             // section => section name (description)
-            'com'           => 'Com',
-            'query'         => __('SQL query'),
-            'innodb'        => 'InnoDB',
-            'ndb'           => 'NDB',
-            'handler'       => __('Handler'),
-            'qcache'        => __('Query cache'),
-            'threads'       => __('Threads'),
-            'binlog_cache'  => __('Binary log'),
-            'created_tmp'   => __('Temporary data'),
-            'delayed'       => __('Delayed inserts'),
-            'key'           => __('Key cache'),
-            'select'        => __('Joins'),
-            'repl'          => __('Replication'),
-            'sort'          => __('Sorting'),
-            'table'         => __('Tables'),
-            'tc'            => __('Transaction coordinator'),
-            'files'         => __('Files'),
-            'ssl'           => 'SSL',
-            'other'         => __('Other'),
+            'com' => 'Com',
+            'query' => __('SQL query'),
+            'innodb' => 'InnoDB',
+            'ndb' => 'NDB',
+            'handler' => __('Handler'),
+            'qcache' => __('Query cache'),
+            'threads' => __('Threads'),
+            'binlog_cache' => __('Binary log'),
+            'created_tmp' => __('Temporary data'),
+            'delayed' => __('Delayed inserts'),
+            'key' => __('Key cache'),
+            'select' => __('Joins'),
+            'repl' => __('Replication'),
+            'sort' => __('Sorting'),
+            'table' => __('Tables'),
+            'tc' => __('Transaction coordinator'),
+            'files' => __('Files'),
+            'ssl' => 'SSL',
+            'other' => __('Other'),
         ];
     }
 
@@ -241,9 +241,8 @@ class Data
     /**
      * Calculate some values
      *
-     * @param array $server_status    contains results of SHOW GLOBAL STATUS
-     * @param array $server_variables contains results of SHOW GLOBAL VARIABLES
-     *
+     * @param  array  $server_status  contains results of SHOW GLOBAL STATUS
+     * @param  array  $server_variables  contains results of SHOW GLOBAL VARIABLES
      * @return array
      */
     private function calculateValues(array $server_status, array $server_variables)
@@ -302,12 +301,11 @@ class Data
     /**
      * Sort variables into arrays
      *
-     * @param array $server_status contains results of SHOW GLOBAL STATUS
-     * @param array $allocations   allocations for sections
-     * @param array $allocationMap map variables to their section
-     * @param array $sectionUsed   is a section used?
-     * @param array $used_queries  used queries
-     *
+     * @param  array  $server_status  contains results of SHOW GLOBAL STATUS
+     * @param  array  $allocations  allocations for sections
+     * @param  array  $allocationMap  map variables to their section
+     * @param  array  $sectionUsed  is a section used?
+     * @param  array  $used_queries  used queries
      * @return array ($allocationMap, $sectionUsed, $used_queries)
      */
     private function sortVariables(
@@ -444,8 +442,7 @@ class Data
     /**
      * cleanup of some deprecated values
      *
-     * @param array $server_status status array to process
-     *
+     * @param  array  $server_status  status array to process
      * @return array
      */
     public static function cleanDeprecated(array $server_status)

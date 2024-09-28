@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Setup;
 
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\VersionInformation;
+
 use function htmlspecialchars;
 use function is_array;
 use function sprintf;
@@ -47,11 +48,10 @@ class Index
     /**
      * Adds a new message to message list
      *
-     * @param string $type    one of: notice, error
-     * @param string $msgId   unique message identifier
-     * @param string $title   language string id (in $str array)
-     * @param string $message message text
-     *
+     * @param  string  $type  one of: notice, error
+     * @param  string  $msgId  unique message identifier
+     * @param  string  $title  language string id (in $str array)
+     * @param  string  $message  message text
      * @return void
      */
     public static function messagesSet($type, $msgId, $title, $message)
@@ -122,7 +122,7 @@ class Index
         $message_id = uniqid('version_check');
 
         // Fetch data
-        $versionInformation = new VersionInformation();
+        $versionInformation = new VersionInformation;
         $version_data = $versionInformation->getLatestVersion();
 
         if (empty($version_data)) {
@@ -132,7 +132,7 @@ class Index
                 __('Version check'),
                 __(
                     'Reading of version failed. '
-                    . 'Maybe you\'re offline or the upgrade server does not respond.'
+                    .'Maybe you\'re offline or the upgrade server does not respond.'
                 )
             );
 
@@ -182,7 +182,7 @@ class Index
                 $message_id,
                 __('Version check'),
                 sprintf(__('A newer version of phpMyAdmin is available and you should consider upgrading.'
-                    . ' The newest version is %s, released on %s.'), $version, $date)
+                    .' The newest version is %s, released on %s.'), $version, $date)
             );
         } else {
             if ($version_local % 100 == 0) {
@@ -191,7 +191,7 @@ class Index
                     $message_id,
                     __('Version check'),
                     Sanitize::sanitizeMessage(sprintf(__('You are using Git version, run [kbd]git pull[/kbd]'
-                        . ' :-)[br]The latest stable version is %s, released on %s.'), $version, $date))
+                        .' :-)[br]The latest stable version is %s, released on %s.'), $version, $date))
                 );
             } else {
                 self::messagesSet(

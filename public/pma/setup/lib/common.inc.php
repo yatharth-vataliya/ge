@@ -14,11 +14,11 @@ define('PMA_MINIMUM_COMMON', true);
 
 chdir('..');
 
-if (! file_exists(ROOT_PATH . 'libraries/common.inc.php')) {
-    die('Bad invocation!');
+if (! file_exists(ROOT_PATH.'libraries/common.inc.php')) {
+    exit('Bad invocation!');
 }
 
-require_once ROOT_PATH . 'libraries/common.inc.php';
+require_once ROOT_PATH.'libraries/common.inc.php';
 
 // use default error handler
 restore_error_handler();
@@ -27,7 +27,7 @@ restore_error_handler();
 $GLOBALS['PMA_Config']->setCookie('pma_lang', (string) $GLOBALS['lang']);
 $GLOBALS['PMA_Config']->set('is_setup', true);
 
-$GLOBALS['ConfigFile'] = new ConfigFile();
+$GLOBALS['ConfigFile'] = new ConfigFile;
 $GLOBALS['ConfigFile']->setPersistKeys(
     [
         'DefaultLang',

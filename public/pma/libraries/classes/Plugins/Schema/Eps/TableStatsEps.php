@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Plugins\Schema\Eps;
 
 use PhpMyAdmin\Plugins\Schema\ExportRelationSchema;
 use PhpMyAdmin\Plugins\Schema\TableStats;
+
 use function count;
 use function max;
 use function sprintf;
@@ -36,17 +37,17 @@ class TableStatsEps extends TableStats
      * @see TableStatsEps::setWidthTable
      * @see TableStatsEps::setHeightTable
      *
-     * @param object $diagram         The EPS diagram
-     * @param string $db              The database name
-     * @param string $tableName       The table name
-     * @param string $font            The font  name
-     * @param int    $fontSize        The font size
-     * @param int    $pageNumber      Page number
-     * @param int    $same_wide_width The max width among tables
-     * @param bool   $showKeys        Whether to display keys or not
-     * @param bool   $tableDimension  Whether to display table position or not
-     * @param bool   $offline         Whether the coordinates are sent
-     *                                from the browser
+     * @param  object  $diagram  The EPS diagram
+     * @param  string  $db  The database name
+     * @param  string  $tableName  The table name
+     * @param  string  $font  The font  name
+     * @param  int  $fontSize  The font size
+     * @param  int  $pageNumber  Page number
+     * @param  int  $same_wide_width  The max width among tables
+     * @param  bool  $showKeys  Whether to display keys or not
+     * @param  bool  $tableDimension  Whether to display table position or not
+     * @param  bool  $offline  Whether the coordinates are sent
+     *                         from the browser
      */
     public function __construct(
         $diagram,
@@ -101,9 +102,8 @@ class TableStatsEps extends TableStats
      *
      * @see Eps
      *
-     * @param string $font     The font name
-     * @param int    $fontSize The font size
-     *
+     * @param  string  $font  The font name
+     * @param  int  $fontSize  The font size
      * @return void
      */
     private function setWidthTable($font, $fontSize)
@@ -137,8 +137,7 @@ class TableStatsEps extends TableStats
     /**
      * Sets the height of the table
      *
-     * @param int $fontSize The font size
-     *
+     * @param  int  $fontSize  The font size
      * @return void
      */
     private function setHeightTable($fontSize)
@@ -154,8 +153,7 @@ class TableStatsEps extends TableStats
      * @see Eps::line
      * @see Eps::rect
      *
-     * @param bool $showColor Whether to display color
-     *
+     * @param  bool  $showColor  Whether to display color
      * @return void
      */
     public function tableDraw($showColor)

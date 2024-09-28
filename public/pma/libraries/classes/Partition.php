@@ -16,14 +16,14 @@ class Partition extends SubPartition
 {
     /** @var string partition description */
     protected $description;
+
     /** @var SubPartition[] sub partitions */
     protected $subPartitions = [];
 
     /**
      * Loads data from the fetched row from information_schema.PARTITIONS
      *
-     * @param array $row fetched row
-     *
+     * @param  array  $row  fetched row
      * @return void
      */
     protected function loadData(array $row)
@@ -54,8 +54,7 @@ class Partition extends SubPartition
     /**
      * Add a sub partition
      *
-     * @param SubPartition $partition Sub partition
-     *
+     * @param  SubPartition  $partition  Sub partition
      * @return void
      */
     public function addSubPartition(SubPartition $partition)
@@ -143,12 +142,9 @@ class Partition extends SubPartition
     /**
      * Returns array of partitions for a specific db/table
      *
-     * @param string $db    database name
-     * @param string $table table name
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
      * @return Partition[]
-     *
-     * @access public
      */
     public static function getPartitions($db, $table)
     {
@@ -157,8 +153,8 @@ class Partition extends SubPartition
         if (self::havePartitioning()) {
             $result = $dbi->fetchResult(
                 'SELECT * FROM `information_schema`.`PARTITIONS`'
-                . " WHERE `TABLE_SCHEMA` = '" . $dbi->escapeString($db)
-                . "' AND `TABLE_NAME` = '" . $dbi->escapeString($table) . "'"
+                ." WHERE `TABLE_SCHEMA` = '".$dbi->escapeString($db)
+                ."' AND `TABLE_NAME` = '".$dbi->escapeString($table)."'"
             );
             if ($result) {
                 $partitionMap = [];
@@ -192,12 +188,9 @@ class Partition extends SubPartition
     /**
      * returns array of partition names for a specific db/table
      *
-     * @param string $db    database name
-     * @param string $table table name
-     *
-     * @return array   of partition names
-     *
-     * @access public
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @return array of partition names
      */
     public static function getPartitionNames($db, $table)
     {
@@ -206,8 +199,8 @@ class Partition extends SubPartition
         if (self::havePartitioning()) {
             return $dbi->fetchResult(
                 'SELECT DISTINCT `PARTITION_NAME` FROM `information_schema`.`PARTITIONS`'
-                . " WHERE `TABLE_SCHEMA` = '" . $dbi->escapeString($db)
-                . "' AND `TABLE_NAME` = '" . $dbi->escapeString($table) . "'"
+                ." WHERE `TABLE_SCHEMA` = '".$dbi->escapeString($db)
+                ."' AND `TABLE_NAME` = '".$dbi->escapeString($table)."'"
             );
         }
 
@@ -217,9 +210,8 @@ class Partition extends SubPartition
     /**
      * returns the partition method used by the table.
      *
-     * @param string $db    database name
-     * @param string $table table name
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
      * @return string|null partition method
      */
     public static function getPartitionMethod($db, $table)
@@ -229,9 +221,9 @@ class Partition extends SubPartition
         if (self::havePartitioning()) {
             $partition_method = $dbi->fetchResult(
                 'SELECT `PARTITION_METHOD` FROM `information_schema`.`PARTITIONS`'
-                . " WHERE `TABLE_SCHEMA` = '" . $dbi->escapeString($db) . "'"
-                . " AND `TABLE_NAME` = '" . $dbi->escapeString($table) . "'"
-                . ' LIMIT 1'
+                ." WHERE `TABLE_SCHEMA` = '".$dbi->escapeString($db)."'"
+                ." AND `TABLE_NAME` = '".$dbi->escapeString($table)."'"
+                .' LIMIT 1'
             );
             if (! empty($partition_method)) {
                 return $partition_method[0];
@@ -247,9 +239,9 @@ class Partition extends SubPartition
      * @return bool
      *
      * @static
+     *
      * @staticvar boolean $have_partitioning
      * @staticvar boolean $already_checked
-     * @access public
      */
     public static function havePartitioning()
     {

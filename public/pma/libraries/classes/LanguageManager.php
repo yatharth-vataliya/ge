@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
-use PhpMyAdmin\Html\MySQLDocumentation;
 use const E_USER_ERROR;
+
+use PhpMyAdmin\Html\MySQLDocumentation;
+
 use function closedir;
 use function count;
 use function explode;
@@ -725,7 +727,7 @@ class LanguageManager
     public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new LanguageManager();
+            self::$instance = new LanguageManager;
         }
 
         return self::$instance;
@@ -755,8 +757,8 @@ class LanguageManager
         /* Process all files */
         while (($file = readdir($handle)) !== false) {
             $path = LOCALE_PATH
-                . '/' . $file
-                . '/LC_MESSAGES/phpmyadmin.mo';
+                .'/'.$file
+                .'/LC_MESSAGES/phpmyadmin.mo';
             if ($file === '.'
                 || $file === '..'
                 || ! @file_exists($path)
@@ -784,7 +786,7 @@ class LanguageManager
                 $this->availableLocales = $this->listLocaleDir();
             } else {
                 $this->availableLocales = preg_grep(
-                    '@' . $GLOBALS['PMA_Config']->get('FilterLanguages') . '@',
+                    '@'.$GLOBALS['PMA_Config']->get('FilterLanguages').'@',
                     $this->listLocaleDir()
                 );
             }
@@ -858,8 +860,7 @@ class LanguageManager
     /**
      * Return Language object for given code
      *
-     * @param string $code Language code
-     *
+     * @param  string  $code  Language code
      * @return Language|false Language object or false on failure
      */
     public function getLanguage($code)
@@ -986,13 +987,10 @@ class LanguageManager
     /**
      * Returns HTML code for the language selector
      *
-     * @param Template $template     Template instance
-     * @param bool     $use_fieldset whether to use fieldset for selection
-     * @param bool     $show_doc     whether to show documentation links
-     *
+     * @param  Template  $template  Template instance
+     * @param  bool  $use_fieldset  whether to use fieldset for selection
+     * @param  bool  $show_doc  whether to show documentation links
      * @return string
-     *
-     * @access public
      */
     public function getSelectorDisplay(Template $template, $use_fieldset = false, $show_doc = true)
     {
@@ -1005,7 +1003,7 @@ class LanguageManager
         // not a proper word in the current language; we show it to help
         // people recognize the dialog
         $language_title = __('Language')
-            . (__('Language') !== 'Language' ? ' - <em>Language</em>' : '');
+            .(__('Language') !== 'Language' ? ' - <em>Language</em>' : '');
         if ($show_doc) {
             $language_title .= MySQLDocumentation::showDocumentation('faq', 'faq7-2');
         }

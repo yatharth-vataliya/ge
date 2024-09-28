@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Query\Utilities;
+
 use function htmlspecialchars;
 use function in_array;
 use function is_array;
@@ -32,8 +33,8 @@ class ReplicationGui
     private $template;
 
     /**
-     * @param Replication $replication Replication instance
-     * @param Template    $template    Template instance
+     * @param  Replication  $replication  Replication instance
+     * @param  Template  $template  Template instance
      */
     public function __construct(Replication $replication, Template $template)
     {
@@ -114,9 +115,8 @@ class ReplicationGui
     /**
      * returns HTML for slave replication configuration
      *
-     * @param bool  $serverSlaveStatus      Whether it is Master or Slave
-     * @param array $serverSlaveReplication Slave replication
-     *
+     * @param  bool  $serverSlaveStatus  Whether it is Master or Slave
+     * @param  array  $serverSlaveReplication  Slave replication
      * @return string HTML code
      */
     public function getHtmlForSlaveConfiguration(
@@ -174,7 +174,7 @@ class ReplicationGui
             $urlParams['sl_configure'] = true;
             $urlParams['repl_clear_scr'] = true;
 
-            $reconfigureMasterLink =  Url::getCommon($urlParams, '');
+            $reconfigureMasterLink = Url::getCommon($urlParams, '');
 
             $slaveStatusTable = $this->getHtmlForReplicationStatusTable('slave', true, false);
 
@@ -222,8 +222,7 @@ class ReplicationGui
     /**
      * returns HTML for changing master
      *
-     * @param string $submitName submit button name
-     *
+     * @param  string  $submitName  submit button name
      * @return string HTML code
      */
     public function getHtmlForReplicationChangeMaster($submitName)
@@ -244,11 +243,10 @@ class ReplicationGui
     /**
      * This function returns html code for table with replication status.
      *
-     * @param string $type     either master or slave
-     * @param bool   $isHidden if true, then default style is set to hidden,
-     *                         default value false
-     * @param bool   $hasTitle if true, then title is displayed, default true
-     *
+     * @param  string  $type  either master or slave
+     * @param  bool  $isHidden  if true, then default style is set to hidden,
+     *                          default value false
+     * @param  bool  $hasTitle  if true, then title is displayed, default true
      * @return string HTML code
      */
     public function getHtmlForReplicationStatusTable(
@@ -330,7 +328,7 @@ class ReplicationGui
     /**
      * get the correct username and hostname lengths for this MySQL server
      *
-     * @return array   username length, hostname length
+     * @return array username length, hostname length
      */
     public function getUsernameHostnameLength()
     {
@@ -447,7 +445,7 @@ class ReplicationGui
             $_SESSION['replication']['sr_action_status'] = 'error';
             $_SESSION['replication']['sr_action_info'] = __(
                 'Connection to server is disabled, please enable'
-                . ' $cfg[\'AllowArbitraryServer\'] in phpMyAdmin configuration.'
+                .' $cfg[\'AllowArbitraryServer\'] in phpMyAdmin configuration.'
             );
         } elseif (isset($_POST['slave_changemaster'])) {
             $result = $this->handleRequestForSlaveChangeMaster();
@@ -490,7 +488,7 @@ class ReplicationGui
             } else {
                 Core::sendHeaderLocation(
                     './index.php?route=/server/replication'
-                    . Url::getCommonRaw($GLOBALS['url_params'], '&')
+                    .Url::getCommonRaw($GLOBALS['url_params'], '&')
                 );
             }
         }
@@ -517,8 +515,8 @@ class ReplicationGui
         $_SESSION['replication']['m_username'] = $sr['username'];
         $_SESSION['replication']['m_password'] = $sr['pma_pw'];
         $_SESSION['replication']['m_hostname'] = $sr['hostname'];
-        $_SESSION['replication']['m_port']     = $sr['port'];
-        $_SESSION['replication']['m_correct']  = '';
+        $_SESSION['replication']['m_port'] = $sr['port'];
+        $_SESSION['replication']['m_correct'] = '';
         $_SESSION['replication']['sr_action_status'] = 'error';
         $_SESSION['replication']['sr_action_info'] = __('Unknown error');
 
@@ -545,10 +543,10 @@ class ReplicationGui
                 $_SESSION['replication']['sr_action_info']
                     = __(
                         'Unable to read master log position. '
-                        . 'Possible privilege problem on master.'
+                        .'Possible privilege problem on master.'
                     );
             } else {
-                $_SESSION['replication']['m_correct']  = true;
+                $_SESSION['replication']['m_correct'] = true;
 
                 if (! $this->replication->slaveChangeMaster(
                     $sr['username'],
@@ -626,7 +624,7 @@ class ReplicationGui
 
         $qStop = $this->replication->slaveControl('STOP', null, DatabaseInterface::CONNECT_USER);
         $qSkip = $dbi->tryQuery(
-            'SET GLOBAL SQL_SLAVE_SKIP_COUNTER = ' . $count . ';'
+            'SET GLOBAL SQL_SLAVE_SKIP_COUNTER = '.$count.';'
         );
         $qStart = $this->replication->slaveControl('START', null, DatabaseInterface::CONNECT_USER);
 

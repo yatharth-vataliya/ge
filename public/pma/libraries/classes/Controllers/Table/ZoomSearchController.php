@@ -13,6 +13,7 @@ use PhpMyAdmin\Table\Search;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_search;
 use function count;
 use function htmlspecialchars;
@@ -67,10 +68,10 @@ class ZoomSearchController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, Search $search, Relation $relation, $dbi)
     {
@@ -229,8 +230,7 @@ class ZoomSearchController extends AbstractController
     /**
      * Display selection form action
      *
-     * @param string $dataLabel Data label
-     *
+     * @param  string  $dataLabel  Data label
      * @return void
      */
     public function displaySelectionFormAction($dataLabel = null)
@@ -288,10 +288,10 @@ class ZoomSearchController extends AbstractController
         }
 
         $extra_data = [];
-        $row_info_query = 'SELECT * FROM ' . Util::backquote($_POST['db']) . '.'
-            . Util::backquote($_POST['table']) . ' WHERE ' . $_POST['where_clause'];
+        $row_info_query = 'SELECT * FROM '.Util::backquote($_POST['db']).'.'
+            .Util::backquote($_POST['table']).' WHERE '.$_POST['where_clause'];
         $result = $this->dbi->query(
-            $row_info_query . ';',
+            $row_info_query.';',
             DatabaseInterface::CONNECT_USER,
             DatabaseInterface::QUERY_STORE
         );
@@ -347,20 +347,19 @@ class ZoomSearchController extends AbstractController
     /**
      * Zoom submit action
      *
-     * @param string $dataLabel Data label
-     * @param string $goto      Goto
-     *
+     * @param  string  $dataLabel  Data label
+     * @param  string  $goto  Goto
      * @return void
      */
     public function zoomSubmitAction($dataLabel, $goto)
     {
         //Query generation part
         $sql_query = $this->search->buildSqlQuery();
-        $sql_query .= ' LIMIT ' . $_POST['maxPlotLimit'];
+        $sql_query .= ' LIMIT '.$_POST['maxPlotLimit'];
 
         //Query execution part
         $result = $this->dbi->query(
-            $sql_query . ';',
+            $sql_query.';',
             DatabaseInterface::CONNECT_USER,
             DatabaseInterface::QUERY_STORE
         );
@@ -386,10 +385,8 @@ class ZoomSearchController extends AbstractController
             $row['where_clause_sign'] = Core::signSqlQuery($uniqueCondition[0]);
 
             $tmpData = [
-                $_POST['criteriaColumnNames'][0] =>
-                    $row[$_POST['criteriaColumnNames'][0]],
-                $_POST['criteriaColumnNames'][1] =>
-                    $row[$_POST['criteriaColumnNames'][1]],
+                $_POST['criteriaColumnNames'][0] => $row[$_POST['criteriaColumnNames'][0]],
+                $_POST['criteriaColumnNames'][1] => $row[$_POST['criteriaColumnNames'][1]],
                 'where_clause' => $uniqueCondition[0],
                 'where_clause_sign' => Core::signSqlQuery($uniqueCondition[0]),
             ];
@@ -424,9 +421,8 @@ class ZoomSearchController extends AbstractController
      * Provides a column's type, collation, operators list, and criteria value
      * to display in table search form
      *
-     * @param int $search_index Row number in table search form
-     * @param int $column_index Column index in ColumnNames array
-     *
+     * @param  int  $search_index  Row number in table search form
+     * @param  int  $column_index  Column index in ColumnNames array
      * @return array Array containing column's properties
      */
     public function getColumnProperties($search_index, $column_index)
@@ -465,12 +461,12 @@ class ZoomSearchController extends AbstractController
                 $cleanType,
                 ! $is_unsigned
             );
-            $htmlAttributes = 'data-min="' . $minMaxValues[0] . '" '
-                            . 'data-max="' . $minMaxValues[1] . '"';
+            $htmlAttributes = 'data-min="'.$minMaxValues[0].'" '
+                            .'data-max="'.$minMaxValues[1].'"';
         }
 
         $htmlAttributes .= ' onfocus="return '
-                        . 'verifyAfterSearchFieldChange(' . $search_index . ', \'#zoom_search_form\')"';
+                        .'verifyAfterSearchFieldChange('.$search_index.', \'#zoom_search_form\')"';
 
         $value = $this->template->render('table/search/input_box', [
             'str' => '',

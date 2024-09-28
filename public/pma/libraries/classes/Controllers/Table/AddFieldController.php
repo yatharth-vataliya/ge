@@ -17,6 +17,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function intval;
 use function is_array;
 use function min;
@@ -40,10 +41,10 @@ class AddFieldController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,

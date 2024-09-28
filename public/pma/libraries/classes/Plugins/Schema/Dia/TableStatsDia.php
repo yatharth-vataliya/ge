@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Plugins\Schema\Dia;
 
 use PhpMyAdmin\Plugins\Schema\ExportRelationSchema;
 use PhpMyAdmin\Plugins\Schema\TableStats;
+
 use function in_array;
 use function shuffle;
 use function sprintf;
@@ -32,13 +33,13 @@ class TableStatsDia extends TableStats
     public $tableColor;
 
     /**
-     * @param Dia    $diagram    The current dia document
-     * @param string $db         The database name
-     * @param string $tableName  The table name
-     * @param int    $pageNumber The current page number (from the
+     * @param  Dia  $diagram  The current dia document
+     * @param  string  $db  The database name
+     * @param  string  $tableName  The table name
+     * @param  int  $pageNumber  The current page number (from the
      *                           $cfg['Servers'][$i]['table_coords'] table)
-     * @param bool   $showKeys   Whether to display ONLY keys or not
-     * @param bool   $offline    Whether the coordinates are sent from the browser
+     * @param  bool  $showKeys  Whether to display ONLY keys or not
+     * @param  bool  $offline  Whether the coordinates are sent from the browser
      */
     public function __construct(
         $diagram,
@@ -61,7 +62,7 @@ class TableStatsDia extends TableStats
         /**
          * Every object in Dia document needs an ID to identify
          * so, we used a static variable to keep the things unique
-        */
+         */
         $this->tableId = ++DiaRelationSchema::$objectId;
     }
 
@@ -90,14 +91,11 @@ class TableStatsDia extends TableStats
      *
      * @see    Dia
      *
-     * @param bool $showColor Whether to show color for tables text or not
-     *                        if showColor is true then an array of $listOfColors
-     *                        will be used to choose the random colors for tables
-     *                        text we can change/add more colors to this array
-     *
+     * @param  bool  $showColor  Whether to show color for tables text or not
+     *                           if showColor is true then an array of $listOfColors
+     *                           will be used to choose the random colors for tables
+     *                           text we can change/add more colors to this array
      * @return void
-     *
-     * @access public
      */
     public function tableDraw($showColor)
     {
@@ -108,7 +106,7 @@ class TableStatsDia extends TableStats
                 '00FF00',
             ];
             shuffle($listOfColors);
-            $this->tableColor =  '#' . $listOfColors[0] . '';
+            $this->tableColor = '#'.$listOfColors[0].'';
         } else {
             $this->tableColor = '#000000';
         }
@@ -118,22 +116,22 @@ class TableStatsDia extends TableStats
         $this->diagram->startElement('dia:object');
         $this->diagram->writeAttribute('type', 'Database - Table');
         $this->diagram->writeAttribute('version', '0');
-        $this->diagram->writeAttribute('id', '' . $this->tableId . '');
+        $this->diagram->writeAttribute('id', ''.$this->tableId.'');
         $this->diagram->writeRaw(
             '<dia:attribute name="obj_pos">
                 <dia:point val="'
-            . ($this->x * $factor) . ',' . ($this->y * $factor) . '"/>
+            .($this->x * $factor).','.($this->y * $factor).'"/>
             </dia:attribute>
             <dia:attribute name="obj_bb">
                 <dia:rectangle val="'
-            . ($this->x * $factor) . ',' . ($this->y * $factor) . ';9.97,9.2"/>
+            .($this->x * $factor).','.($this->y * $factor).';9.97,9.2"/>
             </dia:attribute>
             <dia:attribute name="meta">
                 <dia:composite type="dict"/>
             </dia:attribute>
             <dia:attribute name="elem_corner">
                 <dia:point val="'
-            . ($this->x * $factor) . ',' . ($this->y * $factor) . '"/>
+            .($this->x * $factor).','.($this->y * $factor).'"/>
             </dia:attribute>
             <dia:attribute name="elem_width">
                 <dia:real val="5.9199999999999999"/>
@@ -142,7 +140,7 @@ class TableStatsDia extends TableStats
                 <dia:real val="3.5"/>
             </dia:attribute>
             <dia:attribute name="text_colour">
-                <dia:color val="' . $this->tableColor . '"/>
+                <dia:color val="'.$this->tableColor.'"/>
             </dia:attribute>
             <dia:attribute name="line_colour">
                 <dia:color val="#000000"/>
@@ -154,7 +152,7 @@ class TableStatsDia extends TableStats
                 <dia:real val="0.10000000000000001"/>
             </dia:attribute>
             <dia:attribute name="name">
-                <dia:string>#' . $this->tableName . '#</dia:string>
+                <dia:string>#'.$this->tableName.'#</dia:string>
             </dia:attribute>
             <dia:attribute name="comment">
                 <dia:string>##</dia:string>
@@ -198,7 +196,7 @@ class TableStatsDia extends TableStats
             $this->diagram->writeRaw(
                 '<dia:composite type="table_attribute">
                     <dia:attribute name="name">
-                <dia:string>#' . $field . '#</dia:string>
+                <dia:string>#'.$field.'#</dia:string>
                 </dia:attribute>
                 <dia:attribute name="type">
                     <dia:string>##</dia:string>
@@ -217,13 +215,13 @@ class TableStatsDia extends TableStats
             }
             $this->diagram->writeRaw(
                 '<dia:attribute name="primary_key">
-                    <dia:boolean val="' . $pm . '"/>
+                    <dia:boolean val="'.$pm.'"/>
                 </dia:attribute>
                 <dia:attribute name="nullable">
                     <dia:boolean val="false"/>
                 </dia:attribute>
                 <dia:attribute name="unique">
-                    <dia:boolean val="' . $pm . '"/>
+                    <dia:boolean val="'.$pm.'"/>
                 </dia:attribute>
                 </dia:composite>'
             );

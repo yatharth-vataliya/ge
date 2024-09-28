@@ -25,16 +25,13 @@ class Url
      *
      * @see Url::getCommon()
      *
-     * @param string|array $db     optional database name
-     *                             (can also be an array of parameters)
-     * @param string       $table  optional table name
-     * @param int          $indent indenting level
-     * @param string|array $skip   do not generate a hidden field for this parameter
-     *                             (can be an array of strings)
-     *
-     * @return string   string with input fields
-     *
-     * @access public
+     * @param  string|array  $db  optional database name
+     *                            (can also be an array of parameters)
+     * @param  string  $table  optional table name
+     * @param  int  $indent  indenting level
+     * @param  string|array  $skip  do not generate a hidden field for this parameter
+     *                              (can be an array of strings)
+     * @return string string with input fields
      */
     public static function getHiddenInputs(
         $db = '',
@@ -45,7 +42,7 @@ class Url
         global $PMA_Config;
 
         if (is_array($db)) {
-            $params  =& $db;
+            $params = &$db;
         } else {
             $params = [];
             if (strlen((string) $db) > 0) {
@@ -107,10 +104,9 @@ class Url
      * <input type="hidden" name="ccc[b]" Value="ccc_b">
      * </code>
      *
-     * @param array  $values   hidden values
-     * @param string $pre      prefix
-     * @param bool   $is_token if token already added in hidden input field
-     *
+     * @param  array  $values  hidden values
+     * @param  string  $pre  prefix
+     * @param  bool  $is_token  if token already added in hidden input field
      * @return string form fields of type hidden
      */
     public static function getHiddenFields(array $values, $pre = '', $is_token = false)
@@ -124,7 +120,7 @@ class Url
 
         foreach ($values as $name => $value) {
             if (! empty($pre)) {
-                $name = $pre . '[' . $name . ']';
+                $name = $pre.'['.$name.']';
             }
 
             if (is_array($value)) {
@@ -133,8 +129,8 @@ class Url
                 // do not generate an ending "\n" because
                 // Url::getHiddenInputs() is sometimes called
                 // from a JS document.write()
-                $fields .= '<input type="hidden" name="' . htmlspecialchars((string) $name)
-                    . '" value="' . htmlspecialchars((string) $value) . '">';
+                $fields .= '<input type="hidden" name="'.htmlspecialchars((string) $name)
+                    .'" value="'.htmlspecialchars((string) $value).'">';
             }
         }
 
@@ -164,12 +160,9 @@ class Url
      * // script.php?server=1&lang=en
      * </code>
      *
-     * @param array<string,int|string|bool> $params  optional, Contains an associative array with url params
-     * @param string                        $divider optional character to use instead of '?'
-     *
-     * @return string   string with URL parameters
-     *
-     * @access public
+     * @param  array<string,int|string|bool>  $params  optional, Contains an associative array with url params
+     * @param  string  $divider  optional character to use instead of '?'
+     * @return string string with URL parameters
      */
     public static function getCommon(array $params = [], $divider = '?')
     {
@@ -199,12 +192,9 @@ class Url
      * // script.php?server=1&lang=en
      * </code>
      *
-     * @param array<string|int,int|string|bool> $params  optional, Contains an associative array with url params
-     * @param string                            $divider optional character to use instead of '?'
-     *
-     * @return string   string with URL parameters
-     *
-     * @access public
+     * @param  array<string|int,int|string|bool>  $params  optional, Contains an associative array with url params
+     * @param  string  $divider  optional character to use instead of '?'
+     * @return string string with URL parameters
      */
     public static function getCommonRaw(array $params = [], $divider = '?')
     {
@@ -230,7 +220,7 @@ class Url
         $query = http_build_query($params, '', $separator);
 
         if (($divider !== '?' && $divider !== '&') || strlen($query) > 0) {
-            return $divider . $query;
+            return $divider.$query;
         }
 
         return '';
@@ -242,12 +232,9 @@ class Url
      * extracted from arg_separator.input as set in php.ini
      * we do not use arg_separator.output to avoid problems with & and &
      *
-     * @param string $encode whether to encode separator or not,
-     *                       currently 'none' or 'html'
-     *
-     * @return string  character used for separating url parts usually ; or &
-     *
-     * @access public
+     * @param  string  $encode  whether to encode separator or not,
+     *                          currently 'none' or 'html'
+     * @return string character used for separating url parts usually ; or &
      */
     public static function getArgSeparator($encode = 'none')
     {
@@ -281,11 +268,11 @@ class Url
     }
 
     /**
-     * @param string $route                Route to use
-     * @param array  $additionalParameters Additional URL parameters
+     * @param  string  $route  Route to use
+     * @param  array  $additionalParameters  Additional URL parameters
      */
     public static function getFromRoute(string $route, array $additionalParameters = []): string
     {
-        return 'index.php?route=' . $route . self::getCommon($additionalParameters, '&');
+        return 'index.php?route='.$route.self::getCommon($additionalParameters, '&');
     }
 }

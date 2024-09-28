@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCoursesTable extends Migration
 {
@@ -17,8 +17,8 @@ class CreateCoursesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->string('course_name');
-            $table->string('course_code',30);
-            $table->string('course_count',20)->default(0);
+            $table->string('course_code', 30);
+            $table->string('course_count', 20)->default(0);
             $table->timestamps();
         });
     }

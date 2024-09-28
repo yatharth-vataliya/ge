@@ -11,6 +11,7 @@ use PhpMyAdmin\Server\Status\Monitor;
 use PhpMyAdmin\Server\SysInfo\SysInfo;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function is_numeric;
 use function microtime;
 
@@ -23,10 +24,10 @@ class MonitorController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param Data              $data
-     * @param Monitor           $monitor
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  Data  $data
+     * @param  Monitor  $monitor
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $data, $monitor, $dbi)
     {

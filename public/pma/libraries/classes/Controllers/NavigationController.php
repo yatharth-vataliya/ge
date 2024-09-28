@@ -26,7 +26,7 @@ class NavigationController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct(
         $response,
@@ -60,7 +60,7 @@ class NavigationController extends AbstractController
         }
 
         if (isset($_POST['reload'])) {
-            SessionCache::set('dbs_to_test', false);// Empty database list cache, see #14252
+            SessionCache::set('dbs_to_test', false); // Empty database list cache, see #14252
         }
 
         $cfgRelation = $this->relation->getRelationsParam();

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use const PREG_SET_ORDER;
+
 use function count;
 use function is_array;
 use function preg_match_all;
@@ -26,24 +27,28 @@ class Bookmark
      * @var int
      */
     private $id;
+
     /**
      * Database the bookmark belongs to
      *
      * @var string
      */
     private $database;
+
     /**
      * The user to whom the bookmark belongs, empty for public bookmarks
      *
      * @var string
      */
     private $currentUser;
+
     /**
      * Label of the bookmark
      *
      * @var string
      */
     private $label;
+
     /**
      * SQL query that is bookmarked
      *
@@ -62,8 +67,8 @@ class Bookmark
     private $user;
 
     /**
-     * @param DatabaseInterface $dbi  DatabaseInterface object
-     * @param string            $user Current user
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $user  Current user
      */
     public function __construct(DatabaseInterface $dbi, string $user)
     {
@@ -115,8 +120,6 @@ class Bookmark
      * Adds a bookmark
      *
      * @return bool whether the INSERT succeeds or not
-     *
-     * @access public
      */
     public function save(): bool
     {
@@ -125,13 +128,13 @@ class Bookmark
             return false;
         }
 
-        $query = 'INSERT INTO ' . Util::backquote($cfgBookmark['db'])
-            . '.' . Util::backquote($cfgBookmark['table'])
-            . ' (id, dbase, user, query, label) VALUES (NULL, '
-            . "'" . $this->dbi->escapeString($this->database) . "', "
-            . "'" . $this->dbi->escapeString($this->currentUser) . "', "
-            . "'" . $this->dbi->escapeString($this->query) . "', "
-            . "'" . $this->dbi->escapeString($this->label) . "')";
+        $query = 'INSERT INTO '.Util::backquote($cfgBookmark['db'])
+            .'.'.Util::backquote($cfgBookmark['table'])
+            .' (id, dbase, user, query, label) VALUES (NULL, '
+            ."'".$this->dbi->escapeString($this->database)."', "
+            ."'".$this->dbi->escapeString($this->currentUser)."', "
+            ."'".$this->dbi->escapeString($this->query)."', "
+            ."'".$this->dbi->escapeString($this->label)."')";
 
         return $this->dbi->query($query, DatabaseInterface::CONNECT_CONTROL);
     }
@@ -140,8 +143,6 @@ class Bookmark
      * Deletes a bookmark
      *
      * @return bool true if successful
-     *
-     * @access public
      */
     public function delete(): bool
     {
@@ -150,9 +151,9 @@ class Bookmark
             return false;
         }
 
-        $query  = 'DELETE FROM ' . Util::backquote($cfgBookmark['db'])
-            . '.' . Util::backquote($cfgBookmark['table'])
-            . ' WHERE id = ' . $this->id;
+        $query = 'DELETE FROM '.Util::backquote($cfgBookmark['db'])
+            .'.'.Util::backquote($cfgBookmark['table'])
+            .' WHERE id = '.$this->id;
 
         return $this->dbi->tryQuery($query, DatabaseInterface::CONNECT_CONTROL);
     }
@@ -173,8 +174,7 @@ class Bookmark
     /**
      * Replace the placeholders in the bookmark query with variables
      *
-     * @param array $variables array of variables
-     *
+     * @param  array  $variables  array of variables
      * @return string query with variables applied
      */
     public function applyVariables(array $variables): string
@@ -192,7 +192,7 @@ class Bookmark
             if (! empty($variables[$i])) {
                 $var = $this->dbi->escapeString($variables[$i]);
             }
-            $query = str_replace('[VARIABLE' . $i . ']', $var, $query);
+            $query = str_replace('[VARIABLE'.$i.']', $var, $query);
             // backward compatibility
             if ($i != 1) {
                 continue;
@@ -207,11 +207,8 @@ class Bookmark
     /**
      * Defines the bookmark parameters for the current user
      *
-     * @param string $user Current user
-     *
+     * @param  string  $user  Current user
      * @return array|bool the bookmark parameters for the current user
-     *
-     * @access public
      */
     public static function getParams(string $user)
     {
@@ -227,8 +224,8 @@ class Bookmark
         $cfgRelation = $relation->getRelationsParam();
         if ($cfgRelation['bookmarkwork']) {
             $cfgBookmark = [
-                'user'  => $user,
-                'db'    => $cfgRelation['db'],
+                'user' => $user,
+                'db' => $cfgRelation['db'],
                 'table' => $cfgRelation['bookmark'],
             ];
         } else {
@@ -241,13 +238,12 @@ class Bookmark
     /**
      * Creates a Bookmark object from the parameters
      *
-     * @param DatabaseInterface $dbi        DatabaseInterface object
-     * @param string            $user       Current user
-     * @param array             $bkm_fields the properties of the bookmark to add; here,
-     *                                      $bkm_fields['bkm_sql_query'] is urlencoded
-     * @param bool              $all_users  whether to make the bookmark
-     *                                      available for all users
-     *
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $user  Current user
+     * @param  array  $bkm_fields  the properties of the bookmark to add; here,
+     *                             $bkm_fields['bkm_sql_query'] is urlencoded
+     * @param  bool  $all_users  whether to make the bookmark
+     *                           available for all users
      * @return Bookmark|false
      */
     public static function createBookmark(
@@ -273,9 +269,9 @@ class Bookmark
     }
 
     /**
-     * @param DatabaseInterface $dbi  DatabaseInterface object
-     * @param string            $user Current user
-     * @param array             $row  Resource used to build the bookmark
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $user  Current user
+     * @param  array  $row  Resource used to build the bookmark
      */
     protected static function createFromRow(
         DatabaseInterface $dbi,
@@ -295,13 +291,10 @@ class Bookmark
     /**
      * Gets the list of bookmarks defined for the current database
      *
-     * @param DatabaseInterface $dbi  DatabaseInterface object
-     * @param string            $user Current user
-     * @param string|false      $db   the current database name or false
-     *
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $user  Current user
+     * @param  string|false  $db  the current database name or false
      * @return Bookmark[] the bookmarks list
-     *
-     * @access public
      */
     public static function getList(
         DatabaseInterface $dbi,
@@ -313,12 +306,12 @@ class Bookmark
             return [];
         }
 
-        $query = 'SELECT * FROM ' . Util::backquote($cfgBookmark['db'])
-            . '.' . Util::backquote($cfgBookmark['table'])
-            . " WHERE ( `user` = ''"
-            . " OR `user` = '" . $dbi->escapeString($cfgBookmark['user']) . "' )";
+        $query = 'SELECT * FROM '.Util::backquote($cfgBookmark['db'])
+            .'.'.Util::backquote($cfgBookmark['table'])
+            ." WHERE ( `user` = ''"
+            ." OR `user` = '".$dbi->escapeString($cfgBookmark['user'])."' )";
         if ($db !== false) {
-            $query .= " AND dbase = '" . $dbi->escapeString($db) . "'";
+            $query .= " AND dbase = '".$dbi->escapeString($db)."'";
         }
         $query .= ' ORDER BY label ASC';
 
@@ -345,18 +338,15 @@ class Bookmark
     /**
      * Retrieve a specific bookmark
      *
-     * @param DatabaseInterface $dbi                 DatabaseInterface object
-     * @param string            $user                Current user
-     * @param string            $db                  the current database name
-     * @param int|string        $id                  an identifier of the bookmark to get
-     * @param string            $id_field            which field to look up the identifier
-     * @param bool              $action_bookmark_all true: get all bookmarks regardless
-     *                                               of the owning user
-     * @param bool              $exact_user_match    whether to ignore bookmarks with no user
-     *
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $user  Current user
+     * @param  string  $db  the current database name
+     * @param  int|string  $id  an identifier of the bookmark to get
+     * @param  string  $id_field  which field to look up the identifier
+     * @param  bool  $action_bookmark_all  true: get all bookmarks regardless
+     *                                     of the owning user
+     * @param  bool  $exact_user_match  whether to ignore bookmarks with no user
      * @return Bookmark|null the bookmark
-     *
-     * @access public
      */
     public static function get(
         DatabaseInterface $dbi,
@@ -372,19 +362,19 @@ class Bookmark
             return null;
         }
 
-        $query = 'SELECT * FROM ' . Util::backquote($cfgBookmark['db'])
-            . '.' . Util::backquote($cfgBookmark['table'])
-            . " WHERE dbase = '" . $dbi->escapeString($db) . "'";
+        $query = 'SELECT * FROM '.Util::backquote($cfgBookmark['db'])
+            .'.'.Util::backquote($cfgBookmark['table'])
+            ." WHERE dbase = '".$dbi->escapeString($db)."'";
         if (! $action_bookmark_all) {
             $query .= " AND (user = '"
-                . $dbi->escapeString($cfgBookmark['user']) . "'";
+                .$dbi->escapeString($cfgBookmark['user'])."'";
             if (! $exact_user_match) {
                 $query .= " OR user = ''";
             }
             $query .= ')';
         }
-        $query .= ' AND ' . Util::backquote($id_field)
-            . " = '" . $dbi->escapeString((string) $id) . "' LIMIT 1";
+        $query .= ' AND '.Util::backquote($id_field)
+            ." = '".$dbi->escapeString((string) $id)."' LIMIT 1";
 
         $result = $dbi->fetchSingleRow($query, 'ASSOC', DatabaseInterface::CONNECT_CONTROL);
         if (! empty($result)) {

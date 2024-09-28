@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Database;
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Util;
+
 use function array_intersect;
 use function array_key_exists;
 use function count;
@@ -29,7 +30,6 @@ class Search
     /**
      * Database name
      *
-     * @access private
      * @var string
      */
     private $db;
@@ -37,7 +37,6 @@ class Search
     /**
      * Table Names
      *
-     * @access private
      * @var array
      */
     private $tablesNamesOnly;
@@ -45,7 +44,6 @@ class Search
     /**
      * Type of search
      *
-     * @access private
      * @var array
      */
     private $searchTypes;
@@ -53,7 +51,6 @@ class Search
     /**
      * Already set search type
      *
-     * @access private
      * @var int
      */
     private $criteriaSearchType;
@@ -61,7 +58,6 @@ class Search
     /**
      * Already set search type's description
      *
-     * @access private
      * @var string
      */
     private $searchTypeDescription;
@@ -69,7 +65,6 @@ class Search
     /**
      * Search string/regexp
      *
-     * @access private
      * @var string
      */
     private $criteriaSearchString;
@@ -77,7 +72,6 @@ class Search
     /**
      * Criteria Tables to search in
      *
-     * @access private
      * @var array
      */
     private $criteriaTables;
@@ -85,7 +79,6 @@ class Search
     /**
      * Restrict the search to this column
      *
-     * @access private
      * @var string
      */
     private $criteriaColumnName;
@@ -97,9 +90,9 @@ class Search
     public $template;
 
     /**
-     * @param DatabaseInterface $dbi      DatabaseInterface object
-     * @param string            $db       Database name
-     * @param Template          $template Template object
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
+     * @param  string  $db  Database name
+     * @param  Template  $template  Template object
      */
     public function __construct(DatabaseInterface $dbi, $db, Template $template)
     {
@@ -176,8 +169,7 @@ class Search
     /**
      * Builds the SQL search query
      *
-     * @param string $table The table name
-     *
+     * @param  string  $table  The table name
      * @return array 3 SQL queries (for count, display and delete results)
      *
      * @todo    can we make use of fulltextsearch IN BOOLEAN MODE for this?
@@ -196,19 +188,19 @@ class Search
         $sqlstr_delete = 'DELETE';
         // Table to use
         $sqlstr_from = ' FROM '
-            . Util::backquote($GLOBALS['db']) . '.'
-            . Util::backquote($table);
+            .Util::backquote($GLOBALS['db']).'.'
+            .Util::backquote($table);
         // Gets where clause for the query
         $where_clause = $this->getWhereClause($table);
         // Builds complete queries
         $sql = [];
-        $sql['select_columns'] = $sqlstr_select . ' * ' . $sqlstr_from
-            . $where_clause;
+        $sql['select_columns'] = $sqlstr_select.' * '.$sqlstr_from
+            .$where_clause;
         // here, I think we need to still use the COUNT clause, even for
         // VIEWs, anyway we have a WHERE clause that should limit results
-        $sql['select_count']  = $sqlstr_select . ' COUNT(*) AS `count`'
-            . $sqlstr_from . $where_clause;
-        $sql['delete']        = $sqlstr_delete . $sqlstr_from . $where_clause;
+        $sql['select_count'] = $sqlstr_select.' COUNT(*) AS `count`'
+            .$sqlstr_from.$where_clause;
+        $sql['delete'] = $sqlstr_delete.$sqlstr_from.$where_clause;
 
         return $sql;
     }
@@ -216,8 +208,7 @@ class Search
     /**
      * Provides where clause for building SQL query
      *
-     * @param string $table The table name
-     *
+     * @param  string  $table  The table name
      * @return string The generated where clause
      */
     private function getWhereClause($table)
@@ -226,8 +217,8 @@ class Search
         $allColumns = $this->dbi->getColumns($GLOBALS['db'], $table);
         $likeClauses = [];
         // Based on search type, decide like/regex & '%'/''
-        $like_or_regex   = ($this->criteriaSearchType == 5 ? 'REGEXP' : 'LIKE');
-        $automatic_wildcard   = ($this->criteriaSearchType < 4 ? '%' : '');
+        $like_or_regex = ($this->criteriaSearchType == 5 ? 'REGEXP' : 'LIKE');
+        $automatic_wildcard = ($this->criteriaSearchType < 4 ? '%' : '');
         // For "as regular expression" (search option 5), LIKE won't be used
         // Usage example: If user is searching for a literal $ in a regexp search,
         // they should enter \$ as the value.
@@ -254,12 +245,12 @@ class Search
                     continue;
                 }
 
-                $column = 'CONVERT(' . Util::backquote($column['Field'])
-                        . ' USING utf8)';
-                $likeClausesPerColumn[] = $column . ' ' . $like_or_regex . ' '
-                    . "'"
-                    . $automatic_wildcard . $search_word . $automatic_wildcard
-                    . "'";
+                $column = 'CONVERT('.Util::backquote($column['Field'])
+                        .' USING utf8)';
+                $likeClausesPerColumn[] = $column.' '.$like_or_regex.' '
+                    ."'"
+                    .$automatic_wildcard.$search_word.$automatic_wildcard
+                    ."'";
             }
             if (count($likeClausesPerColumn) <= 0) {
                 continue;
@@ -268,15 +259,15 @@ class Search
             $likeClauses[] = implode(' OR ', $likeClausesPerColumn);
         }
         // Use 'OR' if 'at least one word' is to be searched, else use 'AND'
-        $implode_str  = ($this->criteriaSearchType == 1 ? ' OR ' : ' AND ');
+        $implode_str = ($this->criteriaSearchType == 1 ? ' OR ' : ' AND ');
         if (empty($likeClauses)) {
             // this could happen when the "inside column" does not exist
             // in any selected tables
             $where_clause = ' WHERE FALSE';
         } else {
             $where_clause = ' WHERE ('
-                . implode(') ' . $implode_str . ' (', $likeClauses)
-                . ')';
+                .implode(') '.$implode_str.' (', $likeClauses)
+                .')';
         }
 
         return $where_clause;

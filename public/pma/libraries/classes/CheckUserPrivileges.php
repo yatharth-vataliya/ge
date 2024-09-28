@@ -9,6 +9,7 @@ namespace PhpMyAdmin;
 
 use PhpMyAdmin\Query\Utilities;
 use PhpMyAdmin\Utils\SessionCache;
+
 use function mb_strpos;
 use function mb_substr;
 use function preg_match;
@@ -24,7 +25,7 @@ class CheckUserPrivileges
     private $dbi;
 
     /**
-     * @param DatabaseInterface $dbi DatabaseInterface object
+     * @param  DatabaseInterface  $dbi  DatabaseInterface object
      */
     public function __construct(DatabaseInterface $dbi)
     {
@@ -34,9 +35,7 @@ class CheckUserPrivileges
     /**
      * Extracts details from a result row of a SHOW GRANT query
      *
-     * @param string $row grant row
-     *
-     * @return array
+     * @param  string  $row  grant row
      */
     public function getItemsFromShowGrantsRow(string $row): array
     {
@@ -86,9 +85,9 @@ class CheckUserPrivileges
      * Check if user has required privileges for
      * performing 'Adjust privileges' operations
      *
-     * @param string $show_grants_str     string containing grants for user
-     * @param string $show_grants_dbname  name of db extracted from grant string
-     * @param string $show_grants_tblname name of table extracted from grant string
+     * @param  string  $show_grants_str  string containing grants for user
+     * @param  string  $show_grants_dbname  name of db extracted from grant string
+     * @param  string  $show_grants_tblname  name of table extracted from grant string
      */
     public function checkRequiredPrivilegesForAdjust(
         string $show_grants_str,
@@ -204,7 +203,7 @@ class CheckUserPrivileges
         }
 
         // defaults
-        $GLOBALS['is_create_db_priv']  = false;
+        $GLOBALS['is_create_db_priv'] = false;
         $GLOBALS['is_reload_priv'] = false;
         $GLOBALS['db_to_create'] = '';
         $GLOBALS['dbs_where_create_table_allowed'] = [];
@@ -265,7 +264,7 @@ class CheckUserPrivileges
                 // a global CREATE privilege
                 $GLOBALS['is_create_db_priv'] = true;
                 $GLOBALS['is_reload_priv'] = true;
-                $GLOBALS['db_to_create']   = '';
+                $GLOBALS['db_to_create'] = '';
                 $GLOBALS['dbs_where_create_table_allowed'][] = '*';
                 // @todo we should not break here, cause GRANT ALL *.*
                 // could be revoked by a later rule like GRANT SELECT ON db.*
@@ -283,11 +282,11 @@ class CheckUserPrivileges
             }
 
             // does this db exist?
-            if ((! preg_match('/' . $re0 . '%|_/', $show_grants_dbname)
+            if ((! preg_match('/'.$re0.'%|_/', $show_grants_dbname)
                 || preg_match('/\\\\%|\\\\_/', $show_grants_dbname))
                 && ($this->dbi->tryQuery(
-                    'USE ' . preg_replace(
-                        '/' . $re1 . '(%|_)/',
+                    'USE '.preg_replace(
+                        '/'.$re1.'(%|_)/',
                         '\\1\\3',
                         $dbname_to_test
                     )
@@ -302,12 +301,12 @@ class CheckUserPrivileges
              * (this case must be rare anyway)
              */
             $GLOBALS['db_to_create'] = preg_replace(
-                '/' . $re0 . '%/',
+                '/'.$re0.'%/',
                 '\\1',
                 $show_grants_dbname
             );
             $GLOBALS['db_to_create'] = preg_replace(
-                '/' . $re1 . '(%|_)/',
+                '/'.$re1.'(%|_)/',
                 '\\1\\3',
                 $GLOBALS['db_to_create']
             );
@@ -317,8 +316,8 @@ class CheckUserPrivileges
              * @todo collect $GLOBALS['db_to_create'] into an array,
              * to display a drop-down in the "Create database" dialog
              */
-             // we don't break, we want all possible databases
-             //break;
+            // we don't break, we want all possible databases
+            //break;
         }
 
         $this->dbi->freeResult($rs_usr);

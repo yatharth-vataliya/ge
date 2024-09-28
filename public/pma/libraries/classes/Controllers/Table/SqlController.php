@@ -11,6 +11,7 @@ use PhpMyAdmin\SqlQueryForm;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function htmlspecialchars;
 
 /**
@@ -22,9 +23,9 @@ final class SqlController extends AbstractController
     private $sqlQueryForm;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name.
-     * @param string   $table    Table name.
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
      */
     public function __construct($response, Template $template, $db, $table, SqlQueryForm $sqlQueryForm)
     {

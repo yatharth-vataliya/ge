@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Plugins\Transformations\Abs;
 
 use PhpMyAdmin\Plugins\TransformationsPlugin;
 use stdClass;
+
 use function htmlspecialchars;
 use function mb_strlen;
 use function mb_substr;
@@ -27,20 +28,19 @@ abstract class SubstringTransformationsPlugin extends TransformationsPlugin
     {
         return __(
             'Displays a part of a string. The first option is the number of'
-            . ' characters to skip from the beginning of the string (Default 0).'
-            . ' The second option is the number of characters to return (Default:'
-            . ' until end of string). The third option is the string to append'
-            . ' and/or prepend when truncation occurs (Default: "…").'
+            .' characters to skip from the beginning of the string (Default 0).'
+            .' The second option is the number of characters to return (Default:'
+            .' until end of string). The third option is the string to append'
+            .' and/or prepend when truncation occurs (Default: "…").'
         );
     }
 
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)
@@ -67,7 +67,7 @@ abstract class SubstringTransformationsPlugin extends TransformationsPlugin
         $baselength = mb_strlen((string) $buffer);
         if ($length != $baselength) {
             if ($optionZero !== 0) {
-                $newtext = $options[2] . $newtext;
+                $newtext = $options[2].$newtext;
             }
 
             if ($length + $optionZero != $baselength) {

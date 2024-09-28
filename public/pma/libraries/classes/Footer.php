@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use Traversable;
+
 use function basename;
 use function file_exists;
 use function htmlspecialchars;
@@ -27,29 +28,28 @@ class Footer
     /**
      * Scripts instance
      *
-     * @access private
      * @var Scripts
      */
     private $scripts;
+
     /**
      * Whether we are servicing an ajax request.
      *
-     * @access private
      * @var bool
      */
     private $isAjax;
+
     /**
      * Whether to only close the BODY and HTML tags
      * or also include scripts, errors and links
      *
-     * @access private
      * @var bool
      */
     private $isMinimal;
+
     /**
      * Whether to display anything
      *
-     * @access private
      * @var bool
      */
     private $isEnabled;
@@ -67,9 +67,9 @@ class Footer
     {
         global $dbi;
 
-        $this->template = new Template();
+        $this->template = new Template;
         $this->isEnabled = true;
-        $this->scripts = new Scripts();
+        $this->scripts = new Scripts;
         $this->isMinimal = false;
         $this->relation = new Relation($dbi);
     }
@@ -79,22 +79,22 @@ class Footer
      */
     private function getDemoMessage(): string
     {
-        $message = '<a href="/">' . __('phpMyAdmin Demo Server') . '</a>: ';
-        if (@file_exists(ROOT_PATH . 'revision-info.php')) {
+        $message = '<a href="/">'.__('phpMyAdmin Demo Server').'</a>: ';
+        if (@file_exists(ROOT_PATH.'revision-info.php')) {
             $revision = '';
             $fullrevision = '';
             $repobase = '';
             $repobranchbase = '';
             $branch = '';
-            include ROOT_PATH . 'revision-info.php';
+            include ROOT_PATH.'revision-info.php';
             $message .= sprintf(
                 __('Currently running Git revision %1$s from the %2$s branch.'),
                 '<a target="_blank" rel="noopener noreferrer" href="'
-                . htmlspecialchars($repobase . $fullrevision) . '">'
-                . htmlspecialchars($revision) . '</a>',
+                .htmlspecialchars($repobase.$fullrevision).'">'
+                .htmlspecialchars($revision).'</a>',
                 '<a target="_blank" rel="noopener noreferrer" href="'
-                . htmlspecialchars($repobranchbase . $branch) . '">'
-                . htmlspecialchars($branch) . '</a>'
+                .htmlspecialchars($repobranchbase.$branch).'">'
+                .htmlspecialchars($branch).'</a>'
             );
         } else {
             $message .= __('Git information missing!');
@@ -106,10 +106,9 @@ class Footer
     /**
      * Remove recursions and iterator objects from an object
      *
-     * @param object|array $object Object to clean
-     * @param array        $stack  Stack used to keep track of recursion,
-     *                             need not be passed for the first time
-     *
+     * @param  object|array  $object  Object to clean
+     * @param  array  $stack  Stack used to keep track of recursion,
+     *                        need not be passed for the first time
      * @return object Reference passed object
      */
     private static function removeRecursion(&$object, array $stack = [])
@@ -202,27 +201,27 @@ class Footer
             $params['single_table'] = $_REQUEST['single_table'];
         }
 
-        return basename(Core::getenv('SCRIPT_NAME')) . Url::getCommonRaw($params);
+        return basename(Core::getenv('SCRIPT_NAME')).Url::getCommonRaw($params);
     }
 
     /**
      * Renders the link to open a new page
      *
-     * @param string $url The url of the page
+     * @param  string  $url  The url of the page
      */
     private function getSelfLink(string $url): string
     {
-        $retval  = '';
+        $retval = '';
         $retval .= '<div id="selflink" class="print_ignore">';
-        $retval .= '<a href="' . htmlspecialchars($url) . '"'
-            . ' title="' . __('Open new phpMyAdmin window') . '" target="_blank" rel="noopener noreferrer">';
+        $retval .= '<a href="'.htmlspecialchars($url).'"'
+            .' title="'.__('Open new phpMyAdmin window').'" target="_blank" rel="noopener noreferrer">';
         if (Util::showIcons('TabsMode')) {
             $retval .= Html\Generator::getImage(
                 'window-new',
                 __('Open new phpMyAdmin window')
             );
         } else {
-            $retval .=  __('Open new phpMyAdmin window');
+            $retval .= __('Open new phpMyAdmin window');
         }
         $retval .= '</a>';
         $retval .= '</div>';
@@ -284,7 +283,7 @@ class Footer
      * Set the ajax flag to indicate whether
      * we are servicing an ajax request
      *
-     * @param bool $isAjax Whether we are servicing an ajax request
+     * @param  bool  $isAjax  Whether we are servicing an ajax request
      */
     public function setAjax(bool $isAjax): void
     {
@@ -329,11 +328,11 @@ class Footer
                     $this->scripts->addCode(
                         sprintf(
                             'if (! (history && history.pushState)) '
-                            . 'MicroHistory.primer = {'
-                            . ' url: "%s",'
-                            . ' scripts: %s,'
-                            . ' menuHash: "%s"'
-                            . '};',
+                            .'MicroHistory.primer = {'
+                            .' url: "%s",'
+                            .' scripts: %s,'
+                            .' menuHash: "%s"'
+                            .'};',
                             Sanitize::escapeJsString($url),
                             json_encode($scripts),
                             Sanitize::escapeJsString($menuHash)
@@ -347,7 +346,7 @@ class Footer
                     $selfLink = $this->getSelfLink($url);
                 }
                 $this->scripts->addCode(
-                    'var debugSQLInfo = ' . $this->getDebugMessage() . ';'
+                    'var debugSQLInfo = '.$this->getDebugMessage().';'
                 );
 
                 $errorMessages = $this->getErrorMessages();

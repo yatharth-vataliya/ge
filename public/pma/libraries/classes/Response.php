@@ -17,6 +17,7 @@ use const JSON_ERROR_SYNTAX;
 use const JSON_ERROR_UNSUPPORTED_TYPE;
 use const JSON_ERROR_UTF8;
 use const PHP_SAPI;
+
 use function defined;
 use function explode;
 use function headers_sent;
@@ -37,59 +38,59 @@ class Response
     /**
      * Response instance
      *
-     * @access private
      * @static
+     *
      * @var Response
      */
     private static $instance;
+
     /**
      * Header instance
      *
-     * @access private
      * @var Header
      */
     protected $header;
+
     /**
      * HTML data to be used in the response
      *
-     * @access private
      * @var string
      */
     private $HTML;
+
     /**
      * An array of JSON key-value pairs
      * to be sent back for ajax requests
      *
-     * @access private
      * @var array
      */
     private $JSON;
+
     /**
      * PhpMyAdmin\Footer instance
      *
-     * @access private
      * @var Footer
      */
     protected $footer;
+
     /**
      * Whether we are servicing an ajax request.
      *
-     * @access private
      * @var bool
      */
     protected $isAjax;
+
     /**
      * Whether response object is disabled
      *
-     * @access private
      * @var bool
      */
     private $isDisabled;
+
     /**
      * Whether there were any errors during the processing of the request
      * Only used for ajax responses
      *
-     * @access private
      * @var bool
      */
     protected $isSuccess;
@@ -181,12 +182,12 @@ class Response
             $buffer->start();
             register_shutdown_function([$this, 'response']);
         }
-        $this->header = new Header();
-        $this->HTML   = '';
-        $this->JSON   = [];
-        $this->footer = new Footer();
+        $this->header = new Header;
+        $this->HTML = '';
+        $this->JSON = [];
+        $this->footer = new Footer;
 
-        $this->isSuccess  = true;
+        $this->isSuccess = true;
         $this->isDisabled = false;
         $this->setAjax(! empty($_REQUEST['ajax_request']));
     }
@@ -195,7 +196,7 @@ class Response
      * Set the ajax flag to indicate whether
      * we are servicing an ajax request
      *
-     * @param bool $isAjax Whether we are servicing an ajax request
+     * @param  bool  $isAjax  Whether we are servicing an ajax request
      */
     public function setAjax(bool $isAjax): void
     {
@@ -212,7 +213,7 @@ class Response
     public static function getInstance()
     {
         if (empty(self::$instance)) {
-            self::$instance = new Response();
+            self::$instance = new Response;
         }
 
         return self::$instance;
@@ -222,7 +223,7 @@ class Response
      * Set the status of an ajax response,
      * whether it is a success or an error
      *
-     * @param bool $state Whether the request was successfully processed
+     * @param  bool  $state  Whether the request was successfully processed
      */
     public function setRequestStatus(bool $state): void
     {
@@ -274,9 +275,8 @@ class Response
     /**
      * Add HTML code to the response
      *
-     * @param string $content A string to be appended to
-     *                        the current output buffer
-     *
+     * @param  string  $content  A string to be appended to
+     *                           the current output buffer
      * @return void
      */
     public function addHTML($content)
@@ -295,11 +295,10 @@ class Response
     /**
      * Add JSON code to the response
      *
-     * @param mixed $json  Either a key (string) or an
-     *                     array or key-value pairs
-     * @param mixed $value Null, if passing an array in $json otherwise
-     *                     it's a string value to the key
-     *
+     * @param  mixed  $json  Either a key (string) or an
+     *                       array or key-value pairs
+     * @param  mixed  $value  Null, if passing an array in $json otherwise
+     *                        it's a string value to the key
      * @return void
      */
     public function addJSON($json, $value = null)
@@ -328,7 +327,7 @@ class Response
         // if its content was already rendered
         // and, in this case, the header will be
         // in the content part of the request
-        $retval  = $this->header->getDisplay();
+        $retval = $this->header->getDisplay();
         $retval .= $this->HTML;
         $retval .= $this->footer->getDisplay();
 
@@ -371,13 +370,13 @@ class Response
             $this->JSON['success'] = true;
         } else {
             $this->JSON['success'] = false;
-            $this->JSON['error']   = $this->JSON['message'];
+            $this->JSON['error'] = $this->JSON['message'];
             unset($this->JSON['message']);
         }
 
         if ($this->isSuccess) {
             if (! isset($this->JSON['title'])) {
-                $this->addJSON('title', '<title>' . $this->getHeader()->getPageTitle() . '</title>');
+                $this->addJSON('title', '<title>'.$this->getHeader()->getPageTitle().'</title>');
             }
 
             if (isset($dbi)) {
@@ -483,7 +482,7 @@ class Response
             }
             echo json_encode([
                 'success' => false,
-                'error' => 'JSON encoding failed: ' . $error,
+                'error' => 'JSON encoding failed: '.$error,
             ]);
         } else {
             echo $result;
@@ -513,8 +512,7 @@ class Response
     /**
      * Wrapper around PHP's header() function.
      *
-     * @param string $text header string
-     *
+     * @param  string  $text  header string
      * @return void
      */
     public function header($text)
@@ -536,8 +534,7 @@ class Response
     /**
      * Wrapper around PHP's http_response_code() function.
      *
-     * @param int $response_code will set the response code.
-     *
+     * @param  int  $response_code  will set the response code.
      * @return void
      */
     public function httpResponseCode($response_code)
@@ -548,12 +545,12 @@ class Response
     /**
      * Sets http response code.
      *
-     * @param int $responseCode will set the response code.
+     * @param  int  $responseCode  will set the response code.
      */
     public function setHttpResponseCode(int $responseCode): void
     {
         $this->httpResponseCode($responseCode);
-        $header = 'status: ' . $responseCode . ' ';
+        $header = 'status: '.$responseCode.' ';
         if (isset(static::$httpStatusMessages[$responseCode])) {
             $header .= static::$httpStatusMessages[$responseCode];
         } else {
@@ -569,14 +566,13 @@ class Response
     /**
      * Generate header for 303
      *
-     * @param string $location will set location to redirect.
-     *
+     * @param  string  $location  will set location to redirect.
      * @return void
      */
     public function generateHeader303($location)
     {
         $this->setHttpResponseCode(303);
-        $this->header('Location: ' . $location);
+        $this->header('Location: '.$location);
         if (! defined('TESTSUITE')) {
             exit;
         }

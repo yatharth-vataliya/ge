@@ -10,6 +10,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function htmlspecialchars;
 use function in_array;
 use function sprintf;
@@ -23,8 +24,8 @@ class DesignerController extends AbstractController
     private $designerCommon;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name
+     * @param  Response  $response
+     * @param  string  $db  Database name
      */
     public function __construct(
         $response,
@@ -186,7 +187,7 @@ class DesignerController extends AbstractController
         }
 
         foreach ($tab_pos as $position) {
-            if (in_array($position['dbName'] . '.' . $position['tableName'], $fullTableNames)) {
+            if (in_array($position['dbName'].'.'.$position['tableName'], $fullTableNames)) {
                 continue;
             }
 

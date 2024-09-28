@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Plugins;
 use PhpMyAdmin\File;
 use PhpMyAdmin\Import;
 use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
+
 use function strlen;
 
 /**
@@ -30,14 +31,13 @@ abstract class ImportPlugin
 
     public function __construct()
     {
-        $this->import = new Import();
+        $this->import = new Import;
     }
 
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     abstract public function doImport(?File $importHandle = null, array &$sql_data = []);
@@ -65,9 +65,8 @@ abstract class ImportPlugin
     /**
      * Define DB name and options
      *
-     * @param string $currentDb DB
-     * @param string $defaultDb Default DB name
-     *
+     * @param  string  $currentDb  DB
+     * @param  string  $defaultDb  Default DB name
      * @return array DB name and options (an associative array of options)
      */
     protected function getDbnameAndOptions($currentDb, $defaultDb)

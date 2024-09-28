@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Providers\ServerVariables;
 
 use Williamdes\MariaDBMySQLKBS\Search;
+
 use function class_exists;
 
 class ServerVariablesProvider
@@ -19,12 +20,12 @@ class ServerVariablesProvider
         }
 
         if (self::mariaDbMySqlKbsExists()) {
-            self::$instance = new MariaDbMySqlKbsProvider();
+            self::$instance = new MariaDbMySqlKbsProvider;
 
             return self::$instance;
         }
 
-        self::$instance = new VoidProvider();
+        self::$instance = new VoidProvider;
 
         return self::$instance;
     }

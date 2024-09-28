@@ -7,6 +7,7 @@ namespace PhpMyAdmin\Controllers;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
+
 use function array_keys;
 
 /**
@@ -18,8 +19,8 @@ class TransformationOverviewController extends AbstractController
     private $transformations;
 
     /**
-     * @param Response        $response
-     * @param Transformations $transformations
+     * @param  Response  $response
+     * @param  Transformations  $transformations
      */
     public function __construct($response, Template $template, $transformations)
     {
@@ -52,7 +53,7 @@ class TransformationOverviewController extends AbstractController
                 $transformations[$type][] = [
                     'name' => $transformation,
                     'description' => $this->transformations->getDescription(
-                        $types[$type . '_file'][$key]
+                        $types[$type.'_file'][$key]
                     ),
                 ];
             }

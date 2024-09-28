@@ -16,6 +16,7 @@ use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\SelectPropertyItem;
 use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
 use PhpMyAdmin\SqlParser\Utils\BufferedQuery;
+
 use function count;
 use function implode;
 use function mb_strlen;
@@ -42,7 +43,7 @@ class ImportSql extends ImportPlugin
     {
         global $dbi;
 
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setText('SQL');
         $importPluginProperties->setExtension('sql');
         $importPluginProperties->setOptionsText(__('Options'));
@@ -101,8 +102,7 @@ class ImportSql extends ImportPlugin
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
@@ -112,7 +112,7 @@ class ImportSql extends ImportPlugin
         // Handle compatibility options.
         $this->setSQLMode($dbi, $_REQUEST);
 
-        $bq = new BufferedQuery();
+        $bq = new BufferedQuery;
         if (isset($_POST['sql_delimiter'])) {
             $bq->setDelimiter($_POST['sql_delimiter']);
         }
@@ -174,9 +174,8 @@ class ImportSql extends ImportPlugin
     /**
      * Handle compatibility options
      *
-     * @param DatabaseInterface $dbi     Database interface
-     * @param array             $request Request array
-     *
+     * @param  DatabaseInterface  $dbi  Database interface
+     * @param  array  $request  Request array
      * @return void
      */
     private function setSQLMode($dbi, array $request)
@@ -195,7 +194,7 @@ class ImportSql extends ImportPlugin
         }
 
         $dbi->tryQuery(
-            'SET SQL_MODE="' . implode(',', $sql_modes) . '"'
+            'SET SQL_MODE="'.implode(',', $sql_modes).'"'
         );
     }
 }

@@ -12,7 +12,7 @@ class Plugins
     private $dbi;
 
     /**
-     * @param DatabaseInterface $dbi DatabaseInterface instance
+     * @param  DatabaseInterface  $dbi  DatabaseInterface instance
      */
     public function __construct(DatabaseInterface $dbi)
     {
@@ -41,7 +41,7 @@ class Plugins
     }
 
     /**
-     * @param array $row Row fetched from database
+     * @param  array  $row  Row fetched from database
      */
     private function mapRowToPlugin(array $row): Plugin
     {

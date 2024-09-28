@@ -30,7 +30,7 @@ class ImportForm extends BaseForm
                 'Import/sql_read_as_multibytes',
             ],
             'Csv' => [
-                ':group:' . __('CSV'),
+                ':group:'.__('CSV'),
                 'Import/csv_replace',
                 'Import/csv_ignore',
                 'Import/csv_terminated',
@@ -38,7 +38,7 @@ class ImportForm extends BaseForm
                 'Import/csv_escaped',
                 'Import/csv_col_names',
                 ':group:end',
-                ':group:' . __('CSV using LOAD DATA'),
+                ':group:'.__('CSV using LOAD DATA'),
                 'Import/ldi_replace',
                 'Import/ldi_ignore',
                 'Import/ldi_terminated',
@@ -47,7 +47,7 @@ class ImportForm extends BaseForm
                 'Import/ldi_local_option',
             ],
             'Open_Document' => [
-                ':group:' . __('OpenDocument Spreadsheet'),
+                ':group:'.__('OpenDocument Spreadsheet'),
                 'Import/ods_col_names',
                 'Import/ods_empty_rows',
                 'Import/ods_recognize_percentages',

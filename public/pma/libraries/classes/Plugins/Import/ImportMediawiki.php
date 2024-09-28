@@ -11,6 +11,7 @@ use PhpMyAdmin\File;
 use PhpMyAdmin\Message;
 use PhpMyAdmin\Plugins\ImportPlugin;
 use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
+
 use function count;
 use function explode;
 use function mb_strlen;
@@ -53,7 +54,7 @@ class ImportMediawiki extends ImportPlugin
             $this->setAnalyze(true);
         }
 
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setText(__('MediaWiki Table'));
         $importPluginProperties->setExtension('txt');
         $importPluginProperties->setMimeType('text/plain');
@@ -66,8 +67,7 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
@@ -125,7 +125,7 @@ class ImportMediawiki extends ImportPlugin
             // contains only a portion of an actual line from the imported file.
             // Therefore, we have to append it to the last line from the previous
             // chunk. If we are at the first chunk, $last_chunk_line should be empty.
-            $buffer = $last_chunk_line . $buffer;
+            $buffer = $last_chunk_line.$buffer;
 
             // Process the buffer line by line
             $buffer_lines = explode($mediawiki_new_line, $buffer);
@@ -137,7 +137,7 @@ class ImportMediawiki extends ImportPlugin
                 $last_chunk_line = $buffer_lines[--$full_buffer_lines_count];
             }
 
-            for ($line_nr = 0; $line_nr < $full_buffer_lines_count; ++$line_nr) {
+            for ($line_nr = 0; $line_nr < $full_buffer_lines_count; $line_nr++) {
                 $cur_buffer_line = trim($buffer_lines[$line_nr]);
 
                 // If the line is empty, go to the next one
@@ -151,6 +151,7 @@ class ImportMediawiki extends ImportPlugin
                 // Check beginning of comment
                 if (! strcmp(mb_substr($cur_buffer_line, 0, 4), '<!--')) {
                     $inside_comment = true;
+
                     continue;
                 }
 
@@ -195,6 +196,7 @@ class ImportMediawiki extends ImportPlugin
                             $inside_structure_comment = true;
                         }
                     }
+
                     continue;
                 }
 
@@ -300,15 +302,14 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Imports data from a single table
      *
-     * @param array $table    containing all table info:
+     * @param  array  $table  containing all table info:
      *                        <code> $table[0] - string
      *                        containing table name
      *                        $table[1] - array[]   of
      *                        table headers $table[2] -
      *                        array[][] of table content
      *                        rows </code>
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      *
      * @global bool $analyze whether to scan for column types
@@ -345,8 +346,7 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Sets the table name
      *
-     * @param string $table_name reference to the name of the table
-     *
+     * @param  string  $table_name  reference to the name of the table
      * @return void
      */
     private function setTableName(&$table_name)
@@ -359,16 +359,15 @@ class ImportMediawiki extends ImportPlugin
 
         $result = $dbi->fetchResult('SHOW TABLES');
         // todo check if the name below already exists
-        $table_name = 'TABLE ' . (count($result) + 1);
+        $table_name = 'TABLE '.(count($result) + 1);
     }
 
     /**
      * Set generic names for table headers, if they don't exist
      *
-     * @param array $table_headers reference to the array containing the headers
-     *                             of a table
-     * @param array $table_row     array containing the first content row
-     *
+     * @param  array  $table_headers  reference to the array containing the headers
+     *                                of a table
+     * @param  array  $table_row  array containing the first content row
      * @return void
      */
     private function setTableHeaders(array &$table_headers, array $table_row)
@@ -380,8 +379,8 @@ class ImportMediawiki extends ImportPlugin
         // The first table row should contain the number of columns
         // If they are not set, generic names will be given (COL 1, COL 2, etc)
         $num_cols = count($table_row);
-        for ($i = 0; $i < $num_cols; ++$i) {
-            $table_headers[$i] = 'COL ' . ($i + 1);
+        for ($i = 0; $i < $num_cols; $i++) {
+            $table_headers[$i] = 'COL '.($i + 1);
         }
     }
 
@@ -389,17 +388,16 @@ class ImportMediawiki extends ImportPlugin
      * Sets the database name and additional options and calls Import::buildSql()
      * Used in PMA_importDataAllTables() and $this->importDataOneTable()
      *
-     * @param array $tables   structure:
-     *                        array(
-     *                        array(table_name, array() column_names, array()()
-     *                        rows)
-     *                        )
-     * @param array $analyses structure:
-     *                        $analyses = array(
-     *                        array(array() column_types, array() column_sizes)
-     *                        )
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $tables  structure:
+     *                         array(
+     *                         array(table_name, array() column_names, array()()
+     *                         rows)
+     *                         )
+     * @param  array  $analyses  structure:
+     *                           $analyses = array(
+     *                           array(array() column_types, array() column_sizes)
+     *                           )
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      *
      * @global string $db      name of the database to import in
@@ -425,9 +423,8 @@ class ImportMediawiki extends ImportPlugin
      * Replaces all instances of the '||' separator between delimiters
      * in a given string
      *
-     * @param string $replace the string to be replaced with
-     * @param string $subject the text to be replaced
-     *
+     * @param  string  $replace  the string to be replaced with
+     * @param  string  $subject  the text to be replaced
      * @return string with replacements
      */
     private function delimiterReplace($replace, $subject)
@@ -511,8 +508,7 @@ class ImportMediawiki extends ImportPlugin
      * and ignores any instances of it inside markup tags
      * Used in parsing buffer lines containing data cells
      *
-     * @param string $text text to be split
-     *
+     * @param  string  $text  text to be split
      * @return array
      */
     private function explodeMarkup($text)
@@ -550,8 +546,7 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Sets to true if the table should be analyzed, false otherwise
      *
-     * @param bool $analyze status
-     *
+     * @param  bool  $analyze  status
      * @return void
      */
     private function setAnalyze($analyze)
@@ -562,8 +557,7 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Get cell
      *
-     * @param string $cell Cell
-     *
+     * @param  string  $cell  Cell
      * @return mixed
      */
     private function getCellData($cell)
@@ -587,8 +581,7 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Manage $inside_structure_comment
      *
-     * @param bool $inside_structure_comment Value to test
-     *
+     * @param  bool  $inside_structure_comment  Value to test
      * @return bool
      */
     private function mngInsideStructComm($inside_structure_comment)
@@ -604,9 +597,8 @@ class ImportMediawiki extends ImportPlugin
     /**
      * Get cell content
      *
-     * @param string $cell           Cell
-     * @param string $col_start_char Start char
-     *
+     * @param  string  $cell  Cell
+     * @param  string  $col_start_char  Start char
      * @return string
      */
     private function getCellContent($cell, $col_start_char)

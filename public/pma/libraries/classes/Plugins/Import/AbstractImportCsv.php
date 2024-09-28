@@ -27,7 +27,7 @@ abstract class AbstractImportCsv extends ImportPlugin
      */
     protected function setProperties()
     {
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setOptionsText(__('Options'));
 
         // create the root group that will be the options field for
@@ -45,7 +45,7 @@ abstract class AbstractImportCsv extends ImportPlugin
             'replace',
             __(
                 'Update data when duplicate keys found on import (add ON DUPLICATE '
-                . 'KEY UPDATE)'
+                .'KEY UPDATE)'
             )
         );
         $generalOptions->addProperty($leaf);

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Export;
 
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_UNICODE;
+
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Plugins\ExportPlugin;
 use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyMainGroup;
@@ -14,8 +17,7 @@ use PhpMyAdmin\Properties\Options\Groups\OptionsPropertyRootGroup;
 use PhpMyAdmin\Properties\Options\Items\BoolPropertyItem;
 use PhpMyAdmin\Properties\Options\Items\HiddenPropertyItem;
 use PhpMyAdmin\Properties\Plugins\ExportPluginProperties;
-use const JSON_PRETTY_PRINT;
-use const JSON_UNESCAPED_UNICODE;
+
 use function bin2hex;
 use function explode;
 use function json_encode;
@@ -38,8 +40,7 @@ class ExportJson extends ExportPlugin
     /**
      * Encodes the data into JSON
      *
-     * @param mixed $data Data to encode
-     *
+     * @param  mixed  $data  Data to encode
      * @return string
      */
     public function encode($data)
@@ -66,7 +67,7 @@ class ExportJson extends ExportPlugin
      */
     protected function setProperties()
     {
-        $exportPluginProperties = new ExportPluginProperties();
+        $exportPluginProperties = new ExportPluginProperties;
         $exportPluginProperties->setText('JSON');
         $exportPluginProperties->setExtension('json');
         $exportPluginProperties->setMimeType('text/plain');
@@ -121,7 +122,7 @@ class ExportJson extends ExportPlugin
         ];
 
         return $this->export->outputHandler(
-            '[' . $crlf . $this->encode($meta) . ',' . $crlf
+            '['.$crlf.$this->encode($meta).','.$crlf
         );
     }
 
@@ -134,15 +135,14 @@ class ExportJson extends ExportPlugin
     {
         global $crlf;
 
-        return $this->export->outputHandler(']' . $crlf);
+        return $this->export->outputHandler(']'.$crlf);
     }
 
     /**
      * Outputs database header
      *
-     * @param string $db       Database name
-     * @param string $db_alias Aliases of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $db_alias  Aliases of db
      * @return bool Whether it succeeded
      */
     public function exportDBHeader($db, $db_alias = '')
@@ -159,15 +159,14 @@ class ExportJson extends ExportPlugin
         ];
 
         return $this->export->outputHandler(
-            $this->encode($meta) . ',' . $crlf
+            $this->encode($meta).','.$crlf
         );
     }
 
     /**
      * Outputs database footer
      *
-     * @param string $db Database name
-     *
+     * @param  string  $db  Database name
      * @return bool Whether it succeeded
      */
     public function exportDBFooter($db)
@@ -178,10 +177,9 @@ class ExportJson extends ExportPlugin
     /**
      * Outputs CREATE DATABASE statement
      *
-     * @param string $db          Database name
-     * @param string $export_type 'server', 'database', 'table'
-     * @param string $db_alias    Aliases of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $export_type  'server', 'database', 'table'
+     * @param  string  $db_alias  Aliases of db
      * @return bool Whether it succeeded
      */
     public function exportDBCreate($db, $export_type, $db_alias = '')
@@ -192,13 +190,12 @@ class ExportJson extends ExportPlugin
     /**
      * Outputs the content of a table in JSON format
      *
-     * @param string $db        database name
-     * @param string $table     table name
-     * @param string $crlf      the end of line sequence
-     * @param string $error_url the url to go back in case of error
-     * @param string $sql_query SQL query for obtaining data
-     * @param array  $aliases   Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case of error
+     * @param  string  $sql_query  SQL query for obtaining data
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportData(
@@ -269,7 +266,7 @@ class ExportJson extends ExportPlugin
     ): bool {
         [$header, $footer] = explode('"@@DATA@@"', $buffer);
 
-        if (! $this->export->outputHandler($header . $crlf . '[' . $crlf)) {
+        if (! $this->export->outputHandler($header.$crlf.'['.$crlf)) {
             return false;
         }
 
@@ -298,7 +295,7 @@ class ExportJson extends ExportPlugin
 
             // Output table name as comment if this is the first record of the table
             if ($record_cnt > 1) {
-                if (! $this->export->outputHandler(',' . $crlf)) {
+                if (! $this->export->outputHandler(','.$crlf)) {
                     return false;
                 }
             }
@@ -319,7 +316,7 @@ class ExportJson extends ExportPlugin
                     && $record[$i] !== null
                 ) {
                     // export GIS and blob types as hex
-                    $record[$i] = '0x' . bin2hex($record[$i]);
+                    $record[$i] = '0x'.bin2hex($record[$i]);
                 }
                 $data[$columns[$i]] = $record[$i];
             }
@@ -333,7 +330,7 @@ class ExportJson extends ExportPlugin
             }
         }
 
-        if (! $this->export->outputHandler($crlf . ']' . $crlf . $footer . $crlf)) {
+        if (! $this->export->outputHandler($crlf.']'.$crlf.$footer.$crlf)) {
             return false;
         }
 
@@ -345,10 +342,9 @@ class ExportJson extends ExportPlugin
     /**
      * Outputs result raw query in JSON format
      *
-     * @param string $err_url   the url to go back in case of error
-     * @param string $sql_query the rawquery to output
-     * @param string $crlf      the end of line sequence
-     *
+     * @param  string  $err_url  the url to go back in case of error
+     * @param  string  $sql_query  the rawquery to output
+     * @param  string  $crlf  the end of line sequence
      * @return bool if succeeded
      */
     public function exportRawQuery(string $err_url, string $sql_query, string $crlf): bool

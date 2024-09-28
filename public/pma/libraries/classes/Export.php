@@ -12,6 +12,7 @@ use PhpMyAdmin\Controllers\Server\ExportController as ServerExportController;
 use PhpMyAdmin\Controllers\Table\ExportController as TableExportController;
 use PhpMyAdmin\Plugins\ExportPlugin;
 use PhpMyAdmin\Plugins\SchemaPlugin;
+
 use function array_merge_recursive;
 use function error_get_last;
 use function fclose;
@@ -55,7 +56,7 @@ class Export
     private $dbi;
 
     /**
-     * @param DatabaseInterface $dbi DatabaseInterface instance
+     * @param  DatabaseInterface  $dbi  DatabaseInterface instance
      */
     public function __construct($dbi)
     {
@@ -113,8 +114,7 @@ class Export
      * Output handler for all exports, if needed buffering, it stores data into
      * $dump_buffer, otherwise it prints them out.
      *
-     * @param string $line the insert statement
-     *
+     * @param  string  $line  the insert statement
      * @return bool Whether output succeeded
      */
     public function outputHandler(?string $line): bool
@@ -222,9 +222,8 @@ class Export
     /**
      * Returns HTML containing the footer for a displayed export
      *
-     * @param string $back_button   the link for going Back
-     * @param string $refreshButton the link for refreshing page
-     *
+     * @param  string  $back_button  the link for going Back
+     * @param  string  $refreshButton  the link for refreshing page
      * @return string the HTML output
      */
     public function getHtmlForDisplayedExportFooter(
@@ -235,20 +234,20 @@ class Export
          * Close the html tags and add the footers for on-screen export
          */
         return '</textarea>'
-            . '    </form>'
-            . '<br>'
+            .'    </form>'
+            .'<br>'
             // bottom back button
-            . $back_button
-            . $refreshButton
-            . '</div>'
-            . '<script type="text/javascript">' . "\n"
-            . '//<![CDATA[' . "\n"
-            . 'var $body = $("body");' . "\n"
-            . '$("#textSQLDUMP")' . "\n"
-            . '.width($body.width() - 50)' . "\n"
-            . '.height($body.height() - 100);' . "\n"
-            . '//]]>' . "\n"
-            . '</script>' . "\n";
+            .$back_button
+            .$refreshButton
+            .'</div>'
+            .'<script type="text/javascript">'."\n"
+            .'//<![CDATA['."\n"
+            .'var $body = $("body");'."\n"
+            .'$("#textSQLDUMP")'."\n"
+            .'.width($body.width() - 50)'."\n"
+            .'.height($body.height() - 100);'."\n"
+            .'//]]>'."\n"
+            .'</script>'."\n";
     }
 
     /**
@@ -290,11 +289,10 @@ class Export
     /**
      * Returns the filename and MIME type for a compression and an export plugin
      *
-     * @param ExportPlugin $exportPlugin the export plugin
-     * @param string       $compression  compression asked
-     * @param string       $filename     the filename
-     *
-     * @return string[]    the filename and mime type
+     * @param  ExportPlugin  $exportPlugin  the export plugin
+     * @param  string  $compression  compression asked
+     * @param  string  $filename  the filename
+     * @return string[] the filename and mime type
      */
     public function getFinalFilenameAndMimetypeForFilename(
         ExportPlugin $exportPlugin,
@@ -312,19 +310,19 @@ class Export
             $extensionStartPos,
             mb_strlen($filename)
         );
-        $requiredExtension = '.' . $exportPlugin->getProperties()->getExtension();
+        $requiredExtension = '.'.$exportPlugin->getProperties()->getExtension();
         if (mb_strtolower($userExtension) != $requiredExtension) {
-            $filename  .= $requiredExtension;
+            $filename .= $requiredExtension;
         }
-        $mime_type  = $exportPlugin->getProperties()->getMimeType();
+        $mime_type = $exportPlugin->getProperties()->getMimeType();
 
         // If dump is going to be compressed, set correct mime_type and add
         // compression to extension
         if ($compression === 'gzip') {
-            $filename  .= '.gz';
+            $filename .= '.gz';
             $mime_type = 'application/x-gzip';
         } elseif ($compression === 'zip') {
-            $filename  .= '.zip';
+            $filename .= '.zip';
             $mime_type = 'application/zip';
         }
 
@@ -337,12 +335,11 @@ class Export
     /**
      * Return the filename and MIME type for export file
      *
-     * @param string       $export_type       type of export
-     * @param string       $remember_template whether to remember template
-     * @param ExportPlugin $export_plugin     the export plugin
-     * @param string       $compression       compression asked
-     * @param string       $filename_template the filename template
-     *
+     * @param  string  $export_type  type of export
+     * @param  string  $remember_template  whether to remember template
+     * @param  ExportPlugin  $export_plugin  the export plugin
+     * @param  string  $compression  compression asked
+     * @param  string  $filename_template  the filename template
      * @return string[] the filename template and mime type
      */
     public function getFilenameAndMimetype(
@@ -400,9 +397,8 @@ class Export
     /**
      * Open the export file
      *
-     * @param string $filename     the export filename
-     * @param bool   $quick_export whether it's a quick export or not
-     *
+     * @param  string  $filename  the export filename
+     * @param  bool  $quick_export  whether it's a quick export or not
      * @return array the full save filename, possible message and the file handle
      */
     public function openFile(string $filename, bool $quick_export): array
@@ -416,7 +412,7 @@ class Export
         }
 
         $save_filename = Util::userDir($GLOBALS['cfg']['SaveDir'])
-            . preg_replace('@[/\\\\]@', '_', $filename);
+            .preg_replace('@[/\\\\]@', '_', $filename);
 
         if (@file_exists($save_filename)
             && ((! $quick_export && empty($_POST['onserver_overwrite']))
@@ -426,7 +422,7 @@ class Export
             $message = Message::error(
                 __(
                     'File %s already exists on server, '
-                    . 'change filename or check overwrite option.'
+                    .'change filename or check overwrite option.'
                 )
             );
             $message->addParam($save_filename);
@@ -434,7 +430,7 @@ class Export
             $message = Message::error(
                 __(
                     'The web server does not have permission '
-                    . 'to save the file %s.'
+                    .'to save the file %s.'
                 )
             );
             $message->addParam($save_filename);
@@ -445,7 +441,7 @@ class Export
                 $message = Message::error(
                     __(
                         'The web server does not have permission '
-                        . 'to save the file %s.'
+                        .'to save the file %s.'
                     )
                 );
                 $message->addParam($save_filename);
@@ -462,10 +458,9 @@ class Export
     /**
      * Close the export file
      *
-     * @param resource $file_handle   the export file handle
-     * @param string   $dump_buffer   the current dump buffer
-     * @param string   $save_filename the export filename
-     *
+     * @param  resource  $file_handle  the export file handle
+     * @param  string  $dump_buffer  the current dump buffer
+     * @param  string  $save_filename  the export filename
      * @return Message a message object (or empty string)
      */
     public function closeFile(
@@ -499,16 +494,15 @@ class Export
     /**
      * Compress the export buffer
      *
-     * @param array|string $dump_buffer the current dump buffer
-     * @param string       $compression the compression mode
-     * @param string       $filename    the filename
-     *
+     * @param  array|string  $dump_buffer  the current dump buffer
+     * @param  string  $compression  the compression mode
+     * @param  string  $filename  the filename
      * @return array|string|bool
      */
     public function compress($dump_buffer, string $compression, string $filename)
     {
         if ($compression === 'zip' && function_exists('gzcompress')) {
-            $zipExtension = new ZipExtension();
+            $zipExtension = new ZipExtension;
             $filename = substr($filename, 0, -4); // remove extension (.zip)
             $dump_buffer = $zipExtension->createFile($dump_buffer, $filename);
         } elseif ($compression === 'gzip' && $this->gzencodeNeeded() && is_string($dump_buffer)) {
@@ -523,8 +517,8 @@ class Export
      * Saves the dump_buffer for a particular table in an array
      * Used in separate files export
      *
-     * @param string $object_name the name of current object to be stored
-     * @param bool   $append      optional boolean to append to an existing index or not
+     * @param  string  $object_name  the name of current object to be stored
+     * @param  bool  $append  optional boolean to append to an existing index or not
      */
     public function saveObjectInBuffer(string $object_name, bool $append = false): void
     {
@@ -546,10 +540,9 @@ class Export
     /**
      * Returns HTML containing the header for a displayed export
      *
-     * @param string $export_type the export type
-     * @param string $db          the database name
-     * @param string $table       the table name
-     *
+     * @param  string  $export_type  the export type
+     * @param  string  $db  the database name
+     * @param  string  $table  the table name
      * @return string[] the generated HTML and back button
      */
     public function getHtmlForDisplayedExportHeader(
@@ -565,11 +558,11 @@ class Export
          */
         $back_button = '<p id="export_back_button">[ <a href="';
         if ($export_type === 'server') {
-            $back_button .= Url::getFromRoute('/server/export') . '" data-post="' . Url::getCommon([], '');
+            $back_button .= Url::getFromRoute('/server/export').'" data-post="'.Url::getCommon([], '');
         } elseif ($export_type === 'database') {
-            $back_button .= Url::getFromRoute('/database/export') . '" data-post="' . Url::getCommon(['db' => $db], '');
+            $back_button .= Url::getFromRoute('/database/export').'" data-post="'.Url::getCommon(['db' => $db], '');
         } else {
-            $back_button .= Url::getFromRoute('/table/export') . '" data-post="' . Url::getCommon(
+            $back_button .= Url::getFromRoute('/table/export').'" data-post="'.Url::getCommon(
                 [
                     'db' => $db,
                     'table' => $table,
@@ -594,31 +587,31 @@ class Export
                 continue;
             }
 
-            $back_button .= '&amp;' . urlencode((string) $name) . '=' . urlencode((string) $value);
+            $back_button .= '&amp;'.urlencode((string) $name).'='.urlencode((string) $value);
         }
-        $back_button .= '&amp;repopulate=1">' . __('Back') . '</a> ]</p>';
+        $back_button .= '&amp;repopulate=1">'.__('Back').'</a> ]</p>';
         $html .= '<br>';
         $html .= $back_button;
         $refreshButton = '<form id="export_refresh_form" method="POST" action="'
-            . Url::getFromRoute('/export') . '" class="disableAjax">';
-        $refreshButton .= '[ <a class="disableAjax export_refresh_btn">' . __('Refresh') . '</a> ]';
+            .Url::getFromRoute('/export').'" class="disableAjax">';
+        $refreshButton .= '[ <a class="disableAjax export_refresh_btn">'.__('Refresh').'</a> ]';
         foreach ($_POST as $name => $value) {
             if (is_array($value)) {
                 foreach ($value as $val) {
-                    $refreshButton .= '<input type="hidden" name="' . htmlentities((string) $name)
-                        . '[]" value="' . htmlentities((string) $val) . '">';
+                    $refreshButton .= '<input type="hidden" name="'.htmlentities((string) $name)
+                        .'[]" value="'.htmlentities((string) $val).'">';
                 }
             } else {
-                $refreshButton .= '<input type="hidden" name="' . htmlentities((string) $name)
-                    . '" value="' . htmlentities((string) $value) . '">';
+                $refreshButton .= '<input type="hidden" name="'.htmlentities((string) $name)
+                    .'" value="'.htmlentities((string) $value).'">';
             }
         }
         $refreshButton .= '</form>';
         $html .= $refreshButton
-            . '<br>'
-            . '<form name="nofunction">'
-            . '<textarea name="sqldump" cols="50" rows="30" '
-            . 'id="textSQLDUMP" wrap="OFF">';
+            .'<br>'
+            .'<form name="nofunction">'
+            .'<textarea name="sqldump" cols="50" rows="30" '
+            .'id="textSQLDUMP" wrap="OFF">';
 
         return [
             $html,
@@ -630,18 +623,18 @@ class Export
     /**
      * Export at the server level
      *
-     * @param string|array $db_select       the selected databases to export
-     * @param string       $whatStrucOrData structure or data or both
-     * @param ExportPlugin $export_plugin   the selected export plugin
-     * @param string       $crlf            end of line character(s)
-     * @param string       $err_url         the URL in case of error
-     * @param string       $export_type     the export type
-     * @param bool         $do_relation     whether to export relation info
-     * @param bool         $do_comments     whether to add comments
-     * @param bool         $do_mime         whether to add MIME info
-     * @param bool         $do_dates        whether to add dates
-     * @param array        $aliases         alias information for db/table/column
-     * @param string       $separate_files  whether it is a separate-files export
+     * @param  string|array  $db_select  the selected databases to export
+     * @param  string  $whatStrucOrData  structure or data or both
+     * @param  ExportPlugin  $export_plugin  the selected export plugin
+     * @param  string  $crlf  end of line character(s)
+     * @param  string  $err_url  the URL in case of error
+     * @param  string  $export_type  the export type
+     * @param  bool  $do_relation  whether to export relation info
+     * @param  bool  $do_comments  whether to add comments
+     * @param  bool  $do_mime  whether to add MIME info
+     * @param  bool  $do_dates  whether to add dates
+     * @param  array  $aliases  alias information for db/table/column
+     * @param  string  $separate_files  whether it is a separate-files export
      */
     public function exportServer(
         $db_select,
@@ -659,12 +652,12 @@ class Export
     ): void {
         if (! empty($db_select)) {
             $tmp_select = implode('|', $db_select);
-            $tmp_select = '|' . $tmp_select . '|';
+            $tmp_select = '|'.$tmp_select.'|';
         }
         // Walk over databases
         foreach ($GLOBALS['dblist']->databases as $current_db) {
             if (! isset($tmp_select)
-                || ! mb_strpos(' ' . $tmp_select, '|' . $current_db . '|')
+                || ! mb_strpos(' '.$tmp_select, '|'.$current_db.'|')
             ) {
                 continue;
             }
@@ -698,21 +691,21 @@ class Export
     /**
      * Export at the database level
      *
-     * @param string       $db              the database to export
-     * @param array        $tables          the tables to export
-     * @param string       $whatStrucOrData structure or data or both
-     * @param array        $table_structure whether to export structure for each table
-     * @param array        $table_data      whether to export data for each table
-     * @param ExportPlugin $export_plugin   the selected export plugin
-     * @param string       $crlf            end of line character(s)
-     * @param string       $err_url         the URL in case of error
-     * @param string       $export_type     the export type
-     * @param bool         $do_relation     whether to export relation info
-     * @param bool         $do_comments     whether to add comments
-     * @param bool         $do_mime         whether to add MIME info
-     * @param bool         $do_dates        whether to add dates
-     * @param array        $aliases         Alias information for db/table/column
-     * @param string       $separate_files  whether it is a separate-files export
+     * @param  string  $db  the database to export
+     * @param  array  $tables  the tables to export
+     * @param  string  $whatStrucOrData  structure or data or both
+     * @param  array  $table_structure  whether to export structure for each table
+     * @param  array  $table_data  whether to export data for each table
+     * @param  ExportPlugin  $export_plugin  the selected export plugin
+     * @param  string  $crlf  end of line character(s)
+     * @param  string  $err_url  the URL in case of error
+     * @param  string  $export_type  the export type
+     * @param  bool  $do_relation  whether to export relation info
+     * @param  bool  $do_comments  whether to add comments
+     * @param  bool  $do_mime  whether to add MIME info
+     * @param  bool  $do_dates  whether to add dates
+     * @param  array  $aliases  Alias information for db/table/column
+     * @param  string  $separate_files  whether it is a separate-files export
      */
     public function exportDatabase(
         string $db,
@@ -798,8 +791,8 @@ class Export
                         // This obtains the current table's size
                         $query = 'SELECT data_length + index_length
                               from information_schema.TABLES
-                              WHERE table_schema = "' . $this->dbi->escapeString($db) . '"
-                              AND table_name = "' . $this->dbi->escapeString($table) . '"';
+                              WHERE table_schema = "'.$this->dbi->escapeString($db).'"
+                              AND table_name = "'.$this->dbi->escapeString($table).'"';
 
                         $size = $this->dbi->fetchValue($query);
                         //Converting the size to MB
@@ -834,9 +827,9 @@ class Export
                 $tableObj = new Table($table, $db);
                 $nonGeneratedCols = $tableObj->getNonGeneratedColumns(true);
 
-                $local_query  = 'SELECT ' . implode(', ', $nonGeneratedCols)
-                    . ' FROM ' . Util::backquote($db)
-                    . '.' . Util::backquote($table);
+                $local_query = 'SELECT '.implode(', ', $nonGeneratedCols)
+                    .' FROM '.Util::backquote($db)
+                    .'.'.Util::backquote($table);
 
                 if (! $export_plugin->exportData(
                     $db,
@@ -852,7 +845,7 @@ class Export
 
             // this buffer was filled, we save it and go to the next one
             if ($separate_files === 'database') {
-                $this->saveObjectInBuffer('table_' . $table);
+                $this->saveObjectInBuffer('table_'.$table);
             }
 
             // now export the triggers (needs to be done after the data because
@@ -884,7 +877,7 @@ class Export
                 continue;
             }
 
-            $this->saveObjectInBuffer('table_' . $table, true);
+            $this->saveObjectInBuffer('table_'.$table, true);
         }
 
         if (isset($GLOBALS['sql_create_view'])) {
@@ -916,7 +909,7 @@ class Export
                     continue;
                 }
 
-                $this->saveObjectInBuffer('view_' . $view);
+                $this->saveObjectInBuffer('view_'.$view);
             }
         }
 
@@ -959,12 +952,12 @@ class Export
     /**
      * Export a raw query
      *
-     * @param string       $whatStrucOrData whether to export structure for each table or raw
-     * @param ExportPlugin $export_plugin   the selected export plugin
-     * @param string       $crlf            end of line character(s)
-     * @param string       $err_url         the URL in case of error
-     * @param string       $sql_query       the query to be executed
-     * @param string       $export_type     the export type
+     * @param  string  $whatStrucOrData  whether to export structure for each table or raw
+     * @param  ExportPlugin  $export_plugin  the selected export plugin
+     * @param  string  $crlf  end of line character(s)
+     * @param  string  $err_url  the URL in case of error
+     * @param  string  $sql_query  the query to be executed
+     * @param  string  $export_type  the export type
      */
     public static function exportRaw(
         string $whatStrucOrData,
@@ -997,22 +990,22 @@ class Export
     /**
      * Export at the table level
      *
-     * @param string       $db              the database to export
-     * @param string       $table           the table to export
-     * @param string       $whatStrucOrData structure or data or both
-     * @param ExportPlugin $export_plugin   the selected export plugin
-     * @param string       $crlf            end of line character(s)
-     * @param string       $err_url         the URL in case of error
-     * @param string       $export_type     the export type
-     * @param bool         $do_relation     whether to export relation info
-     * @param bool         $do_comments     whether to add comments
-     * @param bool         $do_mime         whether to add MIME info
-     * @param bool         $do_dates        whether to add dates
-     * @param string|null  $allrows         whether "dump all rows" was ticked
-     * @param string       $limit_to        upper limit
-     * @param string       $limit_from      starting limit
-     * @param string       $sql_query       query for which exporting is requested
-     * @param array        $aliases         Alias information for db/table/column
+     * @param  string  $db  the database to export
+     * @param  string  $table  the table to export
+     * @param  string  $whatStrucOrData  structure or data or both
+     * @param  ExportPlugin  $export_plugin  the selected export plugin
+     * @param  string  $crlf  end of line character(s)
+     * @param  string  $err_url  the URL in case of error
+     * @param  string  $export_type  the export type
+     * @param  bool  $do_relation  whether to export relation info
+     * @param  bool  $do_comments  whether to add comments
+     * @param  bool  $do_mime  whether to add MIME info
+     * @param  bool  $do_dates  whether to add dates
+     * @param  string|null  $allrows  whether "dump all rows" was ticked
+     * @param  string  $limit_to  upper limit
+     * @param  string  $limit_from  starting limit
+     * @param  string  $sql_query  query for which exporting is requested
+     * @param  array  $aliases  Alias information for db/table/column
      */
     public function exportTable(
         string $db,
@@ -1042,11 +1035,11 @@ class Export
             && $limit_to > 0
             && $limit_from >= 0
         ) {
-            $add_query  = ' LIMIT '
-                        . ($limit_from > 0 ? $limit_from . ', ' : '')
-                        . $limit_to;
+            $add_query = ' LIMIT '
+                        .($limit_from > 0 ? $limit_from.', ' : '')
+                        .$limit_to;
         } else {
-            $add_query  = '';
+            $add_query = '';
         }
 
         $_table = new Table($table, $db);
@@ -1102,16 +1095,16 @@ class Export
                     // remove trailing semicolon before adding a LIMIT
                     $sql_query = preg_replace('%;\s*$%', '', $sql_query);
                 }
-                $local_query = $sql_query . $add_query;
+                $local_query = $sql_query.$add_query;
                 $this->dbi->selectDb($db);
             } else {
                 // Data is exported only for Non-generated columns
                 $tableObj = new Table($table, $db);
                 $nonGeneratedCols = $tableObj->getNonGeneratedColumns(true);
 
-                $local_query  = 'SELECT ' . implode(', ', $nonGeneratedCols)
-                    . ' FROM ' . Util::backquote($db)
-                    . '.' . Util::backquote($table) . $add_query;
+                $local_query = 'SELECT '.implode(', ', $nonGeneratedCols)
+                    .' FROM '.Util::backquote($db)
+                    .'.'.Util::backquote($table).$add_query;
             }
             if (! $export_plugin->exportData(
                 $db,
@@ -1195,9 +1188,8 @@ class Export
      * conflicting alias then array2 value is used if it
      * is non empty otherwise array1 value.
      *
-     * @param array $aliases1 first array of aliases
-     * @param array $aliases2 second array of aliases
-     *
+     * @param  array  $aliases1  first array of aliases
+     * @param  array  $aliases2  second array of aliases
      * @return array resultant merged aliases info
      */
     public function mergeAliases(array $aliases1, array $aliases2): array
@@ -1250,21 +1242,20 @@ class Export
     /**
      * Locks tables
      *
-     * @param string $db       database name
-     * @param array  $tables   list of table names
-     * @param string $lockType lock type; "[LOW_PRIORITY] WRITE" or "READ [LOCAL]"
-     *
+     * @param  string  $db  database name
+     * @param  array  $tables  list of table names
+     * @param  string  $lockType  lock type; "[LOW_PRIORITY] WRITE" or "READ [LOCAL]"
      * @return mixed result of the query
      */
     public function lockTables(string $db, array $tables, string $lockType = 'WRITE')
     {
         $locks = [];
         foreach ($tables as $table) {
-            $locks[] = Util::backquote($db) . '.'
-                . Util::backquote($table) . ' ' . $lockType;
+            $locks[] = Util::backquote($db).'.'
+                .Util::backquote($table).' '.$lockType;
         }
 
-        $sql = 'LOCK TABLES ' . implode(', ', $locks);
+        $sql = 'LOCK TABLES '.implode(', ', $locks);
 
         return $this->dbi->tryQuery($sql);
     }
@@ -1303,9 +1294,8 @@ class Export
     /**
      * Returns the checked clause, depending on the presence of key in array
      *
-     * @param string $key   the key to look for
-     * @param array  $array array to verify
-     *
+     * @param  string  $key  the key to look for
+     * @param  array  $array  array to verify
      * @return string the checked clause
      */
     public function getCheckedClause(string $key, array $array): string
@@ -1321,7 +1311,7 @@ class Export
      * get all the export options and verify
      * call and include the appropriate Schema Class depending on $export_type
      *
-     * @param string|null $export_type format of the export
+     * @param  string|null  $export_type  format of the export
      */
     public function processExportSchema(?string $export_type): void
     {

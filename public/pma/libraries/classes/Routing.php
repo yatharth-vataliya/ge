@@ -4,38 +4,40 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
-use FastRoute\Dispatcher;
-use Psr\Container\ContainerInterface;
-use FastRoute\RouteParser\Std as RouteParserStd;
+use const E_USER_WARNING;
+
 use FastRoute\DataGenerator\GroupCountBased as DataGeneratorGroupCountBased;
+use FastRoute\Dispatcher;
 use FastRoute\Dispatcher\GroupCountBased as DispatcherGroupCountBased;
 use FastRoute\RouteCollector;
+use FastRoute\RouteParser\Std as RouteParserStd;
+use Psr\Container\ContainerInterface;
+use RuntimeException;
+
+use function fclose;
+use function file_exists;
+use function fopen;
+use function fwrite;
 use function htmlspecialchars;
+use function is_array;
+use function is_readable;
+use function is_writable;
 use function mb_strlen;
 use function rawurldecode;
 use function sprintf;
-use function is_writable;
-use function file_exists;
-use function is_array;
-use RuntimeException;
-use function var_export;
-use function is_readable;
 use function trigger_error;
-use const E_USER_WARNING;
-use function fopen;
-use function fwrite;
-use function fclose;
+use function var_export;
 
 /**
  * Class used to warm up the routing cache and manage routing.
  */
 class Routing
 {
-    public const ROUTES_CACHE_FILE = CACHE_DIR . 'routes.cache.php';
+    public const ROUTES_CACHE_FILE = CACHE_DIR.'routes.cache.php';
 
     public static function getDispatcher(): Dispatcher
     {
-        $routes = require ROOT_PATH . 'libraries/routes.php';
+        $routes = require ROOT_PATH.'libraries/routes.php';
 
         return self::routesCachedDispatcher($routes);
     }
@@ -73,15 +75,15 @@ class Routing
             /** @psalm-suppress MissingFile */
             $dispatchData = require self::ROUTES_CACHE_FILE;
             if (! is_array($dispatchData)) {
-                throw new RuntimeException('Invalid cache file "' . self::ROUTES_CACHE_FILE . '"');
+                throw new RuntimeException('Invalid cache file "'.self::ROUTES_CACHE_FILE.'"');
             }
 
             return new DispatcherGroupCountBased($dispatchData);
         }
 
         $routeCollector = new RouteCollector(
-            new RouteParserStd(),
-            new DataGeneratorGroupCountBased()
+            new RouteParserStd,
+            new DataGeneratorGroupCountBased
         );
         $routeDefinitionCallback($routeCollector);
 
@@ -93,14 +95,14 @@ class Routing
         // If no skip cache then try to write if write is possible
         if (! $skipCache && $canWriteCache) {
             $writeWorks = self::writeCache(
-                '<?php return ' . var_export($dispatchData, true) . ';'
+                '<?php return '.var_export($dispatchData, true).';'
             );
             if (! $writeWorks) {
                 trigger_error(
                     sprintf(
                         __(
                             'The routing cache could not be written, '
-                            . 'you need to adjust permissions on the folder/file "%s"'
+                            .'you need to adjust permissions on the folder/file "%s"'
                         ),
                         self::ROUTES_CACHE_FILE
                     ),
@@ -163,7 +165,7 @@ class Routing
             $response->setHttpResponseCode(404);
             echo Message::error(sprintf(
                 __('Error 404! The page %s was not found.'),
-                '<code>' . htmlspecialchars($route) . '</code>'
+                '<code>'.htmlspecialchars($route).'</code>'
             ))->getDisplay();
 
             return;

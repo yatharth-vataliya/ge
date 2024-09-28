@@ -8,6 +8,7 @@ use PhpMyAdmin\Config\ConfigFile;
 use PhpMyAdmin\Config\Forms\BaseForm;
 use PhpMyAdmin\Config\Forms\Setup\SetupFormList;
 use PhpMyAdmin\Template;
+
 use function in_array;
 
 abstract class AbstractController
@@ -19,8 +20,8 @@ abstract class AbstractController
     protected $template;
 
     /**
-     * @param ConfigFile $config   ConfigFile instance
-     * @param Template   $template Template instance
+     * @param  ConfigFile  $config  ConfigFile instance
+     * @param  Template  $template  Template instance
      */
     public function __construct($config, $template)
     {
@@ -28,9 +29,6 @@ abstract class AbstractController
         $this->template = $template;
     }
 
-    /**
-     * @return array
-     */
     protected function getPages(): array
     {
         $ignored = [

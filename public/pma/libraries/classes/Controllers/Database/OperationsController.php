@@ -19,6 +19,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function count;
 use function mb_strtolower;
 use function strlen;
@@ -44,9 +45,9 @@ class OperationsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -132,7 +133,7 @@ class OperationsController extends AbstractController
                         'libraries/classes/Plugins/Export/',
                         [
                             'single_table' => isset($single_table),
-                            'export_type'  => 'database',
+                            'export_type' => 'database',
                         ]
                     );
 
@@ -189,8 +190,8 @@ class OperationsController extends AbstractController
 
                         // if someday the RENAME DATABASE reappears, do not DROP
                         $local_query = 'DROP DATABASE '
-                            . Util::backquote($db) . ';';
-                        $sql_query .= "\n" . $local_query;
+                            .Util::backquote($db).';';
+                        $sql_query .= "\n".$local_query;
                         $this->dbi->query($local_query);
 
                         $message = Message::success(
@@ -321,13 +322,13 @@ class OperationsController extends AbstractController
         ) {
             $message = Message::notice(
                 __(
-                    'The phpMyAdmin configuration storage has been deactivated. ' .
+                    'The phpMyAdmin configuration storage has been deactivated. '.
                     '%sFind out why%s.'
                 )
             );
             $message->addParamHtml(
-                '<a href="' . Url::getFromRoute('/check-relations')
-                . '" data-post="' . Url::getCommon(['db' => $db]) . '">'
+                '<a href="'.Url::getFromRoute('/check-relations')
+                .'" data-post="'.Url::getCommon(['db' => $db]).'">'
             );
             $message->addParamHtml('</a>');
             /* Show error if user has configured something, notice elsewhere */
@@ -374,8 +375,8 @@ class OperationsController extends AbstractController
             return;
         }
 
-        $sql_query = 'ALTER DATABASE ' . Util::backquote($db)
-            . ' DEFAULT' . Util::getCharsetQueryPart($_POST['db_collation'] ?? '');
+        $sql_query = 'ALTER DATABASE '.Util::backquote($db)
+            .' DEFAULT'.Util::getCharsetQueryPart($_POST['db_collation'] ?? '');
         $this->dbi->query($sql_query);
         $message = Message::success();
 
@@ -393,11 +394,11 @@ class OperationsController extends AbstractController
                     continue;
                 }
                 $sql_query = 'ALTER TABLE '
-                    . Util::backquote($db)
-                    . '.'
-                    . Util::backquote($tableName)
-                    . ' DEFAULT '
-                    . Util::getCharsetQueryPart($_POST['db_collation'] ?? '');
+                    .Util::backquote($db)
+                    .'.'
+                    .Util::backquote($tableName)
+                    .' DEFAULT '
+                    .Util::getCharsetQueryPart($_POST['db_collation'] ?? '');
                 $this->dbi->query($sql_query);
 
                 /**

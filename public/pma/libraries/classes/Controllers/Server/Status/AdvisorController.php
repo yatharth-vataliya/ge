@@ -18,8 +18,8 @@ class AdvisorController extends AbstractController
     private $advisor;
 
     /**
-     * @param Response $response
-     * @param Data     $data
+     * @param  Response  $response
+     * @param  Data  $data
      */
     public function __construct($response, Template $template, $data, Advisor $advisor)
     {

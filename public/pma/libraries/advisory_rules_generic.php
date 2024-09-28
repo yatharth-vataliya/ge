@@ -12,7 +12,7 @@ return [
         'issue' => __('Uptime is less than 1 day, performance tuning may not be accurate.'),
         'recommendation' => __(
             'To have more accurate averages it is recommended to let the server run for'
-            . ' longer than a day before running this analyzer'
+            .' longer than a day before running this analyzer'
         ),
         'justification' => __('The uptime is only %s'),
         'justification_formula' => 'ADVISOR_timespanFormat(Uptime)',
@@ -24,7 +24,7 @@ return [
         'test' => 'value < 1000',
         'issue' => __(
             'Fewer than 1,000 questions have been run against this server.'
-            . ' The recommendations may not be accurate.'
+            .' The recommendations may not be accurate.'
         ),
         'recommendation' => __(
             'Let the server run for a longer time until it has executed a greater amount of queries.'
@@ -41,7 +41,7 @@ return [
         'issue' => __('There is a lot of slow queries compared to the overall amount of Queries.'),
         'recommendation' => __(
             'You might want to increase {long_query_time}'
-            . ' or optimize the queries listed in the slow query log'
+            .' or optimize the queries listed in the slow query log'
         ),
         'justification' => __('The slow query rate should be below 5%%, your value is %s%%.'),
         'justification_formula' => 'round(value,2)',
@@ -55,7 +55,7 @@ return [
         'issue' => __('There is a high percentage of slow queries compared to the server uptime.'),
         'recommendation' => __(
             'You might want to increase {long_query_time}'
-            . ' or optimize the queries listed in the slow query log'
+            .' or optimize the queries listed in the slow query log'
         ),
         'justification' => __('You have a slow query rate of %s per hour, you should have less than 1%% per hour.'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -67,11 +67,11 @@ return [
         'test' => 'value >= 10',
         'issue' => __(
             '{long_query_time} is set to 10 seconds or more,'
-            . ' thus only slow queries that take above 10 seconds are logged.'
+            .' thus only slow queries that take above 10 seconds are logged.'
         ),
         'recommendation' => __(
             'It is suggested to set {long_query_time} to a lower value, depending on your environment.'
-            . ' Usually a value of 1-5 seconds is suggested.'
+            .' Usually a value of 1-5 seconds is suggested.'
         ),
         'justification' => __('long_query_time is currently set to %ds.'),
         'justification_formula' => 'value',
@@ -85,7 +85,7 @@ return [
         'issue' => __('The slow query log is disabled.'),
         'recommendation' => __(
             'Enable slow query logging by setting {log_slow_queries} to \'ON\'.'
-            . ' This will help troubleshooting badly performing queries.'
+            .' This will help troubleshooting badly performing queries.'
         ),
         'justification' => __('log_slow_queries is set to \'OFF\''),
     ],
@@ -98,7 +98,7 @@ return [
         'issue' => __('The slow query log is disabled.'),
         'recommendation' => __(
             'Enable slow query logging by setting {slow_query_log} to \'ON\'.'
-            . ' This will help troubleshooting badly performing queries.'
+            .' This will help troubleshooting badly performing queries.'
         ),
         'justification' => __('slow_query_log is set to \'OFF\''),
     ],
@@ -124,7 +124,7 @@ return [
         'issue' => __('Version less than 5.1.30 (the first GA release of 5.1).'),
         'recommendation' => __(
             'You should upgrade, as recent versions of MySQL 5.1 have improved performance'
-            . ' and MySQL 5.5 even more so.'
+            .' and MySQL 5.5 even more so.'
         ),
         'justification' => __('Current version: %s'),
         'justification_formula' => 'value',
@@ -148,8 +148,8 @@ return [
         'issue' => __('Version is compiled from source, not a MySQL official binary.'),
         'recommendation' => __(
             'If you did not compile from source, you may be using a package modified by a distribution.'
-            . ' The MySQL manual only is accurate for official MySQL binaries,'
-            . ' not any package distributions (such as RedHat, Debian/Ubuntu etc).'
+            .' The MySQL manual only is accurate for official MySQL binaries,'
+            .' not any package distributions (such as RedHat, Debian/Ubuntu etc).'
         ),
         'justification' => __('\'source\' found in version_comment'),
     ],
@@ -161,7 +161,7 @@ return [
         'issue' => __('The MySQL manual only is accurate for official MySQL binaries.'),
         'recommendation' => __(
             'Percona documentation is at <a href="https://www.percona.com/software/documentation/">'
-            . 'https://www.percona.com/software/documentation/</a>'
+            .'https://www.percona.com/software/documentation/</a>'
         ),
         'justification' => __('\'percona\' found in version_comment'),
     ],
@@ -170,12 +170,12 @@ return [
         'name' => __('MySQL Architecture'),
         'formula' => 'system_memory',
         'test' => 'value > 3072*1024 && !preg_match(\'/64/\',version_compile_machine)'
-            . ' && !preg_match(\'/64/\',version_compile_os)',
+            .' && !preg_match(\'/64/\',version_compile_os)',
         'issue' => __('MySQL is not compiled as a 64-bit package.'),
         'recommendation' => __(
             'Your memory capacity is above 3 GiB (assuming the Server is on localhost),'
-            . ' so MySQL might not be able to access all of your memory.'
-            . ' You might want to consider installing the 64-bit version of MySQL.'
+            .' so MySQL might not be able to access all of your memory.'
+            .' You might want to consider installing the 64-bit version of MySQL.'
         ),
         'justification' => __('Available memory on this host: %s'),
         'justification_formula' => 'ADVISOR_formatByteDown(value*1024, 2, 2)',
@@ -190,13 +190,13 @@ return [
         'issue' => __('Suboptimal caching method.'),
         'recommendation' => __(
             'You are using the MySQL Query cache with a fairly high traffic database.'
-            . ' It might be worth considering to use '
-            . '<a href="https://dev.mysql.com/doc/refman/5.6/en/ha-memcached.html">memcached</a>'
-            . ' instead of the MySQL Query cache, especially if you have multiple slaves.'
+            .' It might be worth considering to use '
+            .'<a href="https://dev.mysql.com/doc/refman/5.6/en/ha-memcached.html">memcached</a>'
+            .' instead of the MySQL Query cache, especially if you have multiple slaves.'
         ),
         'justification' => __(
             'The query cache is enabled and the server receives %d queries per second.'
-            . ' This rule fires if there is more than 100 queries per second.'
+            .' This rule fires if there is more than 100 queries per second.'
         ),
         'justification_formula' => 'round(value,1)',
     ],
@@ -210,7 +210,7 @@ return [
         'issue' => __('Too many sorts are causing temporary tables.'),
         'recommendation' => __(
             'Consider increasing {sort_buffer_size} and/or {read_rnd_buffer_size},'
-            . ' depending on your system memory limits.'
+            .' depending on your system memory limits.'
         ),
         'justification' => __('%s%% of all sorts cause temporary tables, this value should be lower than 10%%.'),
         'justification_formula' => 'round(value,1)',
@@ -223,7 +223,7 @@ return [
         'issue' => __('Too many sorts are causing temporary tables.'),
         'recommendation' => __(
             'Consider increasing {sort_buffer_size} and/or {read_rnd_buffer_size},'
-            . ' depending on your system memory limits.'
+            .' depending on your system memory limits.'
         ),
         'justification' => __('Temporary tables average: %s, this value should be less than 1 per hour.'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -236,8 +236,8 @@ return [
         'issue' => __('There are lots of rows being sorted.'),
         'recommendation' => __(
             'While there is nothing wrong with a high amount of row sorting, you might want to'
-            . ' make sure that the queries which require a lot of sorting use indexed columns in'
-            . ' the ORDER BY clause, as this will result in much faster sorting.'
+            .' make sure that the queries which require a lot of sorting use indexed columns in'
+            .' the ORDER BY clause, as this will result in much faster sorting.'
         ),
         'justification' => __('Sorted rows average: %s'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -251,7 +251,7 @@ return [
         'issue' => __('There are too many joins without indexes.'),
         'recommendation' => __(
             'This means that joins are doing full table scans. Adding indexes for the columns being'
-            . ' used in the join conditions will greatly speed up table joins.'
+            .' used in the join conditions will greatly speed up table joins.'
         ),
         'justification' => __('Table joins average: %s, this value should be less than 1 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -264,10 +264,10 @@ return [
         'issue' => __('The rate of reading the first index entry is high.'),
         'recommendation' => __(
             'This usually indicates frequent full index scans. Full index scans are faster than'
-            . ' table scans but require lots of CPU cycles in big tables, if those tables that have or'
-            . ' had high volumes of UPDATEs and DELETEs, running \'OPTIMIZE TABLE\' might reduce the'
-            . ' amount of and/or speed up full index scans. Other than that full index scans can'
-            . ' only be reduced by rewriting queries.'
+            .' table scans but require lots of CPU cycles in big tables, if those tables that have or'
+            .' had high volumes of UPDATEs and DELETEs, running \'OPTIMIZE TABLE\' might reduce the'
+            .' amount of and/or speed up full index scans. Other than that full index scans can'
+            .' only be reduced by rewriting queries.'
         ),
         'justification' => __('Index scans average: %s, this value should be less than 1 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -280,7 +280,7 @@ return [
         'issue' => __('The rate of reading data from a fixed position is high.'),
         'recommendation' => __(
             'This indicates that many queries need to sort results and/or do a full table scan,'
-            . ' including join queries that do not use indexes. Add indexes where applicable.'
+            .' including join queries that do not use indexes. Add indexes where applicable.'
         ),
         'justification' => __('Rate of reading fixed position average: %s, this value should be less than 1 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -306,12 +306,12 @@ return [
         'issue' => __('{tmp_table_size} and {max_heap_table_size} are not the same.'),
         'recommendation' => __(
             'If you have deliberately changed one of either: The server uses the lower value of either'
-            . ' to determine the maximum size of in-memory tables. So if you wish to increase the'
-            . ' in-memory table limit you will have to increase the other value as well.'
+            .' to determine the maximum size of in-memory tables. So if you wish to increase the'
+            .' in-memory table limit you will have to increase the other value as well.'
         ),
         'justification' => __('Current values are tmp_table_size: %s, max_heap_table_size: %s'),
         'justification_formula' => 'ADVISOR_formatByteDown(tmp_table_size, 2, 2),'
-            . ' ADVISOR_formatByteDown(max_heap_table_size, 2, 2)',
+            .' ADVISOR_formatByteDown(max_heap_table_size, 2, 2)',
     ],
     [
         'id' => 'Percentage of temp tables on disk',
@@ -322,12 +322,12 @@ return [
         'issue' => __('Many temporary tables are being written to disk instead of being kept in memory.'),
         'recommendation' => __(
             'Increasing {max_heap_table_size} and {tmp_table_size} might help. However some'
-            . ' temporary tables are always being written to disk, independent of the value of these variables.'
-            . ' To eliminate these you will have to rewrite your queries to avoid those conditions'
-            . ' (Within a temporary table: Presence of a BLOB or TEXT column or presence of a column'
-            . ' bigger than 512 bytes) as mentioned in the beginning of an <a href="'
-            . 'https://www.facebook.com/note.php?note_id=10150111255065841&comments'
-            . '">Article by the Pythian Group</a>'
+            .' temporary tables are always being written to disk, independent of the value of these variables.'
+            .' To eliminate these you will have to rewrite your queries to avoid those conditions'
+            .' (Within a temporary table: Presence of a BLOB or TEXT column or presence of a column'
+            .' bigger than 512 bytes) as mentioned in the beginning of an <a href="'
+            .'https://www.facebook.com/note.php?note_id=10150111255065841&comments'
+            .'">Article by the Pythian Group</a>'
         ),
         'justification' => __(
             '%s%% of all temporary tables are being written to disk, this value should be below 25%%'
@@ -343,12 +343,12 @@ return [
         'issue' => __('Many temporary tables are being written to disk instead of being kept in memory.'),
         'recommendation' => __(
             'Increasing {max_heap_table_size} and {tmp_table_size} might help. However some'
-            . ' temporary tables are always being written to disk, independent of the value of these variables.'
-            . ' To eliminate these you will have to rewrite your queries to avoid those conditions'
-            . ' (Within a temporary table: Presence of a BLOB or TEXT column or presence of a column'
-            . ' bigger than 512 bytes) as mentioned in the <a href="'
-            . 'https://dev.mysql.com/doc/refman/8.0/en/internal-temporary-tables.html'
-            . '">MySQL Documentation</a>'
+            .' temporary tables are always being written to disk, independent of the value of these variables.'
+            .' To eliminate these you will have to rewrite your queries to avoid those conditions'
+            .' (Within a temporary table: Presence of a BLOB or TEXT column or presence of a column'
+            .' bigger than 512 bytes) as mentioned in the <a href="'
+            .'https://dev.mysql.com/doc/refman/8.0/en/internal-temporary-tables.html'
+            .'">MySQL Documentation</a>'
         ),
         'justification' => __(
             'Rate of temporary tables being written to disk: %s, this value should be less than 1 per hour'
@@ -378,8 +378,8 @@ return [
         'issue' => __('MyISAM key buffer (index cache) % used is low.'),
         'recommendation' => __(
             'You may need to decrease the size of {key_buffer_size}, re-examine your tables to see'
-            . ' if indexes have been removed, or examine queries and expectations'
-            . ' about what indexes are being used.'
+            .' if indexes have been removed, or examine queries and expectations'
+            .' about what indexes are being used.'
         ),
         'justification' => __('max %% MyISAM key buffer ever used: %s%%, this value should be above 95%%'),
         'justification_formula' => 'round(value,1)',
@@ -395,8 +395,8 @@ return [
         'issue' => __('MyISAM key buffer (index cache) % used is low.'),
         'recommendation' => __(
             'You may need to decrease the size of {key_buffer_size}, re-examine your tables to see'
-            . ' if indexes have been removed, or examine queries and expectations'
-            . ' about what indexes are being used.'
+            .' if indexes have been removed, or examine queries and expectations'
+            .' about what indexes are being used.'
         ),
         'justification' => __('%% MyISAM key buffer used: %s%%, this value should be above 95%%'),
         'justification_formula' => 'round(value,1)',
@@ -422,7 +422,7 @@ return [
         'issue' => __('The rate of opening tables is high.'),
         'recommendation' => __(
             'Opening tables requires disk I/O which is costly.'
-            . ' Increasing {table_open_cache} might avoid this.'
+            .' Increasing {table_open_cache} might avoid this.'
         ),
         'justification' => __('Opened table rate: %s, this value should be less than 10 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -434,11 +434,11 @@ return [
         'test' => 'value > 85',
         'issue' => __(
             'The number of open files is approaching the max number of open files.'
-            . ' You may get a "Too many open files" error.'
+            .' You may get a "Too many open files" error.'
         ),
         'recommendation' => __(
             'Consider increasing {open_files_limit}, and check the error log when'
-            . ' restarting after changing {open_files_limit}.'
+            .' restarting after changing {open_files_limit}.'
         ),
         'justification' => __('The number of opened files is at %s%% of the limit. It should be below 85%%'),
         'justification_formula' => 'round(value,1)',
@@ -451,7 +451,7 @@ return [
         'issue' => __('The rate of opening files is high.'),
         'recommendation' => __(
             'Consider increasing {open_files_limit}, and check the error log when'
-            . ' restarting after changing {open_files_limit}.'
+            .' restarting after changing {open_files_limit}.'
         ),
         'justification' => __('Opened files rate: %s, this value should be less than 5 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -508,7 +508,7 @@ return [
         'issue' => __('There are too many threads that are slow to launch.'),
         'recommendation' => __(
             'This generally happens in case of general system overload as it is pretty simple'
-            . ' operations. You might want to monitor your system load carefully.'
+            .' operations. You might want to monitor your system load carefully.'
         ),
         'justification' => __('%s thread(s) took longer than %s seconds to start, it should be 0'),
         'justification_formula' => 'value, slow_launch_time',
@@ -536,8 +536,8 @@ return [
         ),
         'recommendation' => __(
             'Increase {max_connections}, or decrease {wait_timeout} so that connections that do not'
-            . ' close database handlers properly get killed sooner.'
-            . ' Make sure the code closes database handlers properly.'
+            .' close database handlers properly get killed sooner.'
+            .' Make sure the code closes database handlers properly.'
         ),
         'justification' => __('Max_used_connections is at %s%% of max_connections, it should be below 80%%'),
         'justification_formula' => 'round(value,1)',
@@ -550,8 +550,8 @@ return [
         'issue' => __('Too many connections are aborted.'),
         'recommendation' => __(
             'Connections are usually aborted when they cannot be authorized. <a href="'
-            . 'https://www.percona.com/blog/2008/08/23/how-to-track-down-the-source-of-aborted_connects/'
-            . '">This article</a> might help you track down the source.'
+            .'https://www.percona.com/blog/2008/08/23/how-to-track-down-the-source-of-aborted_connects/'
+            .'">This article</a> might help you track down the source.'
         ),
         'justification' => __('%s%% of all connections are aborted. This value should be below 1%%'),
         'justification_formula' => 'round(value,1)',
@@ -564,8 +564,8 @@ return [
         'issue' => __('Too many connections are aborted.'),
         'recommendation' => __(
             'Connections are usually aborted when they cannot be authorized. <a href="'
-            . 'https://www.percona.com/blog/2008/08/23/how-to-track-down-the-source-of-aborted_connects/'
-            . '">This article</a> might help you track down the source.'
+            .'https://www.percona.com/blog/2008/08/23/how-to-track-down-the-source-of-aborted_connects/'
+            .'">This article</a> might help you track down the source.'
         ),
         'justification' => __('Aborted connections rate is at %s, this value should be less than 1 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -578,8 +578,8 @@ return [
         'issue' => __('Too many clients are aborted.'),
         'recommendation' => __(
             'Clients are usually aborted when they did not close their connection to MySQL properly.'
-            . ' This can be due to network issues or code not closing a database handler properly.'
-            . ' Check your network and code.'
+            .' This can be due to network issues or code not closing a database handler properly.'
+            .' Check your network and code.'
         ),
         'justification' => __('%s%% of all clients are aborted. This value should be below 2%%'),
         'justification_formula' => 'round(value,1)',
@@ -592,8 +592,8 @@ return [
         'issue' => __('Too many clients are aborted.'),
         'recommendation' => __(
             'Clients are usually aborted when they did not close their connection to MySQL properly.'
-            . ' This can be due to network issues or code not closing a database handler properly.'
-            . ' Check your network and code.'
+            .' This can be due to network issues or code not closing a database handler properly.'
+            .' Check your network and code.'
         ),
         'justification' => __('Aborted client rate is at %s, this value should be less than 1 per hour'),
         'justification_formula' => 'ADVISOR_bytime(value,2)',
@@ -620,18 +620,18 @@ return [
         ),
         'recommendation' => __(/* xgettext:no-php-format */
             'Especially on a system with a lot of writes to InnoDB tables you should set'
-            . ' {innodb_log_file_size} to 25% of {innodb_buffer_pool_size}. However the bigger this value,'
-            . ' the longer the recovery time will be when database crashes, so this value should not be set'
-            . ' much higher than 256 MiB. Please note however that you cannot simply change the value of'
-            . ' this variable. You need to shutdown the server, remove the InnoDB log files, set the new'
-            . ' value in my.cnf, start the server, then check the error logs if everything went fine.'
-            . ' See also <a href="'
-            . 'https://mysqldatabaseadministration.blogspot.com/2007/01/increase-innodblogfilesize-proper-way.html'
-            . '">this blog entry</a>'
+            .' {innodb_log_file_size} to 25% of {innodb_buffer_pool_size}. However the bigger this value,'
+            .' the longer the recovery time will be when database crashes, so this value should not be set'
+            .' much higher than 256 MiB. Please note however that you cannot simply change the value of'
+            .' this variable. You need to shutdown the server, remove the InnoDB log files, set the new'
+            .' value in my.cnf, start the server, then check the error logs if everything went fine.'
+            .' See also <a href="'
+            .'https://mysqldatabaseadministration.blogspot.com/2007/01/increase-innodblogfilesize-proper-way.html'
+            .'">this blog entry</a>'
         ),
         'justification' => __(
             'Your InnoDB log size is at %s%% in relation to the InnoDB buffer pool size,'
-            . ' it should not be below 20%%'
+            .' it should not be below 20%%'
         ),
         'justification_formula' => 'round(value,1)',
     ],
@@ -644,14 +644,14 @@ return [
         'issue' => __('The InnoDB log file size is inadequately large.'),
         'recommendation' => __(/* xgettext:no-php-format */
             'It is usually sufficient to set {innodb_log_file_size} to 25% of the size of'
-            . ' {innodb_buffer_pool_size}. A very big {innodb_log_file_size} slows down the recovery'
-            . ' time after a database crash considerably. See also '
-            . '<a href="https://www.percona.com/blog/2006/07/03/choosing-proper-innodb_log_file_size/">'
-            . 'this Article</a>. You need to shutdown the server, remove the InnoDB log files, set the'
-            . ' new value in my.cnf, start the server, then check the error logs'
-            . ' if everything went fine. See also <a href="'
-            . 'https://mysqldatabaseadministration.blogspot.com/2007/01/increase-innodblogfilesize-proper-way.html'
-            . '">this blog entry</a>'
+            .' {innodb_buffer_pool_size}. A very big {innodb_log_file_size} slows down the recovery'
+            .' time after a database crash considerably. See also '
+            .'<a href="https://www.percona.com/blog/2006/07/03/choosing-proper-innodb_log_file_size/">'
+            .'this Article</a>. You need to shutdown the server, remove the InnoDB log files, set the'
+            .' new value in my.cnf, start the server, then check the error logs'
+            .' if everything went fine. See also <a href="'
+            .'https://mysqldatabaseadministration.blogspot.com/2007/01/increase-innodblogfilesize-proper-way.html'
+            .'">this blog entry</a>'
         ),
         'justification' => __('Your absolute InnoDB log size is %s MiB'),
         'justification_formula' => 'round(value,1)',
@@ -665,19 +665,19 @@ return [
         'issue' => __('Your InnoDB buffer pool is fairly small.'),
         'recommendation' => __(/* xgettext:no-php-format */
             'The InnoDB buffer pool has a profound impact on performance for InnoDB tables.'
-            . ' Assign all your remaining memory to this buffer. For database servers that use solely InnoDB'
-            . ' as storage engine and have no other services (e.g. a web server) running, you may set this'
-            . ' as high as 80% of your available memory. If that is not the case, you need to carefully'
-            . ' assess the memory consumption of your other services and non-InnoDB-Tables and set this'
-            . ' variable accordingly. If it is set too high, your system will start swapping,'
-            . ' which decreases performance significantly. See also '
-            . '<a href="https://www.percona.com/blog/2007/11/03/choosing-innodb_buffer_pool_size/">this article</a>'
+            .' Assign all your remaining memory to this buffer. For database servers that use solely InnoDB'
+            .' as storage engine and have no other services (e.g. a web server) running, you may set this'
+            .' as high as 80% of your available memory. If that is not the case, you need to carefully'
+            .' assess the memory consumption of your other services and non-InnoDB-Tables and set this'
+            .' variable accordingly. If it is set too high, your system will start swapping,'
+            .' which decreases performance significantly. See also '
+            .'<a href="https://www.percona.com/blog/2007/11/03/choosing-innodb_buffer_pool_size/">this article</a>'
         ),
         'justification' => __(
             'You are currently using %s%% of your memory for the InnoDB buffer pool.'
-            . ' This rule fires if you are assigning less than 60%%, however this might be perfectly'
-            . ' adequate for your system if you don\'t have much InnoDB tables'
-            . ' or other services running on the same machine.'
+            .' This rule fires if you are assigning less than 60%%, however this might be perfectly'
+            .' adequate for your system if you don\'t have much InnoDB tables'
+            .' or other services running on the same machine.'
         ),
         'justification_formula' => 'value',
     ],
@@ -690,8 +690,8 @@ return [
         'issue' => __('Enable {concurrent_insert} by setting it to 1'),
         'recommendation' => __(
             'Setting {concurrent_insert} to 1 reduces contention between'
-            . ' readers and writers for a given table. See also '
-            . '<a href="https://dev.mysql.com/doc/refman/5.5/en/concurrent-inserts.html">MySQL Documentation</a>'
+            .' readers and writers for a given table. See also '
+            .'<a href="https://dev.mysql.com/doc/refman/5.5/en/concurrent-inserts.html">MySQL Documentation</a>'
         ),
         'justification' => __('concurrent_insert is set to 0'),
     ],

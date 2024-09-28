@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Server\SysInfo;
 
 use COM;
+
 use function class_exists;
 use function count;
 use function in_array;
@@ -71,9 +72,8 @@ class WindowsNt extends Base
     /**
      * Reads data from WMI
      *
-     * @param string $strClass Class to read
-     * @param array  $strValue Values to read
-     *
+     * @param  string  $strClass  Class to read
+     * @param  array  $strValue  Values to read
      * @return array with results
      */
     private function getWMI($strClass, array $strValue = [])

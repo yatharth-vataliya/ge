@@ -13,14 +13,14 @@ use function fgets;
 use function fopen;
 use function function_exists;
 use function fwrite;
-use function recode_string;
+use function iconv;
 use function mb_convert_encoding;
 use function mb_convert_kana;
 use function mb_detect_encoding;
 use function mb_list_encodings;
+use function recode_string;
 use function tempnam;
 use function unlink;
-use function iconv;
 
 /**
  * Encoding conversion helper class
@@ -143,7 +143,7 @@ class Encoding
     /**
      * Setter for engine. Use with caution, mostly useful for testing.
      *
-     * @param int $engine Engine encoding
+     * @param  int  $engine  Engine encoding
      */
     public static function setEngine(int $engine): void
     {
@@ -166,13 +166,10 @@ class Encoding
      * Converts encoding of text according to parameters with detected
      * conversion function.
      *
-     * @param string $src_charset  source charset
-     * @param string $dest_charset target charset
-     * @param string $what         what to convert
-     *
-     * @return string   converted text
-     *
-     * @access public
+     * @param  string  $src_charset  source charset
+     * @param  string  $dest_charset  target charset
+     * @param  string  $what  what to convert
+     * @return string converted text
      */
     public static function convertString(
         string $src_charset,
@@ -188,13 +185,13 @@ class Encoding
         switch (self::$engine) {
             case self::ENGINE_RECODE:
                 return recode_string(
-                    $src_charset . '..' . $dest_charset,
+                    $src_charset.'..'.$dest_charset,
                     $what
                 );
             case self::ENGINE_ICONV:
                 return iconv(
                     $src_charset,
-                    $dest_charset .
+                    $dest_charset.
                     ($GLOBALS['cfg']['IconvExtraParams'] ?? ''),
                     $what
                 );
@@ -228,7 +225,7 @@ class Encoding
     /**
      * Setter for Kanji encodings. Use with caution, mostly useful for testing.
      *
-     * @param string $value Kanji encodings list
+     * @param  string  $value  Kanji encodings list
      */
     public static function setKanjiEncodings(string $value): void
     {
@@ -251,11 +248,10 @@ class Encoding
     /**
      * Kanji string encoding convert
      *
-     * @param string $str  the string to convert
-     * @param string $enc  the destination encoding code
-     * @param string $kana set 'kana' convert to JIS-X208-kana
-     *
-     * @return string   the converted string
+     * @param  string  $str  the string to convert
+     * @param  string  $enc  the destination encoding code
+     * @param  string  $kana  set 'kana' convert to JIS-X208-kana
+     * @return string the converted string
      */
     public static function kanjiStrConv(string $str, string $enc, string $kana): string
     {
@@ -270,7 +266,7 @@ class Encoding
 
         if ($kana === 'kana') {
             $dist = mb_convert_kana($str, 'KV', $string_encoding);
-            $str  = $dist;
+            $str = $dist;
         }
         if ($string_encoding != $enc && $enc != '') {
             $dist = mb_convert_encoding($str, $enc, $string_encoding);
@@ -284,11 +280,10 @@ class Encoding
     /**
      * Kanji file encoding convert
      *
-     * @param string $file the name of the file to convert
-     * @param string $enc  the destination encoding code
-     * @param string $kana set 'kana' convert to JIS-X208-kana
-     *
-     * @return string   the name of the converted file
+     * @param  string  $file  the name of the file to convert
+     * @param  string  $enc  the destination encoding code
+     * @param  string  $kana  set 'kana' convert to JIS-X208-kana
+     * @return string the name of the converted file
      */
     public static function kanjiFileConv(string $file, string $enc, string $kana): string
     {
@@ -296,8 +291,8 @@ class Encoding
             return $file;
         }
         $tmpfname = (string) tempnam($GLOBALS['PMA_Config']->getUploadTempDir(), $enc);
-        $fpd      = fopen($tmpfname, 'wb');
-        $fps      = fopen($file, 'r');
+        $fpd = fopen($tmpfname, 'wb');
+        $fps = fopen($file, 'r');
         self::kanjiChangeOrder();
         while (! feof($fps)) {
             $line = fgets($fps, 4096);
@@ -319,15 +314,13 @@ class Encoding
      */
     public static function kanjiEncodingForm(): string
     {
-        $template = new Template();
+        $template = new Template;
 
         return $template->render('encoding/kanji_encoding_form');
     }
 
     /**
      * Lists available encodings.
-     *
-     * @return array
      */
     public static function listEncodings(): array
     {

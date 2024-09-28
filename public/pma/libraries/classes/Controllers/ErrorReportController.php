@@ -13,6 +13,7 @@ use PhpMyAdmin\Message;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\UserPreferences;
+
 use function count;
 use function in_array;
 use function is_string;
@@ -31,7 +32,7 @@ class ErrorReportController extends AbstractController
     private $errorHandler;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct(
         $response,
@@ -99,7 +100,7 @@ class ErrorReportController extends AbstractController
                     ) {
                         $msg = __(
                             'An error has been detected and an error report has been '
-                            . 'automatically submitted based on your settings.'
+                            .'automatically submitted based on your settings.'
                         );
                     } else {
                         $msg = __('Thank you for submitting this report.');
@@ -107,15 +108,15 @@ class ErrorReportController extends AbstractController
                 } else {
                     $msg = __(
                         'An error has been detected and an error report has been '
-                        . 'generated but failed to be sent.'
+                        .'generated but failed to be sent.'
                     );
                     $msg .= ' ';
                     $msg .= __(
                         'If you experience any '
-                        . 'problems please submit a bug report manually.'
+                        .'problems please submit a bug report manually.'
                     );
                 }
-                $msg .= ' ' . __('You may want to refresh the page.');
+                $msg .= ' '.__('You may want to refresh the page.');
 
                 /* Create message object */
                 if ($success) {
@@ -133,8 +134,8 @@ class ErrorReportController extends AbstractController
                     }
                 } elseif ($_POST['exception_type'] === 'php') {
                     $jsCode = 'Functions.ajaxShowMessage(\'<div class="alert alert-danger" role="alert">'
-                        . $msg
-                        . '</div>\', false);';
+                        .$msg
+                        .'</div>\', false);';
                     $this->response->getFooter()->getScripts()->addCode($jsCode);
                 }
 
@@ -147,7 +148,7 @@ class ErrorReportController extends AbstractController
                 if (isset($_POST['always_send'])
                     && $_POST['always_send'] === 'true'
                 ) {
-                    $userPreferences = new UserPreferences();
+                    $userPreferences = new UserPreferences;
                     $userPreferences->persistOption('SendErrorReports', 'always', 'ask');
                 }
             }

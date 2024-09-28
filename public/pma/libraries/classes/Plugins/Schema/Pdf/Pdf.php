@@ -10,15 +10,16 @@ namespace PhpMyAdmin\Plugins\Schema\Pdf;
 use PhpMyAdmin\Pdf as PdfLib;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Util;
+
 use function class_exists;
 use function count;
 use function getcwd;
+use function is_array;
 use function max;
 use function mb_ord;
 use function str_replace;
 use function strlen;
 use function ucfirst;
-use function is_array;
 
 // phpcs:disable PSR1.Files.SideEffects
 /**
@@ -34,7 +35,7 @@ if (! class_exists('TCPDF')) {
  * block attempts to directly run this script
  */
 if (getcwd() == __DIR__) {
-    die('Attack stopped');
+    exit('Attack stopped');
 }
 // phpcs:enable
 
@@ -43,8 +44,6 @@ if (getcwd() == __DIR__) {
  * in developing the structure of PDF Schema Export
  *
  * @see     TCPDF
- *
- * @access  public
  */
 class Pdf extends PdfLib
 {
@@ -93,14 +92,12 @@ class Pdf extends PdfLib
     /**
      * Constructs PDF for schema export.
      *
-     * @param string $orientation page orientation
-     * @param string $unit        unit
-     * @param string $paper       the format used for pages
-     * @param int    $pageNumber  schema page number that is being exported
-     * @param bool   $withDoc     with document dictionary
-     * @param string $db          the database name
-     *
-     * @access public
+     * @param  string  $orientation  page orientation
+     * @param  string  $unit  unit
+     * @param  string  $paper  the format used for pages
+     * @param  int  $pageNumber  schema page number that is being exported
+     * @param  bool  $withDoc  with document dictionary
+     * @param  string  $db  the database name
      */
     public function __construct(
         $orientation,
@@ -122,8 +119,7 @@ class Pdf extends PdfLib
     /**
      * Sets the value for margins
      *
-     * @param float $c_margin margin
-     *
+     * @param  float  $c_margin  margin
      * @return void
      */
     public function setCMargin($c_margin)
@@ -134,12 +130,11 @@ class Pdf extends PdfLib
     /**
      * Sets the scaling factor, defines minimum coordinates and margins
      *
-     * @param float|int $scale      The scaling factor
-     * @param float|int $xMin       The minimum X coordinate
-     * @param float|int $yMin       The minimum Y coordinate
-     * @param float|int $leftMargin The left margin
-     * @param float|int $topMargin  The top margin
-     *
+     * @param  float|int  $scale  The scaling factor
+     * @param  float|int  $xMin  The minimum X coordinate
+     * @param  float|int  $yMin  The minimum Y coordinate
+     * @param  float|int  $leftMargin  The left margin
+     * @param  float|int  $topMargin  The top margin
      * @return void
      */
     public function setScale(
@@ -167,15 +162,14 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::Cell()
      *
-     * @param float|int $w      The cell width
-     * @param float|int $h      The cell height
-     * @param string    $txt    The text to output
-     * @param mixed     $border Whether to add borders or not
-     * @param int       $ln     Where to put the cursor once the output is done
-     * @param string    $align  Align mode
-     * @param int       $fill   Whether to fill the cell with a color or not
-     * @param string    $link   Link
-     *
+     * @param  float|int  $w  The cell width
+     * @param  float|int  $h  The cell height
+     * @param  string  $txt  The text to output
+     * @param  mixed  $border  Whether to add borders or not
+     * @param  int  $ln  Where to put the cursor once the output is done
+     * @param  string  $align  Align mode
+     * @param  int  $fill  Whether to fill the cell with a color or not
+     * @param  string  $link  Link
      * @return void
      */
     public function cellScale(
@@ -198,11 +192,10 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::Line()
      *
-     * @param float $x1 The horizontal position of the starting point
-     * @param float $y1 The vertical position of the starting point
-     * @param float $x2 The horizontal position of the ending point
-     * @param float $y2 The vertical position of the ending point
-     *
+     * @param  float  $x1  The horizontal position of the starting point
+     * @param  float  $y1  The vertical position of the starting point
+     * @param  float  $x2  The horizontal position of the ending point
+     * @param  float  $y2  The vertical position of the ending point
      * @return void
      */
     public function lineScale($x1, $y1, $x2, $y2)
@@ -219,9 +212,8 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::SetXY()
      *
-     * @param float $x The x position
-     * @param float $y The y position
-     *
+     * @param  float  $x  The x position
+     * @param  float  $y  The y position
      * @return void
      */
     public function setXyScale($x, $y)
@@ -236,8 +228,7 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::SetX()
      *
-     * @param float $x The x position
-     *
+     * @param  float  $x  The x position
      * @return void
      */
     public function setXScale($x)
@@ -251,8 +242,7 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::SetFontSize()
      *
-     * @param float $size The font size (in points)
-     *
+     * @param  float  $size  The font size (in points)
      * @return void
      */
     public function setFontSizeScale($size)
@@ -267,8 +257,7 @@ class Pdf extends PdfLib
      *
      * @see TCPDF::SetLineWidth()
      *
-     * @param float $width The line width
-     *
+     * @param  float  $width  The line width
      * @return void
      */
     public function setLineWidthScale($width)
@@ -300,10 +289,10 @@ class Pdf extends PdfLib
             $pg_name = __('PDF export page');
         } else {
             $test_query = 'SELECT * FROM '
-                . Util::backquote($GLOBALS['cfgRelation']['db']) . '.'
-                . Util::backquote($GLOBALS['cfgRelation']['pdf_pages'])
-                . ' WHERE db_name = \'' . $dbi->escapeString($this->db)
-                . '\' AND page_nr = \'' . $this->pageNumber . '\'';
+                .Util::backquote($GLOBALS['cfgRelation']['db']).'.'
+                .Util::backquote($GLOBALS['cfgRelation']['pdf_pages'])
+                .' WHERE db_name = \''.$dbi->escapeString($this->db)
+                .'\' AND page_nr = \''.$this->pageNumber.'\'';
             $test_rs = $this->relation->queryAsControlUser($test_query);
             $pageDesc = '';
             $pages = $dbi->fetchAssoc($test_rs);
@@ -339,8 +328,7 @@ class Pdf extends PdfLib
     /**
      * Sets widths
      *
-     * @param array $w array of widths
-     *
+     * @param  array  $w  array of widths
      * @return void
      */
     public function setWidths(array $w)
@@ -352,9 +340,8 @@ class Pdf extends PdfLib
     /**
      * Generates table row.
      *
-     * @param array $data  Data for table
-     * @param array $links Links for table cells
-     *
+     * @param  array  $data  Data for table
+     * @param  array  $links  Links for table cells
      * @return void
      */
     public function row(array $data, array $links)
@@ -393,9 +380,8 @@ class Pdf extends PdfLib
     /**
      * Compute number of lines used by a multicell of width w
      *
-     * @param int    $w   width
-     * @param string $txt text
-     *
+     * @param  int  $w  width
+     * @param  string  $txt  text
      * @return int
      */
     public function numLines($w, $txt)
@@ -423,6 +409,7 @@ class Pdf extends PdfLib
                 $j = $i;
                 $l = 0;
                 $nl++;
+
                 continue;
             }
             if ($c === ' ') {
@@ -452,11 +439,8 @@ class Pdf extends PdfLib
     /**
      * Set whether the document is generated from client side DB
      *
-     * @param string $value whether offline
-     *
+     * @param  string  $value  whether offline
      * @return void
-     *
-     * @access private
      */
     public function setOffline($value)
     {

@@ -32,7 +32,7 @@ class SchemaPdf extends SchemaPlugin
      */
     protected function setProperties()
     {
-        $schemaPluginProperties = new SchemaPluginProperties();
+        $schemaPluginProperties = new SchemaPluginProperties;
         $schemaPluginProperties->setText('PDF');
         $schemaPluginProperties->setExtension('pdf');
         $schemaPluginProperties->setMimeType('application/pdf');
@@ -93,8 +93,8 @@ class SchemaPdf extends SchemaPlugin
         );
         $leaf->setValues(
             [
-                ''          => __('None'),
-                'name_asc'  => __('Name (Ascending)'),
+                '' => __('None'),
+                'name_asc' => __('Name (Ascending)'),
                 'name_desc' => __('Name (Descending)'),
             ]
         );
@@ -111,8 +111,7 @@ class SchemaPdf extends SchemaPlugin
     /**
      * Exports the schema into PDF format.
      *
-     * @param string $db database name
-     *
+     * @param  string  $db  database name
      * @return bool Whether it succeeded
      */
     public function exportSchema($db)

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Import;
 
+use const LOCK_EX;
+
 use PhpMyAdmin\File;
 use PhpMyAdmin\Gis\GisFactory;
 use PhpMyAdmin\Gis\GisMultiLineString;
@@ -20,7 +22,7 @@ use PhpMyAdmin\Properties\Plugins\ImportPluginProperties;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\ZipExtension;
 use ZipArchive;
-use const LOCK_EX;
+
 use function count;
 use function extension_loaded;
 use function file_exists;
@@ -50,7 +52,7 @@ class ImportShp extends ImportPlugin
             return;
         }
 
-        $this->zipExtension = new ZipExtension(new ZipArchive());
+        $this->zipExtension = new ZipExtension(new ZipArchive);
     }
 
     /**
@@ -61,7 +63,7 @@ class ImportShp extends ImportPlugin
      */
     protected function setProperties()
     {
-        $importPluginProperties = new ImportPluginProperties();
+        $importPluginProperties = new ImportPluginProperties;
         $importPluginProperties->setText(__('ESRI Shape File'));
         $importPluginProperties->setExtension('shp');
         $importPluginProperties->setOptions([]);
@@ -73,8 +75,7 @@ class ImportShp extends ImportPlugin
     /**
      * Handles the whole import logic
      *
-     * @param array $sql_data 2-element array with sql data
-     *
+     * @param  array  $sql_data  2-element array with sql data
      * @return void
      */
     public function doImport(?File $importHandle = null, array &$sql_data = [])
@@ -132,19 +133,19 @@ class ImportShp extends ImportPlugin
                         // to
                         // dresden_osm.shp/gis.osm_transport_a_v06
                         $path_parts = pathinfo($dbf_file_name);
-                        $dbf_file_name = $path_parts['dirname'] . '/' . $path_parts['filename'];
+                        $dbf_file_name = $path_parts['dirname'].'/'.$path_parts['filename'];
 
                         // sanitize filename
                         $dbf_file_name = Sanitize::sanitizeFilename($dbf_file_name, true);
 
                         // concat correct filename and extension
-                        $dbf_file_path = $temp . '/' . $dbf_file_name . '.dbf';
+                        $dbf_file_path = $temp.'/'.$dbf_file_name.'.dbf';
 
                         if (file_put_contents($dbf_file_path, $extracted, LOCK_EX) !== false) {
                             $temp_dbf_file = true;
 
                             // Replace the .dbf with .*, as required by the bsShapeFiles library.
-                            $shp->FileName = substr($dbf_file_path, 0, -4) . '.*';
+                            $shp->FileName = substr($dbf_file_path, 0, -4).'.*';
                         }
                     }
                 }
@@ -160,7 +161,7 @@ class ImportShp extends ImportPlugin
                     $import_file,
                     0,
                     mb_strlen($import_file) - 4
-                ) . '.*';
+                ).'.*';
                 $shp->FileName = $file_name;
             }
         }
@@ -190,19 +191,19 @@ class ImportShp extends ImportPlugin
             // ESRI Null Shape
             case 0:
                 break;
-            // ESRI Point
+                // ESRI Point
             case 1:
                 $gis_type = 'point';
                 break;
-            // ESRI PolyLine
+                // ESRI PolyLine
             case 3:
                 $gis_type = 'multilinestring';
                 break;
-            // ESRI Polygon
+                // ESRI Polygon
             case 5:
                 $gis_type = 'multipolygon';
                 break;
-            // ESRI MultiPoint
+                // ESRI MultiPoint
             case 8:
                 $gis_type = 'multipoint';
                 break;
@@ -236,7 +237,7 @@ class ImportShp extends ImportPlugin
                     $tempRow[] = null;
                 } else {
                     $tempRow[] = "GeomFromText('"
-                        . $gis_obj->getShape($record->SHPData) . "')";
+                        .$gis_obj->getShape($record->SHPData)."')";
                 }
 
                 if ($shp->getDBFHeader() !== null) {
@@ -273,7 +274,7 @@ class ImportShp extends ImportPlugin
         // Set table name based on the number of tables
         if (strlen((string) $db) > 0) {
             $result = $dbi->fetchResult('SHOW TABLES');
-            $table_name = 'TABLE ' . (count($result) + 1);
+            $table_name = 'TABLE '.(count($result) + 1);
         } else {
             $table_name = 'TBL_NAME';
         }
@@ -322,15 +323,14 @@ class ImportShp extends ImportPlugin
      * falls short.
      * Sets $eof when $GLOBALS['finished'] is set and the buffer falls short.
      *
-     * @param int $length number of bytes
-     *
+     * @param  int  $length  number of bytes
      * @return string
      */
     public static function readFromBuffer($length)
     {
         global $buffer, $eof, $importHandle;
 
-        $import = new Import();
+        $import = new Import;
 
         if (strlen((string) $buffer) < $length) {
             if ($GLOBALS['finished']) {

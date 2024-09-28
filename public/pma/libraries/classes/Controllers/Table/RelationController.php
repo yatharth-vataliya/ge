@@ -13,6 +13,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Table;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Util;
+
 use function array_key_exists;
 use function array_keys;
 use function array_values;
@@ -37,10 +38,10 @@ final class RelationController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param string            $table    Table name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  string  $table  Table name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -199,8 +200,8 @@ final class RelationController extends AbstractController
     /**
      * Update for display field
      *
-     * @param Table $table       table
-     * @param array $cfgRelation relation parameters
+     * @param  Table  $table  table
+     * @param  array  $cfgRelation  relation parameters
      */
     private function updateForDisplayField(Table $table, array $cfgRelation): void
     {
@@ -223,9 +224,9 @@ final class RelationController extends AbstractController
     /**
      * Update for FK
      *
-     * @param Table $table            Table
-     * @param array $options          Options
-     * @param array $relationsForeign External relations
+     * @param  Table  $table  Table
+     * @param  array  $options  Options
+     * @param  array  $relationsForeign  External relations
      */
     private function updateForForeignKeys(Table $table, array $options, array $relationsForeign): void
     {
@@ -280,9 +281,9 @@ final class RelationController extends AbstractController
     /**
      * Update for internal relation
      *
-     * @param Table $table       Table
-     * @param array $cfgRelation Relation parameters
-     * @param array $relations   Relations
+     * @param  Table  $table  Table
+     * @param  array  $cfgRelation  Relation parameters
+     * @param  array  $relations  Relations
      */
     private function updateForInternalRelation(Table $table, array $cfgRelation, array $relations): void
     {
@@ -343,7 +344,7 @@ final class RelationController extends AbstractController
     /**
      * Send database selection values for dropdown
      *
-     * @param string $storageEngine Storage engine.
+     * @param  string  $storageEngine  Storage engine.
      */
     public function getDropdownValueForDatabase(string $storageEngine): void
     {
@@ -352,7 +353,7 @@ final class RelationController extends AbstractController
 
         if ($foreign) {
             $query = 'SHOW TABLE STATUS FROM '
-                . Util::backquote($_POST['foreignDb']);
+                .Util::backquote($_POST['foreignDb']);
             $tables_rs = $this->dbi->query(
                 $query,
                 DatabaseInterface::CONNECT_USER,
@@ -370,7 +371,7 @@ final class RelationController extends AbstractController
             }
         } else {
             $query = 'SHOW TABLES FROM '
-                . Util::backquote($_POST['foreignDb']);
+                .Util::backquote($_POST['foreignDb']);
             $tables_rs = $this->dbi->query(
                 $query,
                 DatabaseInterface::CONNECT_USER,

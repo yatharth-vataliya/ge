@@ -13,6 +13,7 @@ use const LOG_AUTHPRIV;
 use const LOG_NDELAY;
 use const LOG_PID;
 use const LOG_WARNING;
+
 use function closelog;
 use function date;
 use function error_log;
@@ -51,26 +52,24 @@ class Logging
     /**
      * Generate log message for authentication logging
      *
-     * @param string $user   user name
-     * @param string $status status message
-     *
+     * @param  string  $user  user name
+     * @param  string  $status  status message
      * @return string
      */
     public static function getLogMessage($user, $status)
     {
         if ($status === 'ok') {
-            return 'user authenticated: ' . $user . ' from ' . Core::getIp();
+            return 'user authenticated: '.$user.' from '.Core::getIp();
         }
 
-        return 'user denied: ' . $user . ' (' . $status . ') from ' . Core::getIp();
+        return 'user denied: '.$user.' ('.$status.') from '.Core::getIp();
     }
 
     /**
      * Logs user information to webserver logs.
      *
-     * @param string $user   user name
-     * @param string $status status message
-     *
+     * @param  string  $user  user name
+     * @param  string  $status  status message
      * @return void
      */
     public static function logUser($user, $status = 'ok')
@@ -100,7 +99,7 @@ class Logging
             @error_log($message, 4);
         } else {
             @error_log(
-                date('M d H:i:s') . ' phpmyadmin: ' . $message . "\n",
+                date('M d H:i:s').' phpmyadmin: '.$message."\n",
                 3,
                 $log_file
             );

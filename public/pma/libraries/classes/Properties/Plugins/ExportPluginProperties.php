@@ -50,8 +50,7 @@ class ExportPluginProperties extends PluginPropertyItem
     /**
      * Sets the force file parameter
      *
-     * @param bool $forceFile the force file parameter
-     *
+     * @param  bool  $forceFile  the force file parameter
      * @return void
      */
     public function setForceFile($forceFile)

@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Controllers;
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Gis\GisFactory;
 use PhpMyAdmin\Gis\GisVisualization;
+
 use function array_merge;
 use function in_array;
 use function intval;
@@ -88,7 +89,7 @@ class GisDataEditorController extends AbstractController
         $srid = isset($gis_data['srid']) && $gis_data['srid'] != '' ? $gis_data['srid'] : 0;
         $wkt = $gis_obj->generateWkt($gis_data, 0);
         $wkt_with_zero = $gis_obj->generateWkt($gis_data, 0, '0');
-        $result = "'" . $wkt . "'," . $srid;
+        $result = "'".$wkt."',".$srid;
 
         // Generate SVG based visualization
         $visualizationSettings = [

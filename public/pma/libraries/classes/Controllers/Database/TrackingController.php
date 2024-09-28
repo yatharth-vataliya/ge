@@ -14,6 +14,7 @@ use PhpMyAdmin\Tracker;
 use PhpMyAdmin\Tracking;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function count;
 use function htmlspecialchars;
 use function sprintf;
@@ -30,9 +31,9 @@ class TrackingController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, Tracking $tracking, $dbi)
     {
@@ -86,7 +87,7 @@ class TrackingController extends AbstractController
                 sprintf(
                     __(
                         'Version %1$s was created for selected tables,'
-                        . ' tracking is active for them.'
+                        .' tracking is active for them.'
                     ),
                     htmlspecialchars($_POST['version'])
                 )
@@ -151,8 +152,8 @@ class TrackingController extends AbstractController
 
         $log = '';
         foreach ($data['ddlog'] as $entry) {
-            $log .= '# ' . $entry['date'] . ' ' . $entry['username'] . "\n"
-                . $entry['statement'] . "\n";
+            $log .= '# '.$entry['date'].' '.$entry['username']."\n"
+                .$entry['statement']."\n";
         }
         echo Generator::getMessage(__('Database Log'), $log);
     }

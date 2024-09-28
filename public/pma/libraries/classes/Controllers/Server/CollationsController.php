@@ -28,10 +28,10 @@ class CollationsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
-     * @param array|null        $charsets   Array of charsets
-     * @param array|null        $collations Array of collations
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
+     * @param  array|null  $charsets  Array of charsets
+     * @param  array|null  $collations  Array of collations
      */
     public function __construct(
         $response,

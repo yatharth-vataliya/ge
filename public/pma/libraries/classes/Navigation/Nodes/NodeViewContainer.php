@@ -27,11 +27,11 @@ class NodeViewContainer extends NodeDatabaseChildContainer
             'text' => Url::getFromRoute('/database/structure', [
                 'server' => $GLOBALS['server'],
                 'tbl_type' => 'view',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
             'icon' => Url::getFromRoute('/database/structure', [
                 'server' => $GLOBALS['server'],
                 'tbl_type' => 'view',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
         ];
         $this->classes = 'viewContainer subContainer';
         $this->realName = 'views';
@@ -45,10 +45,10 @@ class NodeViewContainer extends NodeDatabaseChildContainer
         $new->links = [
             'text' => Url::getFromRoute('/view/create', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
             'icon' => Url::getFromRoute('/view/create', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
         ];
         $this->addChild($new);
     }

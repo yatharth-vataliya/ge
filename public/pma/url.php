@@ -12,7 +12,7 @@ use PhpMyAdmin\Sanitize;
 
 if (! defined('ROOT_PATH')) {
     // phpcs:disable PSR1.Files.SideEffects
-    define('ROOT_PATH', __DIR__ . DIRECTORY_SEPARATOR);
+    define('ROOT_PATH', __DIR__.DIRECTORY_SEPARATOR);
     // phpcs:enable
 }
 
@@ -22,7 +22,7 @@ global $containerBuilder, $dbi;
 define('PMA_MINIMUM_COMMON', true);
 // phpcs:enable
 
-require_once ROOT_PATH . 'libraries/common.inc.php';
+require_once ROOT_PATH.'libraries/common.inc.php';
 
 // Load database service because services.php is not available here
 $dbi = DatabaseInterface::load();
@@ -51,4 +51,4 @@ if (! Core::isValid($_GET['url'])
     // Do not display the value of $_GET['url'] to avoid showing injected content
     echo __('Taking you to the target site.');
 }
-die;
+exit;

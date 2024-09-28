@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Controllers;
 
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Linter;
+
 use function json_encode;
 
 /**
@@ -47,11 +48,11 @@ class LintController extends AbstractController
             $options = $params['options'];
 
             if (! empty($options['routine_editor'])) {
-                $sqlQuery = 'CREATE PROCEDURE `a`() ' . $sqlQuery;
+                $sqlQuery = 'CREATE PROCEDURE `a`() '.$sqlQuery;
             } elseif (! empty($options['trigger_editor'])) {
-                $sqlQuery = 'CREATE TRIGGER `a` AFTER INSERT ON `b` FOR EACH ROW ' . $sqlQuery;
+                $sqlQuery = 'CREATE TRIGGER `a` AFTER INSERT ON `b` FOR EACH ROW '.$sqlQuery;
             } elseif (! empty($options['event_editor'])) {
-                $sqlQuery = 'CREATE EVENT `a` ON SCHEDULE EVERY MINUTE DO ' . $sqlQuery;
+                $sqlQuery = 'CREATE EVENT `a` ON SCHEDULE EVERY MINUTE DO '.$sqlQuery;
             }
         }
 

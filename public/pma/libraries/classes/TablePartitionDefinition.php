@@ -12,9 +12,7 @@ use function min;
 class TablePartitionDefinition
 {
     /**
-     * @param array|null $details Details that may be pre-filled
-     *
-     * @return array
+     * @param  array|null  $details  Details that may be pre-filled
      */
     public static function getDetails(?array $details = null): array
     {
@@ -25,9 +23,6 @@ class TablePartitionDefinition
         return $details;
     }
 
-    /**
-     * @return array
-     */
     protected static function generateDetails(): array
     {
         $partitionDetails = self::extractDetailsFromRequest();
@@ -52,8 +47,6 @@ class TablePartitionDefinition
 
     /**
      * Extract some partitioning and subpartitioning parameters from the request
-     *
-     * @return array
      */
     protected static function extractDetailsFromRequest(): array
     {
@@ -77,7 +70,7 @@ class TablePartitionDefinition
     }
 
     /**
-     * @param string $paramLabel Label searched in request
+     * @param  string  $paramLabel  Label searched in request
      */
     protected static function extractPartitionCount(string $paramLabel): int
     {
@@ -92,9 +85,7 @@ class TablePartitionDefinition
     }
 
     /**
-     * @param array $partitionDetails Details of partitions
-     *
-     * @return array
+     * @param  array  $partitionDetails  Details of partitions
      */
     protected static function extractPartitions(array $partitionDetails): array
     {
@@ -116,7 +107,7 @@ class TablePartitionDefinition
         for ($i = 0; $i < $partitionCount; $i++) {
             if (! isset($partitions[$i])) { // Newly added partition
                 $partitions[$i] = [
-                    'name' => 'p' . $i,
+                    'name' => 'p'.$i,
                     'value_type' => '',
                     'value' => '',
                     'engine' => '',
@@ -130,8 +121,8 @@ class TablePartitionDefinition
                 ];
             }
 
-            $partition =& $partitions[$i];
-            $partition['prefix'] = 'partitions[' . $i . ']';
+            $partition = &$partitions[$i];
+            $partition['prefix'] = 'partitions['.$i.']';
 
             // Changing from HASH/KEY to RANGE/LIST
             if (! isset($partition['value_type'])) {
@@ -152,6 +143,7 @@ class TablePartitionDefinition
             // No subpartitions
             if ($subpartitionCount <= 1 || $partitionDetails['can_have_subpartitions'] !== true) {
                 unset($partition['subpartitions'], $partition['subpartition_count']);
+
                 continue;
             }
 
@@ -161,7 +153,7 @@ class TablePartitionDefinition
             if (! isset($partition['subpartitions'])) {
                 $partition['subpartitions'] = [];
             }
-            $subpartitions =& $partition['subpartitions'];
+            $subpartitions = &$partition['subpartitions'];
 
             // Remove details of the additional subpartitions
             // when number of subpartitions have been reduced
@@ -170,7 +162,7 @@ class TablePartitionDefinition
             for ($j = 0; $j < $subpartitionCount; $j++) {
                 if (! isset($subpartitions[$j])) { // Newly added subpartition
                     $subpartitions[$j] = [
-                        'name' => $partition['name'] . '_s' . $j,
+                        'name' => $partition['name'].'_s'.$j,
                         'engine' => '',
                         'comment' => '',
                         'data_directory' => '',
@@ -182,8 +174,8 @@ class TablePartitionDefinition
                     ];
                 }
 
-                $subpartitions[$j]['prefix'] = 'partitions[' . $i . ']'
-                    . '[subpartitions][' . $j . ']';
+                $subpartitions[$j]['prefix'] = 'partitions['.$i.']'
+                    .'[subpartitions]['.$j.']';
             }
         }
         $partitionDetails['partitions'] = $partitions;

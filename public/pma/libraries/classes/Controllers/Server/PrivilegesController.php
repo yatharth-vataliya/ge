@@ -19,6 +19,7 @@ use PhpMyAdmin\Server\Privileges;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function header;
 use function implode;
 use function is_array;
@@ -39,8 +40,8 @@ class PrivilegesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, Relation $relation, $dbi)
     {
@@ -161,8 +162,8 @@ class PrivilegesController extends AbstractController
                 Message::error(
                     __(
                         "Username and hostname didn't change. "
-                        . 'If you only want to change the password, '
-                        . "'Change password' tab should be used."
+                        .'If you only want to change the password, '
+                        ."'Change password' tab should be used."
                     )
                 )->getDisplay()
             );
@@ -362,7 +363,7 @@ class PrivilegesController extends AbstractController
             ] = Util::getDbInfo($db, $sub_part ?? '');
 
             $content = ob_get_clean();
-            $this->response->addHTML($content . "\n");
+            $this->response->addHTML($content."\n");
         } elseif (! empty($GLOBALS['message'])) {
             $this->response->addHTML(Generator::getMessage($GLOBALS['message']));
             unset($GLOBALS['message']);
@@ -398,7 +399,7 @@ class PrivilegesController extends AbstractController
                 return;
             }
 
-            $this->response->addHTML('<h2>' . $title . '</h2>' . $export);
+            $this->response->addHTML('<h2>'.$title.'</h2>'.$export);
         }
 
         // Show back the form if an error occurred

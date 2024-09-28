@@ -12,6 +12,7 @@ use PhpMyAdmin\Server\Status\Data;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_keys;
 use function count;
 use function mb_strtolower;
@@ -24,9 +25,9 @@ class ProcessesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param Data              $data
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  Data  $data
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $data, $dbi)
     {
@@ -96,7 +97,7 @@ class ProcessesController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     public function kill(array $params): void
     {
@@ -116,7 +117,7 @@ class ProcessesController extends AbstractController
             $message = Message::error(
                 __(
                     'phpMyAdmin was unable to kill thread %s.'
-                    . ' It probably has already been closed.'
+                    .' It probably has already been closed.'
                 )
             );
             $this->response->setRequestStatus(false);
@@ -127,7 +128,7 @@ class ProcessesController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     private function getList(array $params): string
     {
@@ -199,8 +200,8 @@ class ProcessesController extends AbstractController
         }
         if (! empty($params['order_by_field']) && ! empty($params['sort_order'])) {
             $sqlQuery .= ' ORDER BY '
-                . Util::backquote($params['order_by_field'])
-                . ' ' . $params['sort_order'];
+                .Util::backquote($params['order_by_field'])
+                .' '.$params['sort_order'];
         }
 
         $result = $this->dbi->query($sqlQuery);
@@ -228,7 +229,7 @@ class ProcessesController extends AbstractController
                 'is_full' => false,
             ];
 
-            if (0 !== --$sortableColCount) {
+            if (--$sortableColCount !== 0) {
                 continue;
             }
 

@@ -14,8 +14,8 @@ abstract class AbstractController extends Controller
     protected $db;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name
+     * @param  Response  $response
+     * @param  string  $db  Database name
      */
     public function __construct($response, Template $template, $db)
     {

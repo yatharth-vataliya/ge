@@ -17,7 +17,7 @@ class IndexColumn
 
     /**
      * @var string How the column is sorted in the index. "A" (Ascending) or
-     * NULL (Not sorted)
+     *             NULL (Not sorted)
      */
     private $collation = null;
 
@@ -49,7 +49,7 @@ class IndexColumn
     private $cardinality = null;
 
     /**
-     * @param array $params an array containing the parameters of the index column
+     * @param  array  $params  an array containing the parameters of the index column
      */
     public function __construct(array $params = [])
     {
@@ -59,8 +59,7 @@ class IndexColumn
     /**
      * Sets parameters of the index column
      *
-     * @param array $params an array containing the parameters of the index column
-     *
+     * @param  array  $params  an array containing the parameters of the index column
      * @return void
      */
     public function set(array $params)
@@ -120,8 +119,7 @@ class IndexColumn
     /**
      * Returns whether the column is nullable
      *
-     * @param bool $as_text whether to returned the string representation
-     *
+     * @param  bool  $as_text  whether to returned the string representation
      * @return string nullability of the column. True/false or Yes/No depending
      *                on the value of the $as_text parameter
      */
@@ -167,11 +165,11 @@ class IndexColumn
     public function getCompareData()
     {
         return [
-            'Column_name'   => $this->name,
-            'Seq_in_index'  => $this->seqInIndex,
-            'Collation'     => $this->collation,
-            'Sub_part'      => $this->subPart,
-            'Null'          => $this->null,
+            'Column_name' => $this->name,
+            'Seq_in_index' => $this->seqInIndex,
+            'Collation' => $this->collation,
+            'Sub_part' => $this->subPart,
+            'Null' => $this->null,
         ];
     }
 }

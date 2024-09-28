@@ -12,6 +12,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_merge;
 
 /**
@@ -26,10 +27,10 @@ final class GisVisualizationController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, $dbi)
     {
@@ -191,8 +192,8 @@ final class GisVisualizationController extends AbstractController
     }
 
     /**
-     * @param string $filename File name
-     * @param string $format   Save format
+     * @param  string  $filename  File name
+     * @param  string  $format  Save format
      */
     private function saveToFile(string $filename, string $format): void
     {

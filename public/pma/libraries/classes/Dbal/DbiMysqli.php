@@ -7,13 +7,6 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Dbal;
 
-use mysqli;
-use mysqli_result;
-use mysqli_stmt;
-use PhpMyAdmin\DatabaseInterface;
-use PhpMyAdmin\Query\Utilities;
-use stdClass;
-use function mysqli_report;
 use const E_USER_WARNING;
 use const MYSQLI_ASSOC;
 use const MYSQLI_AUTO_INCREMENT_FLAG;
@@ -66,16 +59,25 @@ use const MYSQLI_UNIQUE_KEY_FLAG;
 use const MYSQLI_UNSIGNED_FLAG;
 use const MYSQLI_USE_RESULT;
 use const MYSQLI_ZEROFILL_FLAG;
+use const PHP_VERSION_ID;
+
+use mysqli;
+use mysqli_result;
+use mysqli_stmt;
+use PhpMyAdmin\DatabaseInterface;
+use PhpMyAdmin\Query\Utilities;
+use stdClass;
+
 use function define;
 use function defined;
 use function implode;
 use function is_array;
 use function is_bool;
+use function mysqli_get_client_info;
 use function mysqli_init;
+use function mysqli_report;
 use function stripos;
 use function trigger_error;
-use const PHP_VERSION_ID;
-use function mysqli_get_client_info;
 
 /**
  * Interface to the MySQL Improved extension (MySQLi)
@@ -102,10 +104,9 @@ class DbiMysqli implements DbiExtension
     /**
      * connects to the database server
      *
-     * @param string $user     mysql user name
-     * @param string $password mysql user password
-     * @param array  $server   host/port/socket/persistent
-     *
+     * @param  string  $user  mysql user name
+     * @param  string  $password  mysql user password
+     * @param  array  $server  host/port/socket/persistent
      * @return mysqli|bool false on error or a mysqli object on success
      */
     public function connect($user, $password, array $server)
@@ -159,7 +160,7 @@ class DbiMysqli implements DbiExtension
         }
 
         if ($GLOBALS['cfg']['PersistentConnections']) {
-            $host = 'p:' . $server['host'];
+            $host = 'p:'.$server['host'];
         } else {
             $host = $server['host'];
         }
@@ -214,9 +215,8 @@ class DbiMysqli implements DbiExtension
     /**
      * selects given database
      *
-     * @param string $databaseName database name to select
-     * @param mysqli $mysqli       the mysqli object
-     *
+     * @param  string  $databaseName  database name to select
+     * @param  mysqli  $mysqli  the mysqli object
      * @return bool
      */
     public function selectDb($databaseName, $mysqli)
@@ -227,10 +227,9 @@ class DbiMysqli implements DbiExtension
     /**
      * runs a query and returns the result
      *
-     * @param string $query   query to execute
-     * @param mysqli $mysqli  mysqli object
-     * @param int    $options query options
-     *
+     * @param  string  $query  query to execute
+     * @param  mysqli  $mysqli  mysqli object
+     * @param  int  $options  query options
      * @return mysqli_result|bool
      */
     public function realQuery($query, $mysqli, $options)
@@ -249,9 +248,8 @@ class DbiMysqli implements DbiExtension
     /**
      * Run the multi query and output the results
      *
-     * @param mysqli $mysqli mysqli object
-     * @param string $query  multi query statement to execute
-     *
+     * @param  mysqli  $mysqli  mysqli object
+     * @param  string  $query  multi query statement to execute
      * @return bool
      */
     public function realMultiQuery($mysqli, $query)
@@ -262,7 +260,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns array of rows with associative and numeric keys from $result
      *
-     * @param mysqli_result $result result set identifier
+     * @param  mysqli_result  $result  result set identifier
      */
     public function fetchArray($result): ?array
     {
@@ -276,7 +274,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns array of rows with associative keys from $result
      *
-     * @param mysqli_result $result result set identifier
+     * @param  mysqli_result  $result  result set identifier
      */
     public function fetchAssoc($result): ?array
     {
@@ -290,7 +288,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns array of rows with numeric keys from $result
      *
-     * @param mysqli_result $result result set identifier
+     * @param  mysqli_result  $result  result set identifier
      */
     public function fetchRow($result): ?array
     {
@@ -304,9 +302,8 @@ class DbiMysqli implements DbiExtension
     /**
      * Adjusts the result pointer to an arbitrary row in the result
      *
-     * @param mysqli_result $result database result
-     * @param int           $offset offset to seek
-     *
+     * @param  mysqli_result  $result  database result
+     * @param  int  $offset  offset to seek
      * @return bool true on success, false on failure
      */
     public function dataSeek($result, $offset)
@@ -317,8 +314,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Frees memory associated with the result
      *
-     * @param mysqli_result $result database result
-     *
+     * @param  mysqli_result  $result  database result
      * @return void
      */
     public function freeResult($result)
@@ -333,8 +329,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Check if there are any more query results from a multi query
      *
-     * @param mysqli $mysqli the mysqli object
-     *
+     * @param  mysqli  $mysqli  the mysqli object
      * @return bool true or false
      */
     public function moreResults($mysqli)
@@ -345,8 +340,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Prepare next result from multi_query
      *
-     * @param mysqli $mysqli the mysqli object
-     *
+     * @param  mysqli  $mysqli  the mysqli object
      * @return bool true or false
      */
     public function nextResult($mysqli)
@@ -357,8 +351,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Store the result returned from multi query
      *
-     * @param mysqli $mysqli the mysqli object
-     *
+     * @param  mysqli  $mysqli  the mysqli object
      * @return mysqli_result|bool false when empty results / result set when not empty
      */
     public function storeResult($mysqli)
@@ -369,8 +362,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Returns a string representing the type of connection used
      *
-     * @param mysqli $mysqli mysql link
-     *
+     * @param  mysqli  $mysqli  mysql link
      * @return string type of connection used
      */
     public function getHostInfo($mysqli)
@@ -381,8 +373,7 @@ class DbiMysqli implements DbiExtension
     /**
      * Returns the version of the MySQL protocol used
      *
-     * @param mysqli $mysqli mysql link
-     *
+     * @param  mysqli  $mysqli  mysql link
      * @return string version of the MySQL protocol used
      */
     public function getProtoInfo($mysqli)
@@ -393,8 +384,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns a string that represents the client library version
      *
-     * @param mysqli $mysqli mysql link
-     *
+     * @param  mysqli  $mysqli  mysql link
      * @return string MySQL client library version
      */
     public function getClientInfo($mysqli)
@@ -410,8 +400,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns last error message or false if no errors occurred
      *
-     * @param mysqli $mysqli mysql link
-     *
+     * @param  mysqli  $mysqli  mysql link
      * @return string|bool error or false
      */
     public function getError($mysqli)
@@ -439,8 +428,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns the number of rows returned by last query
      *
-     * @param mysqli_result $result result set identifier
-     *
+     * @param  mysqli_result  $result  result set identifier
      * @return string|int
      */
     public function numRows($result)
@@ -456,8 +444,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns the number of rows affected by last query
      *
-     * @param mysqli $mysqli the mysqli object
-     *
+     * @param  mysqli  $mysqli  the mysqli object
      * @return int
      */
     public function affectedRows($mysqli)
@@ -468,8 +455,7 @@ class DbiMysqli implements DbiExtension
     /**
      * returns meta info for fields in $result
      *
-     * @param mysqli_result $result result set identifier
-     *
+     * @param  mysqli_result  $result  result set identifier
      * @return array|bool meta info for fields in $result
      */
     public function getFieldsMeta($result)
@@ -483,39 +469,39 @@ class DbiMysqli implements DbiExtension
         }
         // Build an associative array for a type look up
         $typeAr = [];
-        $typeAr[MYSQLI_TYPE_DECIMAL]     = 'real';
-        $typeAr[MYSQLI_TYPE_NEWDECIMAL]  = 'real';
-        $typeAr[MYSQLI_TYPE_BIT]         = 'int';
-        $typeAr[MYSQLI_TYPE_TINY]        = 'int';
-        $typeAr[MYSQLI_TYPE_SHORT]       = 'int';
-        $typeAr[MYSQLI_TYPE_LONG]        = 'int';
-        $typeAr[MYSQLI_TYPE_FLOAT]       = 'real';
-        $typeAr[MYSQLI_TYPE_DOUBLE]      = 'real';
-        $typeAr[MYSQLI_TYPE_NULL]        = 'null';
-        $typeAr[MYSQLI_TYPE_TIMESTAMP]   = 'timestamp';
-        $typeAr[MYSQLI_TYPE_LONGLONG]    = 'int';
-        $typeAr[MYSQLI_TYPE_INT24]       = 'int';
-        $typeAr[MYSQLI_TYPE_DATE]        = 'date';
-        $typeAr[MYSQLI_TYPE_TIME]        = 'time';
-        $typeAr[MYSQLI_TYPE_DATETIME]    = 'datetime';
-        $typeAr[MYSQLI_TYPE_YEAR]        = 'year';
-        $typeAr[MYSQLI_TYPE_NEWDATE]     = 'date';
-        $typeAr[MYSQLI_TYPE_ENUM]        = 'unknown';
-        $typeAr[MYSQLI_TYPE_SET]         = 'unknown';
-        $typeAr[MYSQLI_TYPE_TINY_BLOB]   = 'blob';
+        $typeAr[MYSQLI_TYPE_DECIMAL] = 'real';
+        $typeAr[MYSQLI_TYPE_NEWDECIMAL] = 'real';
+        $typeAr[MYSQLI_TYPE_BIT] = 'int';
+        $typeAr[MYSQLI_TYPE_TINY] = 'int';
+        $typeAr[MYSQLI_TYPE_SHORT] = 'int';
+        $typeAr[MYSQLI_TYPE_LONG] = 'int';
+        $typeAr[MYSQLI_TYPE_FLOAT] = 'real';
+        $typeAr[MYSQLI_TYPE_DOUBLE] = 'real';
+        $typeAr[MYSQLI_TYPE_NULL] = 'null';
+        $typeAr[MYSQLI_TYPE_TIMESTAMP] = 'timestamp';
+        $typeAr[MYSQLI_TYPE_LONGLONG] = 'int';
+        $typeAr[MYSQLI_TYPE_INT24] = 'int';
+        $typeAr[MYSQLI_TYPE_DATE] = 'date';
+        $typeAr[MYSQLI_TYPE_TIME] = 'time';
+        $typeAr[MYSQLI_TYPE_DATETIME] = 'datetime';
+        $typeAr[MYSQLI_TYPE_YEAR] = 'year';
+        $typeAr[MYSQLI_TYPE_NEWDATE] = 'date';
+        $typeAr[MYSQLI_TYPE_ENUM] = 'unknown';
+        $typeAr[MYSQLI_TYPE_SET] = 'unknown';
+        $typeAr[MYSQLI_TYPE_TINY_BLOB] = 'blob';
         $typeAr[MYSQLI_TYPE_MEDIUM_BLOB] = 'blob';
-        $typeAr[MYSQLI_TYPE_LONG_BLOB]   = 'blob';
-        $typeAr[MYSQLI_TYPE_BLOB]        = 'blob';
-        $typeAr[MYSQLI_TYPE_VAR_STRING]  = 'string';
-        $typeAr[MYSQLI_TYPE_STRING]      = 'string';
+        $typeAr[MYSQLI_TYPE_LONG_BLOB] = 'blob';
+        $typeAr[MYSQLI_TYPE_BLOB] = 'blob';
+        $typeAr[MYSQLI_TYPE_VAR_STRING] = 'string';
+        $typeAr[MYSQLI_TYPE_STRING] = 'string';
         // MySQL returns MYSQLI_TYPE_STRING for CHAR
         // and MYSQLI_TYPE_CHAR === MYSQLI_TYPE_TINY
         // so this would override TINYINT and mark all TINYINT as string
         // see https://github.com/phpmyadmin/phpmyadmin/issues/8569
         //$typeAr[MYSQLI_TYPE_CHAR]        = 'string';
-        $typeAr[MYSQLI_TYPE_GEOMETRY]    = 'geometry';
-        $typeAr[MYSQLI_TYPE_BIT]         = 'bit';
-        $typeAr[MYSQLI_TYPE_JSON]        = 'json';
+        $typeAr[MYSQLI_TYPE_GEOMETRY] = 'geometry';
+        $typeAr[MYSQLI_TYPE_BIT] = 'bit';
+        $typeAr[MYSQLI_TYPE_JSON] = 'json';
 
         $fields = $result->fetch_fields();
 
@@ -556,8 +542,7 @@ class DbiMysqli implements DbiExtension
     /**
      * return number of fields in given $result
      *
-     * @param mysqli_result $result result set identifier
-     *
+     * @param  mysqli_result  $result  result set identifier
      * @return int field count
      */
     public function numFields($result)
@@ -568,9 +553,8 @@ class DbiMysqli implements DbiExtension
     /**
      * returns the length of the given field $i in $result
      *
-     * @param mysqli_result $result result set identifier
-     * @param int           $i      field
-     *
+     * @param  mysqli_result  $result  result set identifier
+     * @param  int  $i  field
      * @return int|bool length of field
      */
     public function fieldLen($result, $i)
@@ -590,9 +574,8 @@ class DbiMysqli implements DbiExtension
     /**
      * returns name of $i. field in $result
      *
-     * @param mysqli_result $result result set identifier
-     * @param int           $i      field
-     *
+     * @param  mysqli_result  $result  result set identifier
+     * @param  int  $i  field
      * @return string name of $i. field in $result
      */
     public function fieldName($result, $i)
@@ -612,9 +595,8 @@ class DbiMysqli implements DbiExtension
     /**
      * returns concatenated string of human readable field flags
      *
-     * @param mysqli_result $result result set identifier
-     * @param int           $i      field
-     *
+     * @param  mysqli_result  $result  result set identifier
+     * @param  int  $i  field
      * @return string|false field flags
      */
     public function fieldFlags($result, $i)
@@ -659,9 +641,8 @@ class DbiMysqli implements DbiExtension
     /**
      * returns properly escaped string for use in MySQL queries
      *
-     * @param mysqli $mysqli database link
-     * @param string $string string to be escaped
-     *
+     * @param  mysqli  $mysqli  database link
+     * @param  string  $string  string to be escaped
      * @return string a MySQL escaped string
      */
     public function escapeString($mysqli, $string)
@@ -672,9 +653,8 @@ class DbiMysqli implements DbiExtension
     /**
      * Prepare an SQL statement for execution.
      *
-     * @param mysqli $mysqli database link
-     * @param string $query  The query, as a string.
-     *
+     * @param  mysqli  $mysqli  database link
+     * @param  string  $query  The query, as a string.
      * @return mysqli_stmt|false A statement object or false.
      */
     public function prepare($mysqli, string $query)

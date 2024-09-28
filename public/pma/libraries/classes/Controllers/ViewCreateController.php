@@ -16,6 +16,7 @@ use PhpMyAdmin\SqlParser\TokensList;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_merge;
 use function explode;
 use function htmlspecialchars;
@@ -34,8 +35,8 @@ class ViewCreateController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $dbi)
     {
@@ -107,40 +108,40 @@ class ViewCreateController extends AbstractController
             }
 
             if (Core::isValid($_POST['view']['algorithm'], $view_algorithm_options)) {
-                $sql_query .= $sep . ' ALGORITHM = ' . $_POST['view']['algorithm'];
+                $sql_query .= $sep.' ALGORITHM = '.$_POST['view']['algorithm'];
             }
 
             if (! empty($_POST['view']['definer'])) {
                 if (strpos($_POST['view']['definer'], '@') === false) {
-                    $sql_query .= $sep . 'DEFINER='
-                        . Util::backquote($_POST['view']['definer']);
+                    $sql_query .= $sep.'DEFINER='
+                        .Util::backquote($_POST['view']['definer']);
                 } else {
                     $arr = explode('@', $_POST['view']['definer']);
-                    $sql_query .= $sep . 'DEFINER=' . Util::backquote($arr[0]);
-                    $sql_query .= '@' . Util::backquote($arr[1]) . ' ';
+                    $sql_query .= $sep.'DEFINER='.Util::backquote($arr[0]);
+                    $sql_query .= '@'.Util::backquote($arr[1]).' ';
                 }
             }
 
             if (isset($_POST['view']['sql_security'])
                 && in_array($_POST['view']['sql_security'], $view_security_options)
             ) {
-                $sql_query .= $sep . ' SQL SECURITY '
-                    . $_POST['view']['sql_security'];
+                $sql_query .= $sep.' SQL SECURITY '
+                    .$_POST['view']['sql_security'];
             }
 
-            $sql_query .= $sep . ' VIEW '
-                . Util::backquote($_POST['view']['name']);
+            $sql_query .= $sep.' VIEW '
+                .Util::backquote($_POST['view']['name']);
 
             if (! empty($_POST['view']['column_names'])) {
-                $sql_query .= $sep . ' (' . $_POST['view']['column_names'] . ')';
+                $sql_query .= $sep.' ('.$_POST['view']['column_names'].')';
             }
 
-            $sql_query .= $sep . ' AS ' . $_POST['view']['as'];
+            $sql_query .= $sep.' AS '.$_POST['view']['as'];
 
             if (isset($_POST['view']['with'])) {
                 if (in_array($_POST['view']['with'], $view_with_options)) {
-                    $sql_query .= $sep . ' WITH ' . $_POST['view']['with']
-                        . '  CHECK OPTION';
+                    $sql_query .= $sep.' WITH '.$_POST['view']['with']
+                        .'  CHECK OPTION';
                 }
             }
 
@@ -154,8 +155,8 @@ class ViewCreateController extends AbstractController
                 $this->response->addJSON(
                     'message',
                     Message::error(
-                        '<i>' . htmlspecialchars($sql_query) . '</i><br><br>'
-                        . $this->dbi->getError()
+                        '<i>'.htmlspecialchars($sql_query).'</i><br><br>'
+                        .$this->dbi->getError()
                     )
                 );
                 $this->response->setRequestStatus(false);

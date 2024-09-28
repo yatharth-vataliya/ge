@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Plugins\Schema\Eps;
 
 use PhpMyAdmin\Plugins\Schema\RelationStats;
+
 use function sqrt;
 
 /**
@@ -25,11 +26,11 @@ use function sqrt;
 class RelationStatsEps extends RelationStats
 {
     /**
-     * @param Eps    $diagram       The EPS diagram
-     * @param string $master_table  The master table name
-     * @param string $master_field  The relation field in the master table
-     * @param string $foreign_table The foreign table name
-     * @param string $foreign_field The relation field in the foreign table
+     * @param  Eps  $diagram  The EPS diagram
+     * @param  string  $master_table  The master table name
+     * @param  string  $master_field  The relation field in the master table
+     * @param  string  $foreign_table  The foreign table name
+     * @param  string  $foreign_field  The relation field in the foreign table
      */
     public function __construct(
         $diagram,
@@ -46,7 +47,7 @@ class RelationStatsEps extends RelationStats
             $foreign_table,
             $foreign_field
         );
-        $this->ySrc  += 10;
+        $this->ySrc += 10;
         $this->yDest += 10;
     }
 

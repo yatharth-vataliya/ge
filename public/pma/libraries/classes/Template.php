@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin;
 
+use const DIRECTORY_SEPARATOR;
+use const E_USER_WARNING;
+
 use PhpMyAdmin\Twig\CoreExtension;
 use PhpMyAdmin\Twig\I18nExtension;
 use PhpMyAdmin\Twig\MessageExtension;
@@ -24,11 +27,10 @@ use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\TemplateWrapper;
-use const DIRECTORY_SEPARATOR;
-use const E_USER_WARNING;
+
+use function is_array;
 use function sprintf;
 use function trigger_error;
-use function is_array;
 
 /**
  * Handle front end templating
@@ -42,7 +44,7 @@ class Template
      */
     protected static $twig;
 
-    public const BASE_PATH = ROOT_PATH . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR;
+    public const BASE_PATH = ROOT_PATH.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
 
     public function __construct()
     {
@@ -68,26 +70,26 @@ class Template
         // It was reported that the config could not be loaded correctly
         if (is_array($cfg) && $cfg['environment'] === 'development') {
             $twig->enableDebug();
-            $twig->addExtension(new DebugExtension());
+            $twig->addExtension(new DebugExtension);
         }
-        $twig->addExtension(new CoreExtension());
-        $twig->addExtension(new I18nExtension());
-        $twig->addExtension(new MessageExtension());
-        $twig->addExtension(new PluginsExtension());
-        $twig->addExtension(new RelationExtension());
-        $twig->addExtension(new SanitizeExtension());
-        $twig->addExtension(new TableExtension());
-        $twig->addExtension(new TrackerExtension());
-        $twig->addExtension(new TransformationsExtension());
-        $twig->addExtension(new UrlExtension());
-        $twig->addExtension(new UtilExtension());
+        $twig->addExtension(new CoreExtension);
+        $twig->addExtension(new I18nExtension);
+        $twig->addExtension(new MessageExtension);
+        $twig->addExtension(new PluginsExtension);
+        $twig->addExtension(new RelationExtension);
+        $twig->addExtension(new SanitizeExtension);
+        $twig->addExtension(new TableExtension);
+        $twig->addExtension(new TrackerExtension);
+        $twig->addExtension(new TransformationsExtension);
+        $twig->addExtension(new UrlExtension);
+        $twig->addExtension(new UtilExtension);
         static::$twig = $twig;
     }
 
     /**
      * Loads a template.
      *
-     * @param string $templateName Template path name
+     * @param  string  $templateName  Template path name
      *
      * @throws LoaderError
      * @throws RuntimeError
@@ -96,11 +98,11 @@ class Template
     private function load(string $templateName): TemplateWrapper
     {
         try {
-            $template = static::$twig->load($templateName . '.twig');
+            $template = static::$twig->load($templateName.'.twig');
         } catch (RuntimeException $e) {
             /* Retry with disabled cache */
             static::$twig->setCache(false);
-            $template = static::$twig->load($templateName . '.twig');
+            $template = static::$twig->load($templateName.'.twig');
             /*
              * The trigger error is intentionally after second load
              * to avoid triggering error when disabling cache does not
@@ -119,8 +121,8 @@ class Template
     }
 
     /**
-     * @param string $template Template path name
-     * @param array  $data     Associative array of template variables
+     * @param  string  $template  Template path name
+     * @param  array  $data  Associative array of template variables
      *
      * @throws Throwable
      * @throws LoaderError

@@ -17,6 +17,7 @@ use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+
 use function json_decode;
 use function json_encode;
 
@@ -33,7 +34,7 @@ class Key extends TwoFactorPlugin
     /**
      * Creates object
      *
-     * @param TwoFactor $twofactor TwoFactor instance
+     * @param  TwoFactor  $twofactor  TwoFactor instance
      */
     public function __construct(TwoFactor $twofactor)
     {
@@ -54,7 +55,7 @@ class Key extends TwoFactorPlugin
     {
         $result = [];
         foreach ($this->twofactor->config['settings']['registrations'] as $index => $data) {
-            $reg = new stdClass();
+            $reg = new stdClass;
             $reg->keyHandle = $data['keyHandle'];
             $reg->publicKey = $data['publicKey'];
             $reg->certificate = $data['certificate'];

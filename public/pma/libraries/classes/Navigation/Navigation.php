@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Navigation;
 
+use const PHP_URL_HOST;
+
 use PhpMyAdmin\Config\PageSettings;
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Relation;
@@ -18,7 +20,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Theme;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
-use const PHP_URL_HOST;
+
 use function count;
 use function defined;
 use function file_exists;
@@ -45,9 +47,9 @@ class Navigation
     private $tree;
 
     /**
-     * @param Template          $template Template instance
-     * @param Relation          $relation Relation instance
-     * @param DatabaseInterface $dbi      DatabaseInterface instance
+     * @param  Template  $template  Template instance
+     * @param  Relation  $relation  Relation instance
+     * @param  DatabaseInterface  $dbi  DatabaseInterface instance
      */
     public function __construct($template, $relation, $dbi)
     {
@@ -146,11 +148,10 @@ class Navigation
     /**
      * Add an item of navigation tree to the hidden items list in PMA database.
      *
-     * @param string $itemName  name of the navigation tree item
-     * @param string $itemType  type of the navigation tree item
-     * @param string $dbName    database name
-     * @param string $tableName table name if applicable
-     *
+     * @param  string  $itemName  name of the navigation tree item
+     * @param  string  $itemType  type of the navigation tree item
+     * @param  string  $dbName  database name
+     * @param  string  $tableName  table name if applicable
      * @return void
      */
     public function hideNavigationItem(
@@ -160,16 +161,16 @@ class Navigation
         $tableName = null
     ) {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = 'INSERT INTO ' . $navTable
-            . '(`username`, `item_name`, `item_type`, `db_name`, `table_name`)'
-            . ' VALUES ('
-            . "'" . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "',"
-            . "'" . $this->dbi->escapeString($itemName) . "',"
-            . "'" . $this->dbi->escapeString($itemType) . "',"
-            . "'" . $this->dbi->escapeString($dbName) . "',"
-            . "'" . (! empty($tableName) ? $this->dbi->escapeString($tableName) : '' )
-            . "')";
+            .'.'.Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'INSERT INTO '.$navTable
+            .'(`username`, `item_name`, `item_type`, `db_name`, `table_name`)'
+            .' VALUES ('
+            ."'".$this->dbi->escapeString($GLOBALS['cfg']['Server']['user'])."',"
+            ."'".$this->dbi->escapeString($itemName)."',"
+            ."'".$this->dbi->escapeString($itemType)."',"
+            ."'".$this->dbi->escapeString($dbName)."',"
+            ."'".(! empty($tableName) ? $this->dbi->escapeString($tableName) : '')
+            ."')";
         $this->relation->queryAsControlUser($sqlQuery, false);
     }
 
@@ -177,11 +178,10 @@ class Navigation
      * Remove a hidden item of navigation tree from the
      * list of hidden items in PMA database.
      *
-     * @param string $itemName  name of the navigation tree item
-     * @param string $itemType  type of the navigation tree item
-     * @param string $dbName    database name
-     * @param string $tableName table name if applicable
-     *
+     * @param  string  $itemName  name of the navigation tree item
+     * @param  string  $itemType  type of the navigation tree item
+     * @param  string  $dbName  database name
+     * @param  string  $tableName  table name if applicable
      * @return void
      */
     public function unhideNavigationItem(
@@ -191,16 +191,16 @@ class Navigation
         $tableName = null
     ) {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = 'DELETE FROM ' . $navTable
-            . ' WHERE'
-            . " `username`='"
-            . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "'"
-            . " AND `item_name`='" . $this->dbi->escapeString($itemName) . "'"
-            . " AND `item_type`='" . $this->dbi->escapeString($itemType) . "'"
-            . " AND `db_name`='" . $this->dbi->escapeString($dbName) . "'"
-            . (! empty($tableName)
-                ? " AND `table_name`='" . $this->dbi->escapeString($tableName) . "'"
+            .'.'.Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'DELETE FROM '.$navTable
+            .' WHERE'
+            ." `username`='"
+            .$this->dbi->escapeString($GLOBALS['cfg']['Server']['user'])."'"
+            ." AND `item_name`='".$this->dbi->escapeString($itemName)."'"
+            ." AND `item_type`='".$this->dbi->escapeString($itemType)."'"
+            ." AND `db_name`='".$this->dbi->escapeString($dbName)."'"
+            .(! empty($tableName)
+                ? " AND `table_name`='".$this->dbi->escapeString($tableName)."'"
                 : ''
             );
         $this->relation->queryAsControlUser($sqlQuery, false);
@@ -209,10 +209,9 @@ class Navigation
     /**
      * Returns HTML for the dialog to show hidden navigation items.
      *
-     * @param string $database database name
-     * @param string $itemType type of the items to include
-     * @param string $table    table name
-     *
+     * @param  string  $database  database name
+     * @param  string  $itemType  type of the items to include
+     * @param  string  $table  table name
      * @return string HTML for the dialog to show hidden navigation items
      */
     public function getItemUnhideDialog($database, $itemType = null, $table = null)
@@ -238,21 +237,19 @@ class Navigation
     }
 
     /**
-     * @param string      $database Database name
-     * @param string|null $table    Table name
-     *
-     * @return array
+     * @param  string  $database  Database name
+     * @param  string|null  $table  Table name
      */
     private function getHiddenItems(string $database, ?string $table): array
     {
         $navTable = Util::backquote($GLOBALS['cfgRelation']['db'])
-            . '.' . Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
-        $sqlQuery = 'SELECT `item_name`, `item_type` FROM ' . $navTable
-            . " WHERE `username`='"
-            . $this->dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "'"
-            . " AND `db_name`='" . $this->dbi->escapeString($database) . "'"
-            . " AND `table_name`='"
-            . (! empty($table) ? $this->dbi->escapeString($table) : '') . "'";
+            .'.'.Util::backquote($GLOBALS['cfgRelation']['navigationhiding']);
+        $sqlQuery = 'SELECT `item_name`, `item_type` FROM '.$navTable
+            ." WHERE `username`='"
+            .$this->dbi->escapeString($GLOBALS['cfg']['Server']['user'])."'"
+            ." AND `db_name`='".$this->dbi->escapeString($database)."'"
+            ." AND `table_name`='"
+            .(! empty($table) ? $this->dbi->escapeString($table) : '')."'";
         $result = $this->relation->queryAsControlUser($sqlQuery, false);
 
         $hidden = [];
@@ -278,12 +275,12 @@ class Navigation
         /** @var Theme|null $PMA_Theme */
         global $PMA_Theme;
         if ($PMA_Theme !== null) {
-            if (@file_exists($PMA_Theme->getFsPath() . 'img/logo_left.png')) {
-                return $PMA_Theme->getPath() . '/img/logo_left.png';
+            if (@file_exists($PMA_Theme->getFsPath().'img/logo_left.png')) {
+                return $PMA_Theme->getPath().'/img/logo_left.png';
             }
 
-            if (@file_exists($PMA_Theme->getFsPath() . 'img/pma_logo2.png')) {
-                return $PMA_Theme->getPath() . '/img/pma_logo2.png';
+            if (@file_exists($PMA_Theme->getFsPath().'img/pma_logo2.png')) {
+                return $PMA_Theme->getPath().'/img/pma_logo2.png';
             }
         }
 

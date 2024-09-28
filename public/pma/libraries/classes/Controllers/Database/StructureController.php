@@ -27,6 +27,7 @@ use PhpMyAdmin\Tracker;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_search;
 use function ceil;
 use function count;
@@ -91,11 +92,11 @@ class StructureController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db          Database name
-     * @param Relation          $relation
-     * @param Replication       $replication
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  Relation  $relation
+     * @param  Replication  $replication
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -120,7 +121,7 @@ class StructureController extends AbstractController
     /**
      * Retrieves database information for further use
      *
-     * @param string $subPart Page part name
+     * @param  string  $subPart  Page part name
      */
     private function getDatabaseInfo(string $subPart): void
     {
@@ -162,7 +163,7 @@ class StructureController extends AbstractController
         // If there are no tables, the user is redirected to the last page
         // having any.
         if ($this->totalNumTables > 0 && $this->position > $this->totalNumTables) {
-            $uri = './index.php?route=/database/structure' . Url::getCommonRaw([
+            $uri = './index.php?route=/database/structure'.Url::getCommonRaw([
                 'db' => $this->db,
                 'pos' => max(0, $this->totalNumTables - $cfg['MaxTableList']),
                 'reload' => 1,
@@ -299,7 +300,7 @@ class StructureController extends AbstractController
             'db' => $this->db,
             'ajax_request' => true,
             'favorite_table' => $favoriteTable,
-            ($alreadyFavorite ? 'remove' : 'add') . '_favorite' => true,
+            ($alreadyFavorite ? 'remove' : 'add').'_favorite' => true,
         ];
 
         $json['user'] = $user;
@@ -307,7 +308,7 @@ class StructureController extends AbstractController
         $json['list'] = $favoriteInstance->getHtmlList();
         $json['anchor'] = $this->template->render('database/structure/favorite_anchor', [
             'table_name_hash' => md5($favoriteTable),
-            'db_table_name_hash' => md5($this->db . '.' . $favoriteTable),
+            'db_table_name_hash' => md5($this->db.'.'.$favoriteTable),
             'fav_params' => $favoriteParams,
             'already_favorite' => $alreadyFavorite,
         ]);
@@ -407,7 +408,7 @@ class StructureController extends AbstractController
     }
 
     /**
-     * @param array $replicaInfo
+     * @param  array  $replicaInfo
      */
     protected function displayTableList($replicaInfo): string
     {
@@ -426,9 +427,9 @@ class StructureController extends AbstractController
         $num_columns = $GLOBALS['cfg']['PropertiesNumColumns'] > 1
             ? ceil($this->numTables / $GLOBALS['cfg']['PropertiesNumColumns']) + 1
             : 0;
-        $row_count      = 0;
-        $sum_size       = 0;
-        $overhead_size  = 0;
+        $row_count = 0;
+        $sum_size = 0;
+        $overhead_size = 0;
 
         $hidden_fields = [];
         $overall_approx_rows = false;
@@ -541,7 +542,7 @@ class StructureController extends AbstractController
             $row_count++;
             if ($table_is_view) {
                 $hidden_fields[] = '<input type="hidden" name="views[]" value="'
-                    . htmlspecialchars($current_table['TABLE_NAME']) . '">';
+                    .htmlspecialchars($current_table['TABLE_NAME']).'">';
             }
 
             /*
@@ -609,7 +610,7 @@ class StructureController extends AbstractController
 
             $structure_table_rows[] = [
                 'table_name_hash' => md5($current_table['TABLE_NAME']),
-                'db_table_name_hash' => md5($this->db . '.' . $current_table['TABLE_NAME']),
+                'db_table_name_hash' => md5($this->db.'.'.$current_table['TABLE_NAME']),
                 'db' => $this->db,
                 'curr' => $i,
                 'input_class' => implode(' ', $input_class),
@@ -618,7 +619,7 @@ class StructureController extends AbstractController
                 'may_have_rows' => $may_have_rows,
                 'browse_table_label_title' => htmlspecialchars($current_table['TABLE_COMMENT']),
                 'browse_table_label_truename' => $truename,
-                'empty_table_sql_query' => 'TRUNCATE ' . Util::backquote(
+                'empty_table_sql_query' => 'TRUNCATE '.Util::backquote(
                     $current_table['TABLE_NAME']
                 ),
                 'empty_table_message_to_show' => urlencode(
@@ -682,7 +683,7 @@ class StructureController extends AbstractController
             $databaseCharset = $collation->getCharset();
         }
 
-        return $html . $this->template->render('database/structure/table_header', [
+        return $html.$this->template->render('database/structure/table_header', [
             'db' => $this->db,
             'db_is_system_schema' => $this->dbIsSystemSchema,
             'replication' => $replicaInfo['status'],
@@ -734,8 +735,7 @@ class StructureController extends AbstractController
     /**
      * Returns the tracking icon if the table is tracked
      *
-     * @param string $table table name
-     *
+     * @param  string  $table  table name
      * @return string HTML for tracking icon
      */
     protected function getTrackingIcon(string $table): string
@@ -760,10 +760,8 @@ class StructureController extends AbstractController
     /**
      * Returns whether the row count is approximated
      *
-     * @param array $current_table array containing details about the table
-     * @param bool  $table_is_view whether the table is a view
-     *
-     * @return array
+     * @param  array  $current_table  array containing details about the table
+     * @param  bool  $table_is_view  whether the table is a view
      */
     protected function isRowCountApproximated(
         array $current_table,
@@ -794,7 +792,7 @@ class StructureController extends AbstractController
                         sprintf(
                             __(
                                 'This view has at least this number of '
-                                . 'rows. Please refer to %sdocumentation%s.'
+                                .'rows. Please refer to %sdocumentation%s.'
                             ),
                             '[doc@cfg_MaxExactCountViews]',
                             '[/doc]'
@@ -813,10 +811,8 @@ class StructureController extends AbstractController
     /**
      * Returns the replication status of the table.
      *
-     * @param array  $replicaInfo
-     * @param string $table       table name
-     *
-     * @return array
+     * @param  array  $replicaInfo
+     * @param  string  $table  table name
      */
     protected function getReplicationStatus($replicaInfo, string $table): array
     {
@@ -870,11 +866,9 @@ class StructureController extends AbstractController
     /**
      * Synchronize favorite tables
      *
-     * @param RecentFavoriteTable $favoriteInstance Instance of this class
-     * @param string              $user             The user hash
-     * @param array               $favoriteTables   Existing favorites
-     *
-     * @return array
+     * @param  RecentFavoriteTable  $favoriteInstance  Instance of this class
+     * @param  string  $user  The user hash
+     * @param  array  $favoriteTables  Existing favorites
      */
     protected function synchronizeFavoriteTables(
         RecentFavoriteTable $favoriteInstance,
@@ -906,7 +900,7 @@ class StructureController extends AbstractController
     /**
      * Function to check if a table is already in favorite list.
      *
-     * @param string $currentTable current table
+     * @param  string  $currentTable  current table
      */
     protected function checkFavoriteTable(string $currentTable): bool
     {
@@ -925,9 +919,8 @@ class StructureController extends AbstractController
     /**
      * Find table with truename
      *
-     * @param array  $db       DB to look into
-     * @param string $truename Table name
-     *
+     * @param  array  $db  DB to look into
+     * @param  string  $truename  Table name
      * @return bool
      */
     protected function hasTable(array $db, $truename)
@@ -935,8 +928,8 @@ class StructureController extends AbstractController
         foreach ($db as $db_table) {
             if ($this->db == $this->replication->extractDbOrTable($db_table)
                 && preg_match(
-                    '@^' .
-                    preg_quote(mb_substr($this->replication->extractDbOrTable($db_table, 'table'), 0, -1), '@') . '@',
+                    '@^'.
+                    preg_quote(mb_substr($this->replication->extractDbOrTable($db_table, 'table'), 0, -1), '@').'@',
                     $truename
                 )
             ) {
@@ -952,10 +945,9 @@ class StructureController extends AbstractController
      *
      * @internal param bool $table_is_view whether table is view or not
      *
-     * @param array $current_table current table
-     * @param int   $sum_size      total table size
-     * @param int   $overhead_size overhead size
-     *
+     * @param  array  $current_table  current table
+     * @param  int  $sum_size  total table size
+     * @param  int  $overhead_size  overhead size
      * @return array
      */
     protected function getStuffForEngineTypeTable(
@@ -970,8 +962,8 @@ class StructureController extends AbstractController
         $table_is_view = false;
 
         switch ($current_table['ENGINE']) {
-        // MyISAM, ISAM or Heap table: Row count, data size and index size
-        // are accurate; data size is accurate for ARCHIVE
+            // MyISAM, ISAM or Heap table: Row count, data size and index size
+            // are accurate; data size is accurate for ARCHIVE
             case 'MyISAM':
             case 'ISAM':
             case 'HEAP':
@@ -1009,21 +1001,21 @@ class StructureController extends AbstractController
                     $sum_size
                 );
                 break;
-        // Mysql 5.0.x (and lower) uses MRG_MyISAM
-        // and MySQL 5.1.x (and higher) uses MRG_MYISAM
-        // Both are aliases for MERGE
+                // Mysql 5.0.x (and lower) uses MRG_MyISAM
+                // and MySQL 5.1.x (and higher) uses MRG_MYISAM
+                // Both are aliases for MERGE
             case 'MRG_MyISAM':
             case 'MRG_MYISAM':
             case 'MERGE':
             case 'BerkeleyDB':
                 // Merge or BerkleyDB table: Only row count is accurate.
                 if ($this->isShowStats) {
-                    $formatted_size =  ' - ';
-                    $unit          =  '';
+                    $formatted_size = ' - ';
+                    $unit = '';
                 }
                 break;
-        // for a view, the ENGINE is sometimes reported as null,
-        // or on some servers it's reported as "SYSTEM VIEW"
+                // for a view, the ENGINE is sometimes reported as null,
+                // or on some servers it's reported as "SYSTEM VIEW"
             case null:
             case 'SYSTEM VIEW':
                 // possibly a view, do nothing
@@ -1031,8 +1023,8 @@ class StructureController extends AbstractController
             default:
                 // Unknown table type.
                 if ($this->isShowStats) {
-                    $formatted_size =  __('unknown');
-                    $unit          =  '';
+                    $formatted_size = __('unknown');
+                    $unit = '';
                 }
         }
 
@@ -1061,14 +1053,13 @@ class StructureController extends AbstractController
     /**
      * Get values for ARIA/MARIA tables
      *
-     * @param array  $current_table      current table
-     * @param int    $sum_size           sum size
-     * @param int    $overhead_size      overhead size
-     * @param int    $formatted_size     formatted size
-     * @param string $unit               unit
-     * @param int    $formatted_overhead overhead formatted
-     * @param string $overhead_unit      overhead unit
-     *
+     * @param  array  $current_table  current table
+     * @param  int  $sum_size  sum size
+     * @param  int  $overhead_size  overhead size
+     * @param  int  $formatted_size  formatted size
+     * @param  string  $unit  unit
+     * @param  int  $formatted_overhead  overhead formatted
+     * @param  string  $overhead_unit  overhead unit
      * @return array
      */
     protected function getValuesForAriaTable(
@@ -1123,9 +1114,8 @@ class StructureController extends AbstractController
     /**
      * Get values for InnoDB table
      *
-     * @param array $current_table current table
-     * @param int   $sum_size      sum size
-     *
+     * @param  array  $current_table  current table
+     * @param  int  $sum_size  sum size
      * @return array
      */
     protected function getValuesForInnodbTable(
@@ -1185,8 +1175,7 @@ class StructureController extends AbstractController
     }
 
     /**
-     * @param string[] $selected Selected tables.
-     *
+     * @param  string[]  $selected  Selected tables.
      * @return array<string, array<int, array<string, string>>>
      */
     private function getShowCreateTables(array $selected): array
@@ -1382,18 +1371,18 @@ class StructureController extends AbstractController
             $current = $selectedValue;
             if (! empty($views) && in_array($current, $views)) {
                 $full_query_views .= (empty($full_query_views) ? 'DROP VIEW ' : ', ')
-                    . Util::backquote(htmlspecialchars($current));
+                    .Util::backquote(htmlspecialchars($current));
             } else {
                 $full_query .= (empty($full_query) ? 'DROP TABLE ' : ', ')
-                    . Util::backquote(htmlspecialchars($current));
+                    .Util::backquote(htmlspecialchars($current));
             }
         }
 
         if (! empty($full_query)) {
-            $full_query .= ';<br>' . "\n";
+            $full_query .= ';<br>'."\n";
         }
         if (! empty($full_query_views)) {
-            $full_query .= $full_query_views . ';<br>' . "\n";
+            $full_query .= $full_query_views.';<br>'."\n";
         }
 
         $_url_params = ['db' => $db];
@@ -1429,7 +1418,7 @@ class StructureController extends AbstractController
 
         foreach ($selected as $selectedValue) {
             $fullQuery .= 'TRUNCATE ';
-            $fullQuery .= Util::backquote(htmlspecialchars($selectedValue)) . ';<br>';
+            $fullQuery .= Util::backquote(htmlspecialchars($selectedValue)).';<br>';
             $urlParams['selected'][] = $selectedValue;
         }
 
@@ -1474,9 +1463,9 @@ class StructureController extends AbstractController
             $current = $selected[$i];
 
             if (! empty($views) && in_array($current, $views)) {
-                $sql_query_views .= (empty($sql_query_views) ? 'DROP VIEW ' : ', ') . Util::backquote($current);
+                $sql_query_views .= (empty($sql_query_views) ? 'DROP VIEW ' : ', ').Util::backquote($current);
             } else {
-                $sql_query .= (empty($sql_query) ? 'DROP TABLE ' : ', ') . Util::backquote($current);
+                $sql_query .= (empty($sql_query) ? 'DROP TABLE ' : ', ').Util::backquote($current);
             }
 
             $reload = 1;
@@ -1485,7 +1474,7 @@ class StructureController extends AbstractController
         if (! empty($sql_query)) {
             $sql_query .= ';';
         } elseif (! empty($sql_query_views)) {
-            $sql_query = $sql_query_views . ';';
+            $sql_query = $sql_query_views.';';
             unset($sql_query_views);
         }
 
@@ -1504,7 +1493,7 @@ class StructureController extends AbstractController
         $result = $this->dbi->tryQuery($sql_query);
 
         if ($result && ! empty($sql_query_views)) {
-            $sql_query .= ' ' . $sql_query_views . ';';
+            $sql_query .= ' '.$sql_query_views.';';
             $result = $this->dbi->tryQuery($sql_query_views);
             unset($sql_query_views);
         }
@@ -1556,7 +1545,7 @@ class StructureController extends AbstractController
             $aQuery = 'TRUNCATE ';
             $aQuery .= Util::backquote($selected[$i]);
 
-            $sql_query .= $aQuery . ';' . "\n";
+            $sql_query .= $aQuery.';'."\n";
             $this->dbi->selectDb($db);
             $this->dbi->query($aQuery);
         }
@@ -1567,7 +1556,7 @@ class StructureController extends AbstractController
                 $this->relation,
                 $this->relationCleanup,
                 $this->operations,
-                new Transformations(),
+                new Transformations,
                 $this->template
             );
 
@@ -1597,11 +1586,11 @@ class StructureController extends AbstractController
         $selectedCount = count($selected);
 
         for ($i = 0; $i < $selectedCount; $i++) {
-            $newTableName = $_POST['add_prefix'] . $selected[$i];
-            $aQuery = 'ALTER TABLE ' . Util::backquote($selected[$i])
-                . ' RENAME ' . Util::backquote($newTableName);
+            $newTableName = $_POST['add_prefix'].$selected[$i];
+            $aQuery = 'ALTER TABLE '.Util::backquote($selected[$i])
+                .' RENAME '.Util::backquote($newTableName);
 
-            $sql_query .= $aQuery . ';' . "\n";
+            $sql_query .= $aQuery.';'."\n";
             $this->dbi->selectDb($db);
             $this->dbi->query($aQuery);
         }
@@ -1631,7 +1620,7 @@ class StructureController extends AbstractController
             $subFromPrefix = mb_substr($current, 0, mb_strlen((string) $from_prefix));
 
             if ($subFromPrefix === $from_prefix) {
-                $newTableName = $to_prefix . mb_substr(
+                $newTableName = $to_prefix.mb_substr(
                     $current,
                     mb_strlen((string) $from_prefix)
                 );
@@ -1639,10 +1628,10 @@ class StructureController extends AbstractController
                 $newTableName = $current;
             }
 
-            $aQuery = 'ALTER TABLE ' . Util::backquote($selected[$i])
-                . ' RENAME ' . Util::backquote($newTableName);
+            $aQuery = 'ALTER TABLE '.Util::backquote($selected[$i])
+                .' RENAME '.Util::backquote($newTableName);
 
-            $sql_query .= $aQuery . ';' . "\n";
+            $sql_query .= $aQuery.';'."\n";
             $this->dbi->selectDb($db);
             $this->dbi->query($aQuery);
         }
@@ -1668,7 +1657,7 @@ class StructureController extends AbstractController
 
         for ($i = 0; $i < $selectedCount; $i++) {
             $current = $selected[$i];
-            $newTableName = $to_prefix . mb_substr($current, mb_strlen((string) $from_prefix));
+            $newTableName = $to_prefix.mb_substr($current, mb_strlen((string) $from_prefix));
 
             Table::moveCopy(
                 $db,

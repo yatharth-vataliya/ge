@@ -26,10 +26,10 @@ class NodeColumnContainer extends Node
         $this->links = [
             'text' => Url::getFromRoute('/table/structure', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
             'icon' => Url::getFromRoute('/table/structure', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
         ];
         $this->realName = 'columns';
 
@@ -44,12 +44,12 @@ class NodeColumnContainer extends Node
                 'server' => $GLOBALS['server'],
                 'field_where' => 'last',
                 'after_field' => '',
-            ]) . '&amp;db=%3$s&amp;table=%2$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s',
             'icon' => Url::getFromRoute('/table/add-field', [
                 'server' => $GLOBALS['server'],
                 'field_where' => 'last',
                 'after_field' => '',
-            ]) . '&amp;db=%3$s&amp;table=%2$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s',
         ];
         $this->addChild($new);
     }

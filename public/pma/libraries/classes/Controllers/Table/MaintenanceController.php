@@ -8,6 +8,7 @@ use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Table\Maintenance;
 use PhpMyAdmin\Template;
+
 use function count;
 use function is_array;
 
@@ -17,9 +18,9 @@ final class MaintenanceController extends AbstractController
     private $model;
 
     /**
-     * @param Response $response
-     * @param string   $db
-     * @param string   $table
+     * @param  Response  $response
+     * @param  string  $db
+     * @param  string  $table
      */
     public function __construct(
         $response,

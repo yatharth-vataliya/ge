@@ -18,10 +18,10 @@ class NodeIndex extends Node
     /**
      * Initialises the class
      *
-     * @param string $name    An identifier for the new node
-     * @param int    $type    Type of node, may be one of CONTAINER or OBJECT
-     * @param bool   $isGroup Whether this object has been created
-     *                        while grouping nodes
+     * @param  string  $name  An identifier for the new node
+     * @param  int  $type  Type of node, may be one of CONTAINER or OBJECT
+     * @param  bool  $isGroup  Whether this object has been created
+     *                         while grouping nodes
      */
     public function __construct($name, $type = Node::OBJECT, $isGroup = false)
     {
@@ -30,10 +30,10 @@ class NodeIndex extends Node
         $this->links = [
             'text' => Url::getFromRoute('/table/indexes', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
             'icon' => Url::getFromRoute('/table/indexes', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s&amp;index=%1$s',
         ];
         $this->classes = 'index';
     }

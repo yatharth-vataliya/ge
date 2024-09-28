@@ -18,7 +18,7 @@ class I18nExtension extends TwigI18nExtension
      */
     public function getTokenParsers()
     {
-        return [new TokenParserTrans()];
+        return [new TokenParserTrans];
     }
 
     /**

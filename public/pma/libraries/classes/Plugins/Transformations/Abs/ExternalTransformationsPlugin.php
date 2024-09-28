@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Transformations\Abs;
 
+use const E_USER_DEPRECATED;
+
 use PhpMyAdmin\Plugins\TransformationsPlugin;
 use stdClass;
-use const E_USER_DEPRECATED;
+
 use function count;
 use function fclose;
 use function feof;
@@ -37,25 +39,24 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
     {
         return __(
             'LINUX ONLY: Launches an external application and feeds it the column'
-            . ' data via standard input. Returns the standard output of the'
-            . ' application. The default is Tidy, to pretty-print HTML code.'
-            . ' For security reasons, you have to manually edit the file'
-            . ' libraries/classes/Plugins/Transformations/Abs/ExternalTransformationsPlugin.php'
-            . ' and list the tools you want to make available.'
-            . ' The first option is then the number of the program you want to'
-            . ' use. The second option should be blank for historical reasons.'
-            . ' The third option, if set to 1, will convert the output using'
-            . ' htmlspecialchars() (Default 1). The fourth option, if set to 1,'
-            . ' will prevent wrapping and ensure that the output appears all on'
-            . ' one line (Default 1).'
+            .' data via standard input. Returns the standard output of the'
+            .' application. The default is Tidy, to pretty-print HTML code.'
+            .' For security reasons, you have to manually edit the file'
+            .' libraries/classes/Plugins/Transformations/Abs/ExternalTransformationsPlugin.php'
+            .' and list the tools you want to make available.'
+            .' The first option is then the number of the program you want to'
+            .' use. The second option should be blank for historical reasons.'
+            .' The third option, if set to 1, will convert the output using'
+            .' htmlspecialchars() (Default 1). The fourth option, if set to 1,'
+            .' will prevent wrapping and ensure that the output appears all on'
+            .' one line (Default 1).'
         );
     }
 
     /**
      * Enables no-wrapping
      *
-     * @param array $options transformation options
-     *
+     * @param  array  $options  transformation options
      * @return bool
      */
     public function applyTransformationNoWrap(array $options = [])
@@ -74,10 +75,9 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)
@@ -122,8 +122,8 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
             trigger_error(sprintf(
                 __(
                     'You are using the external transformation command line'
-                    . ' options field, which has been deprecated for security reasons.'
-                    . ' Add all command line options directly to the definition in %s.'
+                    .' options field, which has been deprecated for security reasons.'
+                    .' Add all command line options directly to the definition in %s.'
                 ),
                 '[code]libraries/classes/Plugins/Transformations/Abs/ExternalTransformationsPlugin.php[/code]'
             ), E_USER_DEPRECATED);
@@ -141,7 +141,7 @@ abstract class ExternalTransformationsPlugin extends TransformationsPlugin
                 'w',
             ],
         ];
-        $process = proc_open($program . ' ' . $options[1], $descriptorspec, $pipes);
+        $process = proc_open($program.' '.$options[1], $descriptorspec, $pipes);
         if (is_resource($process)) {
             fwrite($pipes[0], $buffer);
             fclose($pipes[0]);

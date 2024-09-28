@@ -19,6 +19,8 @@ use const E_USER_ERROR;
 use const E_USER_NOTICE;
 use const E_USER_WARNING;
 use const E_WARNING;
+use const PHP_VERSION_ID;
+
 use function array_splice;
 use function count;
 use function defined;
@@ -27,7 +29,6 @@ use function headers_sent;
 use function htmlspecialchars;
 use function set_error_handler;
 use function trigger_error;
-use const PHP_VERSION_ID;
 
 /**
  * handling errors
@@ -114,7 +115,7 @@ class ErrorHandler
     /**
      * Toggles location hiding
      *
-     * @param bool $hide Whether to hide
+     * @param  bool  $hide  Whether to hide
      */
     public function setHideLocation(bool $hide): void
     {
@@ -124,8 +125,7 @@ class ErrorHandler
     /**
      * returns array with all errors
      *
-     * @param bool $check Whether to check for session errors
-     *
+     * @param  bool  $check  Whether to check for session errors
      * @return Error[]
      */
     public function getErrors(bool $check = true): array
@@ -151,8 +151,7 @@ class ErrorHandler
     /**
      * Pops recent errors from the storage
      *
-     * @param int $count Old error count
-     *
+     * @param  int  $count  Old error count
      * @return Error[]
      */
     public function sliceErrors(int $count): array
@@ -169,10 +168,10 @@ class ErrorHandler
      * This calls the addError() function, escaping the error string
      * Ignores the errors wherever Error Control Operator (@) is used.
      *
-     * @param int    $errno   error number
-     * @param string $errstr  error string
-     * @param string $errfile error file
-     * @param int    $errline error line
+     * @param  int  $errno  error number
+     * @param  string  $errstr  error string
+     * @param  string  $errfile  error file
+     * @param  int  $errline  error line
      */
     public function handleError(
         int $errno,
@@ -182,10 +181,10 @@ class ErrorHandler
     ): void {
         if (Util::isErrorReportingAvailable()) {
             /**
-            * Check if Error Control Operator (@) was used, but still show
-            * user errors even in this case.
-            * See: https://github.com/phpmyadmin/phpmyadmin/issues/16729
-            */
+             * Check if Error Control Operator (@) was used, but still show
+             * user errors even in this case.
+             * See: https://github.com/phpmyadmin/phpmyadmin/issues/16729
+             */
             $isSilenced = ! (error_reporting() & $errno);
             if (PHP_VERSION_ID < 80000) {
                 $isSilenced = error_reporting() == 0;
@@ -216,11 +215,11 @@ class ErrorHandler
      * Do not use the context parameter as we want to avoid storing the
      * complete $GLOBALS inside $_SESSION['errors']
      *
-     * @param string $errstr  error string
-     * @param int    $errno   error number
-     * @param string $errfile error file
-     * @param int    $errline error line
-     * @param bool   $escape  whether to escape the error string
+     * @param  string  $errstr  error string
+     * @param  int  $errno  error number
+     * @param  string  $errfile  error file
+     * @param  int  $errline  error line
+     * @param  bool  $escape  whether to escape the error string
      */
     public function addError(
         string $errstr,
@@ -276,8 +275,8 @@ class ErrorHandler
     /**
      * trigger a custom error
      *
-     * @param string $errorInfo   error message
-     * @param int    $errorNumber error number
+     * @param  string  $errorInfo  error message
+     * @param  int  $errorNumber  error number
      */
     public function triggerError(string $errorInfo, ?int $errorNumber = null): void
     {
@@ -289,7 +288,7 @@ class ErrorHandler
     /**
      * display fatal error and exit
      *
-     * @param Error $error the error
+     * @param  Error  $error  the error
      */
     protected function dispFatalError(Error $error): void
     {
@@ -329,7 +328,7 @@ class ErrorHandler
     /**
      * display HTML header
      *
-     * @param Error $error the error
+     * @param  Error  $error  the error
      */
     protected function dispPageStart(?Error $error = null): void
     {
@@ -372,39 +371,39 @@ class ErrorHandler
         // if preference is not 'never' and
         // there are 'actual' errors to be reported
         if ($GLOBALS['cfg']['SendErrorReports'] !== 'never'
-            && $this->countErrors() !=  $this->countUserErrors()
+            && $this->countErrors() != $this->countUserErrors()
         ) {
             // add report button.
-            $retval .= '<form method="post" action="' . Url::getFromRoute('/error-report')
-                    . '" id="pma_report_errors_form"';
+            $retval .= '<form method="post" action="'.Url::getFromRoute('/error-report')
+                    .'" id="pma_report_errors_form"';
             if ($GLOBALS['cfg']['SendErrorReports'] === 'always') {
                 // in case of 'always', generate 'invisible' form.
                 $retval .= ' class="hide"';
             }
-            $retval .=  '>';
+            $retval .= '>';
             $retval .= Url::getHiddenFields([
                 'exception_type' => 'php',
                 'send_error_report' => '1',
                 'server' => $GLOBALS['server'],
             ]);
             $retval .= '<input type="submit" value="'
-                    . __('Report')
-                    . '" id="pma_report_errors" class="btn btn-primary floatright">'
-                    . '<input type="checkbox" name="always_send"'
-                    . ' id="always_send_checkbox" value="true">'
-                    . '<label for="always_send_checkbox">'
-                    . __('Automatically send report next time')
-                    . '</label>';
+                    .__('Report')
+                    .'" id="pma_report_errors" class="btn btn-primary floatright">'
+                    .'<input type="checkbox" name="always_send"'
+                    .' id="always_send_checkbox" value="true">'
+                    .'<label for="always_send_checkbox">'
+                    .__('Automatically send report next time')
+                    .'</label>';
 
             if ($GLOBALS['cfg']['SendErrorReports'] === 'ask') {
                 // add ignore buttons
                 $retval .= '<input type="submit" value="'
-                        . __('Ignore')
-                        . '" id="pma_ignore_errors_bottom" class="btn btn-secondary floatright">';
+                        .__('Ignore')
+                        .'" id="pma_ignore_errors_bottom" class="btn btn-secondary floatright">';
             }
             $retval .= '<input type="submit" value="'
-                    . __('Ignore All')
-                    . '" id="pma_ignore_all_errors_bottom" class="btn btn-secondary floatright">';
+                    .__('Ignore All')
+                    .'" id="pma_ignore_all_errors_bottom" class="btn btn-secondary floatright">';
             $retval .= '</form>';
         }
 
@@ -437,8 +436,7 @@ class ErrorHandler
     /**
      * return count of errors
      *
-     * @param bool $check Whether to check for session errors
-     *
+     * @param  bool  $check  Whether to check for session errors
      * @return int number of errors occurred
      */
     public function countErrors(bool $check = true): int
@@ -528,7 +526,7 @@ class ErrorHandler
     public function hasErrorsForPrompt(): bool
     {
         return $GLOBALS['cfg']['SendErrorReports'] !== 'never'
-            && $this->countErrors() !=  $this->countUserErrors();
+            && $this->countErrors() != $this->countUserErrors();
     }
 
     /**
@@ -540,7 +538,7 @@ class ErrorHandler
     {
         // if there're no actual errors,
         if (! $this->hasErrors()
-            || $this->countErrors() ==  $this->countUserErrors()
+            || $this->countErrors() == $this->countUserErrors()
         ) {
             // then simply return.
             return;
@@ -556,7 +554,7 @@ class ErrorHandler
             } else {
                 // send the error reports asynchronously & without asking user
                 $jsCode .= '$("#pma_report_errors_form").submit();'
-                        . 'Functions.ajaxShowMessage(
+                        .'Functions.ajaxShowMessage(
                             Messages.phpErrorsBeingSubmitted, false
                         );';
                 // js code to appropriate focusing,
@@ -569,23 +567,23 @@ class ErrorHandler
             if (! $response->isAjax()) {
                 // js code to show appropriate msgs, event binding & focusing.
                 $jsCode = 'Functions.ajaxShowMessage(Messages.phpErrorsFound);'
-                        . '$("#pma_ignore_errors_popup").on("click", function() {
+                        .'$("#pma_ignore_errors_popup").on("click", function() {
                             Functions.ignorePhpErrors()
                         });'
-                        . '$("#pma_ignore_all_errors_popup").on("click",
+                        .'$("#pma_ignore_all_errors_popup").on("click",
                             function() {
                                 Functions.ignorePhpErrors(false)
                             });'
-                        . '$("#pma_ignore_errors_bottom").on("click", function(e) {
+                        .'$("#pma_ignore_errors_bottom").on("click", function(e) {
                             e.preventDefault();
                             Functions.ignorePhpErrors()
                         });'
-                        . '$("#pma_ignore_all_errors_bottom").on("click",
+                        .'$("#pma_ignore_all_errors_bottom").on("click",
                             function(e) {
                                 e.preventDefault();
                                 Functions.ignorePhpErrors(false)
                             });'
-                        . '$("html, body").animate({
+                        .'$("html, body").animate({
                             scrollTop:$(document).height()
                         }, "slow");';
             }

@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Plugins\Transformations\Abs;
 
 use PhpMyAdmin\Plugins\TransformationsPlugin;
 use stdClass;
+
 use function bin2hex;
 use function chunk_split;
 use function intval;
@@ -27,18 +28,17 @@ abstract class HexTransformationsPlugin extends TransformationsPlugin
     {
         return __(
             'Displays hexadecimal representation of data. Optional first'
-            . ' parameter specifies how often space will be added (defaults'
-            . ' to 2 nibbles).'
+            .' parameter specifies how often space will be added (defaults'
+            .' to 2 nibbles).'
         );
     }
 
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)

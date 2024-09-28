@@ -9,6 +9,7 @@ use PhpMyAdmin\Export\TemplateModel;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
+
 use function is_array;
 use function is_string;
 
@@ -21,7 +22,7 @@ final class ExportTemplateController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct(
         $response,

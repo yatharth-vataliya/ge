@@ -16,6 +16,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function stripos;
 
 class QueryByExampleController extends AbstractController
@@ -27,9 +28,9 @@ class QueryByExampleController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, Relation $relation, $dbi)
     {
@@ -111,7 +112,7 @@ class QueryByExampleController extends AbstractController
                     $this->relation,
                     new RelationCleanup($this->dbi, $this->relation),
                     new Operations($this->dbi, $this->relation),
-                    new Transformations(),
+                    new Transformations,
                     $this->template
                 );
 
@@ -135,7 +136,7 @@ class QueryByExampleController extends AbstractController
             }
         }
 
-        $sub_part  = '_qbe';
+        $sub_part = '_qbe';
 
         Util::checkParameters(['db']);
 

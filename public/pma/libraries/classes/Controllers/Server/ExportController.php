@@ -13,6 +13,7 @@ use PhpMyAdmin\Plugins;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function array_merge;
 
 final class ExportController extends AbstractController
@@ -24,8 +25,8 @@ final class ExportController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, Options $export, $dbi)
     {

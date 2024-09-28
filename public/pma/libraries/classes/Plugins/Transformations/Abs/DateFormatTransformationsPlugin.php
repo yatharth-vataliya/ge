@@ -11,6 +11,7 @@ use PhpMyAdmin\Plugins\TransformationsPlugin;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Util;
 use stdClass;
+
 use function checkdate;
 use function gmdate;
 use function htmlspecialchars;
@@ -35,24 +36,23 @@ abstract class DateFormatTransformationsPlugin extends TransformationsPlugin
     {
         return __(
             'Displays a TIME, TIMESTAMP, DATETIME or numeric unix timestamp'
-            . ' column as formatted date. The first option is the offset (in'
-            . ' hours) which will be added to the timestamp (Default: 0). Use'
-            . ' second option to specify a different date/time format string.'
-            . ' Third option determines whether you want to see local date or'
-            . ' UTC one (use "local" or "utc" strings) for that. According to'
-            . ' that, date format has different value - for "local" see the'
-            . ' documentation for PHP\'s strftime() function and for "utc" it'
-            . ' is done using gmdate() function.'
+            .' column as formatted date. The first option is the offset (in'
+            .' hours) which will be added to the timestamp (Default: 0). Use'
+            .' second option to specify a different date/time format string.'
+            .' Third option determines whether you want to see local date or'
+            .' UTC one (use "local" or "utc" strings) for that. According to'
+            .' that, date format has different value - for "local" see the'
+            .' documentation for PHP\'s strftime() function and for "utc" it'
+            .' is done using gmdate() function.'
         );
     }
 
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)
@@ -142,8 +142,8 @@ abstract class DateFormatTransformationsPlugin extends TransformationsPlugin
                 $text = 'INVALID DATE TYPE';
             }
 
-            return '<dfn onclick="alert(\'' . Sanitize::jsFormat($source, false) . '\');" title="'
-                . htmlspecialchars((string) $source) . '">' . htmlspecialchars((string) $text) . '</dfn>';
+            return '<dfn onclick="alert(\''.Sanitize::jsFormat($source, false).'\');" title="'
+                .htmlspecialchars((string) $source).'">'.htmlspecialchars((string) $text).'</dfn>';
         }
 
         return htmlspecialchars((string) $buffer);

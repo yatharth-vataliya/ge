@@ -18,9 +18,9 @@ class SearchController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $dbi)
     {

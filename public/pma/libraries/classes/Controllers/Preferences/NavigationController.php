@@ -14,6 +14,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\TwoFactor;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\UserPreferences;
+
 use function define;
 use function ltrim;
 
@@ -26,7 +27,7 @@ class NavigationController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct(
         $response,

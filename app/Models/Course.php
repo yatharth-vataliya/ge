@@ -8,12 +8,13 @@ class Course extends Model
 {
     protected $guarded = [];
 
-    public function department(){
-    	return $this->belongsTo(\App\Models\Department::class);
+    public function department()
+    {
+        return $this->belongsTo(\App\Models\Department::class);
     }
 
-    public function students(){
+    public function students()
+    {
         return $this->hasMany(\App\Models\Student::class);
     }
-
 }

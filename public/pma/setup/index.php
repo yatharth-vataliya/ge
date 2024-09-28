@@ -15,13 +15,13 @@ use PhpMyAdmin\Url;
 
 if (! defined('ROOT_PATH')) {
     // phpcs:disable PSR1.Files.SideEffects
-    define('ROOT_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+    define('ROOT_PATH', dirname(__DIR__).DIRECTORY_SEPARATOR);
     // phpcs:enable
 }
 
 global $cfg;
 
-require ROOT_PATH . 'setup/lib/common.inc.php';
+require ROOT_PATH.'setup/lib/common.inc.php';
 
 if (@file_exists(CONFIG_FILE) && ! $cfg['DBG']['demo']) {
     Core::fatalError(__('Configuration already exists, setup is disabled!'));
@@ -36,7 +36,7 @@ if ($page === '') {
 Core::noCacheHeader();
 
 if ($page === 'form') {
-    $controller = new FormController($GLOBALS['ConfigFile'], new Template());
+    $controller = new FormController($GLOBALS['ConfigFile'], new Template);
     echo $controller->index([
         'formset' => $_GET['formset'] ?? null,
     ]);
@@ -45,7 +45,7 @@ if ($page === 'form') {
 }
 
 if ($page === 'config') {
-    $controller = new ConfigController($GLOBALS['ConfigFile'], new Template());
+    $controller = new ConfigController($GLOBALS['ConfigFile'], new Template);
     echo $controller->index([
         'formset' => $_GET['formset'] ?? null,
         'eol' => $_GET['eol'] ?? null,
@@ -55,12 +55,12 @@ if ($page === 'config') {
 }
 
 if ($page === 'servers') {
-    $controller = new ServersController($GLOBALS['ConfigFile'], new Template());
+    $controller = new ServersController($GLOBALS['ConfigFile'], new Template);
     if (isset($_GET['mode']) && $_GET['mode'] === 'remove' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $controller->destroy([
             'id' => $_GET['id'] ?? null,
         ]);
-        header('Location: index.php' . Url::getCommonRaw());
+        header('Location: index.php'.Url::getCommonRaw());
 
         return;
     }
@@ -74,7 +74,7 @@ if ($page === 'servers') {
     return;
 }
 
-$controller = new HomeController($GLOBALS['ConfigFile'], new Template());
+$controller = new HomeController($GLOBALS['ConfigFile'], new Template);
 echo $controller->index([
     'formset' => $_GET['formset'] ?? null,
     'action_done' => $_GET['action_done'] ?? null,

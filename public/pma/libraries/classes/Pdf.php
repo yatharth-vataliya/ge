@@ -10,6 +10,7 @@ namespace PhpMyAdmin;
 use Exception;
 use TCPDF;
 use TCPDF_FONTS;
+
 use function count;
 use function strlen;
 use function strtr;
@@ -33,18 +34,16 @@ class Pdf extends TCPDF
     /**
      * Constructs PDF and configures standard parameters.
      *
-     * @param string $orientation page orientation
-     * @param string $unit        unit
-     * @param string $format      the format used for pages
-     * @param bool   $unicode     true means that the input text is unicode
-     * @param string $encoding    charset encoding; default is UTF-8.
-     * @param bool   $diskcache   if true reduce the RAM memory usage by caching
-     *                            temporary data on filesystem (slower).
-     * @param bool   $pdfa        If TRUE set the document to PDF/A mode.
+     * @param  string  $orientation  page orientation
+     * @param  string  $unit  unit
+     * @param  string  $format  the format used for pages
+     * @param  bool  $unicode  true means that the input text is unicode
+     * @param  string  $encoding  charset encoding; default is UTF-8.
+     * @param  bool  $diskcache  if true reduce the RAM memory usage by caching
+     *                           temporary data on filesystem (slower).
+     * @param  bool  $pdfa  If TRUE set the document to PDF/A mode.
      *
      * @throws Exception
-     *
-     * @access public
      */
     public function __construct(
         $orientation = 'P',
@@ -64,7 +63,7 @@ class Pdf extends TCPDF
             $diskcache,
             $pdfa
         );
-        $this->SetAuthor('phpMyAdmin ' . PMA_VERSION);
+        $this->SetAuthor('phpMyAdmin '.PMA_VERSION);
         $this->AddFont('DejaVuSans', '', 'dejavusans.php');
         $this->AddFont('DejaVuSans', 'B', 'dejavusansb.php');
         $this->SetFont(self::PMA_PDF_FONT, '', 14);
@@ -89,8 +88,8 @@ class Pdf extends TCPDF
         $this->Cell(
             0,
             6,
-            __('Page number:') . ' '
-            . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(),
+            __('Page number:').' '
+            .$this->getAliasNumPage().'/'.$this->getAliasNbPages(),
             'T',
             0,
             'C'
@@ -105,9 +104,8 @@ class Pdf extends TCPDF
     /**
      * Function to set alias which will be expanded on page rendering.
      *
-     * @param string $name  name of the alias
-     * @param string $value value of the alias
-     *
+     * @param  string  $name  name of the alias
+     * @param  string  $value  value of the alias
      * @return void
      */
     public function setAlias($name, $value)
@@ -148,15 +146,14 @@ class Pdf extends TCPDF
     /**
      * Displays an error message
      *
-     * @param string $error_message the error message
-     *
+     * @param  string  $error_message  the error message
      * @return void
      */
     // @codingStandardsIgnoreLine
     public function Error($error_message = '')
     {
         echo Message::error(
-            __('Error while creating PDF:') . ' ' . $error_message
+            __('Error while creating PDF:').' '.$error_message
         )->getDisplay();
         exit;
     }
@@ -164,8 +161,7 @@ class Pdf extends TCPDF
     /**
      * Sends file as a download to user.
      *
-     * @param string $filename file name
-     *
+     * @param  string  $filename  file name
      * @return void
      */
     public function download($filename)

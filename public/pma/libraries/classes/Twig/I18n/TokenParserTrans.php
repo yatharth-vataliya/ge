@@ -13,8 +13,7 @@ class TokenParserTrans extends TransTokenParser
     /**
      * Parses a token and returns a node.
      *
-     * @param Token $token Twig token to parse
-     *
+     * @param  Token  $token  Twig token to parse
      * @return NodeTrans
      *
      * @throws SyntaxError
@@ -63,8 +62,7 @@ class TokenParserTrans extends TransTokenParser
     /**
      * Tests the current token for a type.
      *
-     * @param Token $token Twig token to test
-     *
+     * @param  Token  $token  Twig token to test
      * @return bool
      */
     public function decideForFork(Token $token)

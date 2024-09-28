@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use const E_USER_ERROR;
+
 use function file_exists;
 use function file_get_contents;
 use function filemtime;
@@ -30,25 +31,21 @@ class Theme
 {
     /**
      * @var string theme version
-     * @access protected
      */
     public $version = '0.0.0.0';
 
     /**
      * @var string theme name
-     * @access protected
      */
     public $name = '';
 
     /**
      * @var string theme id
-     * @access protected
      */
     public $id = '';
 
     /**
      * @var string theme path
-     * @access protected
      */
     public $path = '';
 
@@ -57,13 +54,11 @@ class Theme
 
     /**
      * @var string image path
-     * @access protected
      */
     public $imgPath = '';
 
     /**
      * @var int last modification time for info file
-     * @access protected
      */
     public $mtimeInfo = 0;
 
@@ -72,13 +67,11 @@ class Theme
      * is identical
      *
      * @var int filesize for info file
-     * @access protected
      */
     public $filesizeInfo = 0;
 
     /**
      * @var array List of css files to load
-     * @access private
      */
     public $cssFiles = [
         'common',
@@ -98,19 +91,17 @@ class Theme
 
     public function __construct()
     {
-        $this->template = new Template();
+        $this->template = new Template;
     }
 
     /**
      * Loads theme information
      *
      * @return bool whether loading them info was successful or not
-     *
-     * @access public
      */
     public function loadInfo()
     {
-        $infofile = $this->getFsPath() . 'theme.json';
+        $infofile = $this->getFsPath().'theme.json';
         if (! @file_exists($infofile)) {
             return false;
         }
@@ -161,17 +152,15 @@ class Theme
      * returns theme object loaded from given folder
      * or false if theme is invalid
      *
-     * @param string $folder path to theme
-     * @param string $fsPath file-system path to theme
-     *
+     * @param  string  $folder  path to theme
+     * @param  string  $fsPath  file-system path to theme
      * @return Theme|false
      *
      * @static
-     * @access public
      */
     public static function load(string $folder, string $fsPath)
     {
-        $theme = new Theme();
+        $theme = new Theme;
 
         $theme->setPath($folder);
         $theme->setFsPath($fsPath);
@@ -189,21 +178,19 @@ class Theme
      * checks image path for existence - if not found use img from fallback theme
      *
      * @return bool
-     *
-     * @access public
      */
     public function checkImgPath()
     {
         // try current theme first
-        if (is_dir($this->getFsPath() . 'img/')) {
-            $this->setImgPath($this->getPath() . '/img/');
+        if (is_dir($this->getFsPath().'img/')) {
+            $this->setImgPath($this->getPath().'/img/');
 
             return true;
         }
 
         // try fallback theme
-        $fallback = ThemeManager::getThemesDir() . ThemeManager::FALLBACK_THEME . '/img/';
-        if (is_dir(ThemeManager::getThemesFsDir() . ThemeManager::FALLBACK_THEME . '/img/')) {
+        $fallback = ThemeManager::getThemesDir().ThemeManager::FALLBACK_THEME.'/img/';
+        if (is_dir(ThemeManager::getThemesFsDir().ThemeManager::FALLBACK_THEME.'/img/')) {
             $this->setImgPath($fallback);
 
             return true;
@@ -225,8 +212,6 @@ class Theme
      * returns path to theme
      *
      * @return string path to theme
-     *
-     * @access public
      */
     public function getPath()
     {
@@ -246,11 +231,8 @@ class Theme
     /**
      * set path to theme
      *
-     * @param string $path path to theme
-     *
+     * @param  string  $path  path to theme
      * @return void
-     *
-     * @access public
      */
     public function setPath($path)
     {
@@ -260,7 +242,7 @@ class Theme
     /**
      * set file system path to the theme
      *
-     * @param string $path path to theme
+     * @param  string  $path  path to theme
      */
     public function setFsPath(string $path): void
     {
@@ -270,11 +252,8 @@ class Theme
     /**
      * sets version
      *
-     * @param string $version version to set
-     *
+     * @param  string  $version  version to set
      * @return void
-     *
-     * @access public
      */
     public function setVersion($version)
     {
@@ -285,8 +264,6 @@ class Theme
      * returns version
      *
      * @return string version
-     *
-     * @access public
      */
     public function getVersion()
     {
@@ -297,11 +274,8 @@ class Theme
      * checks theme version against $version
      * returns true if theme version is equal or higher to $version
      *
-     * @param string $version version to compare to
-     *
+     * @param  string  $version  version to compare to
      * @return bool true if theme version is equal or higher to $version
-     *
-     * @access public
      */
     public function checkVersion($version)
     {
@@ -311,11 +285,8 @@ class Theme
     /**
      * sets name
      *
-     * @param string $name name to set
-     *
+     * @param  string  $name  name to set
      * @return void
-     *
-     * @access public
      */
     public function setName($name)
     {
@@ -326,8 +297,6 @@ class Theme
      * returns name
      *
      * @return string name
-     *
-     * @access public
      */
     public function getName()
     {
@@ -337,11 +306,8 @@ class Theme
     /**
      * sets id
      *
-     * @param string $id new id
-     *
+     * @param  string  $id  new id
      * @return void
-     *
-     * @access public
      */
     public function setId($id)
     {
@@ -352,8 +318,6 @@ class Theme
      * returns id
      *
      * @return string id
-     *
-     * @access public
      */
     public function getId()
     {
@@ -363,11 +327,8 @@ class Theme
     /**
      * Sets path to images for the theme
      *
-     * @param string $path path to images for this theme
-     *
+     * @param  string  $path  path to images for this theme
      * @return void
-     *
-     * @access public
      */
     public function setImgPath($path)
     {
@@ -379,12 +340,9 @@ class Theme
      * If filename is given, it possibly fallbacks to fallback
      * theme for it if image does not exist.
      *
-     * @param string $file     file name for image
-     * @param string $fallback fallback image
-     *
+     * @param  string  $file  file name for image
+     * @param  string  $fallback  fallback image
      * @return string image path for this theme
-     *
-     * @access public
      */
     public function getImgPath($file = null, $fallback = null)
     {
@@ -392,30 +350,28 @@ class Theme
             return $this->imgPath;
         }
 
-        if (is_readable($this->imgPath . $file)) {
-            return $this->imgPath . $file;
+        if (is_readable($this->imgPath.$file)) {
+            return $this->imgPath.$file;
         }
 
         if ($fallback !== null) {
             return $this->getImgPath($fallback);
         }
 
-        return './themes/' . ThemeManager::FALLBACK_THEME . '/img/' . $file;
+        return './themes/'.ThemeManager::FALLBACK_THEME.'/img/'.$file;
     }
 
     /**
      * Renders the preview for this theme
      *
      * @return string
-     *
-     * @access public
      */
     public function getPrintPreview()
     {
         $url_params = ['set_theme' => $this->getId()];
         $screen = null;
-        if (@file_exists($this->getFsPath() . 'screen.png')) {
-            $screen = $this->getPath() . '/screen.png';
+        if (@file_exists($this->getFsPath().'screen.png')) {
+            $screen = $this->getPath().'/screen.png';
         }
 
         return $this->template->render('theme_preview', [

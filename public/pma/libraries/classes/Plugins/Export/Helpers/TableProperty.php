@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Export\Helpers;
 
-use PhpMyAdmin\Plugins\Export\ExportCodegen;
 use const ENT_COMPAT;
+
+use PhpMyAdmin\Plugins\Export\ExportCodegen;
+
 use function htmlspecialchars;
 use function mb_strpos;
 use function mb_substr;
@@ -61,7 +63,7 @@ class TableProperty
     public $ext;
 
     /**
-     * @param array $row table row
+     * @param  array  $row  table row
      */
     public function __construct(array $row)
     {
@@ -187,8 +189,8 @@ class TableProperty
     {
         if (strlen($this->key) > 0) {
             return 'index="'
-                . htmlspecialchars($this->name, ENT_COMPAT, 'UTF-8')
-                . '"';
+                .htmlspecialchars($this->name, ENT_COMPAT, 'UTF-8')
+                .'"';
         }
 
         return '';
@@ -207,8 +209,7 @@ class TableProperty
     /**
      * Formats a string for C#
      *
-     * @param string $text string to be formatted
-     *
+     * @param  string  $text  string to be formatted
      * @return string formatted text
      */
     public function formatCs($text)
@@ -225,8 +226,7 @@ class TableProperty
     /**
      * Formats a string for XML
      *
-     * @param string $text string to be formatted
-     *
+     * @param  string  $text  string to be formatted
      * @return string formatted text
      */
     public function formatXml($text)
@@ -249,8 +249,7 @@ class TableProperty
     /**
      * Formats a string
      *
-     * @param string $text string to be formatted
-     *
+     * @param  string  $text  string to be formatted
      * @return string formatted text
      */
     public function format($text)

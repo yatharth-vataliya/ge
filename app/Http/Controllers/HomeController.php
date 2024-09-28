@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Models\Student;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -26,6 +24,7 @@ class HomeController extends Controller
     public function index()
     {
         $students = Student::latest()->paginate(7);
-        return view('home',compact('students'));
+
+        return view('home', compact('students'));
     }
 }

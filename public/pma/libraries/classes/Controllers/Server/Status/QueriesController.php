@@ -12,6 +12,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Server\Status\Data;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function array_sum;
 use function arsort;
 use function count;
@@ -23,9 +24,9 @@ class QueriesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param Data              $data
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  Data  $data
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $data, $dbi)
     {

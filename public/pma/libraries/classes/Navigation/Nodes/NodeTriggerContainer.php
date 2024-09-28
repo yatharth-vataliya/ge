@@ -26,10 +26,10 @@ class NodeTriggerContainer extends Node
         $this->links = [
             'text' => Url::getFromRoute('/database/triggers', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
             'icon' => Url::getFromRoute('/database/triggers', [
                 'server' => $GLOBALS['server'],
-            ]) . '&amp;db=%2$s&amp;table=%1$s',
+            ]).'&amp;db=%2$s&amp;table=%1$s',
         ];
         $this->realName = 'triggers';
 
@@ -43,11 +43,11 @@ class NodeTriggerContainer extends Node
             'text' => Url::getFromRoute('/database/triggers', [
                 'server' => $GLOBALS['server'],
                 'add_item' => 1,
-            ]) . '&amp;db=%3$s',
+            ]).'&amp;db=%3$s',
             'icon' => Url::getFromRoute('/database/triggers', [
                 'server' => $GLOBALS['server'],
                 'add_item' => 1,
-            ]) . '&amp;db=%3$s',
+            ]).'&amp;db=%3$s',
         ];
         $this->addChild($new);
     }

@@ -13,6 +13,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function in_array;
 use function strlen;
 
@@ -28,9 +29,9 @@ class RoutinesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, CheckUserPrivileges $checkUserPrivileges, $dbi)
     {
@@ -116,7 +117,7 @@ class RoutinesController extends AbstractController
             'table' => $table,
             'items' => $items,
             'rows' => $rows,
-            'select_all_arrow_src' => $PMA_Theme->getImgPath() . 'arrow_' . $text_dir . '.png',
+            'select_all_arrow_src' => $PMA_Theme->getImgPath().'arrow_'.$text_dir.'.png',
             'has_privilege' => Util::currentUserHasPrivilege('CREATE ROUTINE', $db, $table),
         ]);
     }

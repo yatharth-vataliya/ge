@@ -9,6 +9,7 @@ namespace PhpMyAdmin\Navigation\Nodes;
 
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Url;
+
 use function strlen;
 use function substr;
 
@@ -20,10 +21,10 @@ class NodeColumn extends Node
     /**
      * Initialises the class
      *
-     * @param array $item    array to identify the column node
-     * @param int   $type    Type of node, may be one of CONTAINER or OBJECT
-     * @param bool  $isGroup Whether this object has been created
-     *                       while grouping nodes
+     * @param  array  $item  array to identify the column node
+     * @param  int  $type  Type of node, may be one of CONTAINER or OBJECT
+     * @param  bool  $isGroup  Whether this object has been created
+     *                         while grouping nodes
      */
     public function __construct($item, $type = Node::OBJECT, $isGroup = false)
     {
@@ -35,11 +36,11 @@ class NodeColumn extends Node
             'text' => Url::getFromRoute('/table/structure/change', [
                 'server' => $GLOBALS['server'],
                 'change_column' => 1,
-            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;field=%1$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s&amp;field=%1$s',
             'icon' => Url::getFromRoute('/table/structure/change', [
                 'server' => $GLOBALS['server'],
                 'change_column' => 1,
-            ]) . '&amp;db=%3$s&amp;table=%2$s&amp;field=%1$s',
+            ]).'&amp;db=%3$s&amp;table=%2$s&amp;field=%1$s',
             'title' => __('Structure'),
         ];
     }
@@ -47,8 +48,7 @@ class NodeColumn extends Node
     /**
      * Get customized Icon for columns in navigation tree
      *
-     * @param string $key The key type - (primary, foreign etc.)
-     *
+     * @param  string  $key  The key type - (primary, foreign etc.)
      * @return string Icon name for required key.
      */
     private function getColumnIcon($key)
@@ -71,8 +71,7 @@ class NodeColumn extends Node
     /**
      * Get displayable name for navigation tree (key_type, data_type, default)
      *
-     * @param array<string, mixed> $item Item is array containing required info
-     *
+     * @param  array<string, mixed>  $item  Item is array containing required info
      * @return string Display name for navigation tree
      */
     private function getDisplayName($item)
@@ -89,15 +88,14 @@ class NodeColumn extends Node
             $retval .= $this->getTruncateValue($key, $value);
         }
 
-        return $retval . ')';
+        return $retval.')';
     }
 
     /**
      * Get truncated value for display in node column view
      *
-     * @param string $key   key to identify default,datatype etc
-     * @param string $value value corresponding to key
-     *
+     * @param  string  $key  key to identify default,datatype etc
+     * @param  string  $value  value corresponding to key
      * @return string truncated value
      */
     public function getTruncateValue($key, $value)
@@ -107,7 +105,7 @@ class NodeColumn extends Node
         switch ($key) {
             case 'default':
                 strlen($value) > 6 ?
-                    $retval .= substr($value, 0, 6) . '...' :
+                    $retval .= substr($value, 0, 6).'...' :
                     $retval = $value;
                 break;
             default:

@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Plugins\Schema\Pdf;
 use PhpMyAdmin\Pdf as PdfLib;
 use PhpMyAdmin\Plugins\Schema\ExportRelationSchema;
 use PhpMyAdmin\Plugins\Schema\TableStats;
+
 use function count;
 use function in_array;
 use function max;
@@ -38,17 +39,17 @@ class TableStatsPdf extends TableStats
      * @see TableStatsPdf::setWidthTable
      * @see PhpMyAdmin\Plugins\Schema\Pdf\TableStatsPdf::setHeightTable
      *
-     * @param object $diagram        The PDF diagram
-     * @param string $db             The database name
-     * @param string $tableName      The table name
-     * @param int    $fontSize       The font size
-     * @param int    $pageNumber     The current page number (from the
-     *                               $cfg['Servers'][$i]['table_coords'] table)
-     * @param int    $sameWideWidth  The max. width among tables
-     * @param bool   $showKeys       Whether to display keys or not
-     * @param bool   $tableDimension Whether to display table position or not
-     * @param bool   $offline        Whether the coordinates are sent
-     *                               from the browser
+     * @param  object  $diagram  The PDF diagram
+     * @param  string  $db  The database name
+     * @param  string  $tableName  The table name
+     * @param  int  $fontSize  The font size
+     * @param  int  $pageNumber  The current page number (from the
+     *                           $cfg['Servers'][$i]['table_coords'] table)
+     * @param  int  $sameWideWidth  The max. width among tables
+     * @param  bool  $showKeys  Whether to display keys or not
+     * @param  bool  $tableDimension  Whether to display table position or not
+     * @param  bool  $offline  Whether the coordinates are sent
+     *                         from the browser
      */
     public function __construct(
         $diagram,
@@ -112,7 +113,7 @@ class TableStatsPdf extends TableStats
             $ret = sprintf('%.0fx%0.f', $this->width, $this->height);
         }
 
-        return $ret . ' ' . $this->tableName;
+        return $ret.' '.$this->tableName;
     }
 
     /**
@@ -120,11 +121,8 @@ class TableStatsPdf extends TableStats
      *
      * @see    PMA_Schema_PDF
      *
-     * @param int $fontSize The font size
-     *
+     * @param  int  $fontSize  The font size
      * @return void
-     *
-     * @access private
      */
     private function setWidth($fontSize)
     {
@@ -147,8 +145,6 @@ class TableStatsPdf extends TableStats
      * Sets the height of the table
      *
      * @return void
-     *
-     * @access private
      */
     private function setHeight()
     {
@@ -160,13 +156,10 @@ class TableStatsPdf extends TableStats
      *
      * @see    PMA_Schema_PDF
      *
-     * @param int      $fontSize The font size
-     * @param bool     $withDoc  Whether to include links to documentation
-     * @param bool|int $setColor Whether to display color
-     *
+     * @param  int  $fontSize  The font size
+     * @param  bool  $withDoc  Whether to include links to documentation
+     * @param  bool|int  $setColor  Whether to display color
      * @return void
-     *
-     * @access public
      */
     public function tableDraw($fontSize, $withDoc, $setColor = 0)
     {
@@ -221,7 +214,7 @@ class TableStatsPdf extends TableStats
             $this->diagram->cellScale(
                 $this->width,
                 $this->heightCell,
-                ' ' . $field,
+                ' '.$field,
                 1,
                 1,
                 'L',

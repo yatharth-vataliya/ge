@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Html\MySQLDocumentation;
+
 use function htmlspecialchars;
 use function sprintf;
 use function strlen;
@@ -28,7 +29,7 @@ class SqlQueryForm
     private $template;
 
     /**
-     * @param Template $template Template object
+     * @param  Template  $template  Template object
      */
     public function __construct(Template $template)
     {
@@ -38,13 +39,12 @@ class SqlQueryForm
     /**
      * return HTML for the sql query boxes
      *
-     * @param bool|string $query       query to display in the textarea
-     *                                 or true to display last executed
-     * @param bool|string $display_tab sql|full|false
-     *                                 what part to display
-     *                                 false if not inside querywindow
-     * @param string      $delimiter   delimiter
-     *
+     * @param  bool|string  $query  query to display in the textarea
+     *                              or true to display last executed
+     * @param  bool|string  $display_tab  sql|full|false
+     *                                    what part to display
+     *                                    false if not inside querywindow
+     * @param  string  $delimiter  delimiter
      * @return string
      *
      * @usedby  /server/sql
@@ -137,15 +137,14 @@ class SqlQueryForm
     /**
      * Get initial values for Sql Query Form Insert
      *
-     * @param string $query query to display in the textarea
-     *
+     * @param  string  $query  query to display in the textarea
      * @return array ($legend, $query, $columns_list)
      */
     public function init($query)
     {
         global $dbi;
 
-        $columns_list    = [];
+        $columns_list = [];
         if (strlen($GLOBALS['db']) === 0) {
             // prepare for server related
             $legend = sprintf(
@@ -158,16 +157,16 @@ class SqlQueryForm
             );
         } elseif (strlen($GLOBALS['table']) === 0) {
             // prepare for db related
-            $db     = $GLOBALS['db'];
+            $db = $GLOBALS['db'];
             // if you want navigation:
             $scriptName = Util::getScriptNameForOption(
                 $GLOBALS['cfg']['DefaultTabDatabase'],
                 'database'
             );
-            $tmp_db_link = '<a href="' . $scriptName
-                . Url::getCommon(['db' => $db], strpos($scriptName, '?') === false ? '?' : '&')
-                . '">';
-            $tmp_db_link .= htmlspecialchars($db) . '</a>';
+            $tmp_db_link = '<a href="'.$scriptName
+                .Url::getCommon(['db' => $db], strpos($scriptName, '?') === false ? '?' : '&')
+                .'">';
+            $tmp_db_link .= htmlspecialchars($db).'</a>';
             $legend = sprintf(__('Run SQL query/queries on database %s'), $tmp_db_link);
             if (empty($query)) {
                 $query = Util::expandUserString(
@@ -176,8 +175,8 @@ class SqlQueryForm
                 );
             }
         } else {
-            $db     = $GLOBALS['db'];
-            $table  = $GLOBALS['table'];
+            $db = $GLOBALS['db'];
+            $table = $GLOBALS['table'];
             // Get the list and number of fields
             // we do a try_query here, because we could be in the query window,
             // trying to synchronize and the table has not yet been created
@@ -192,8 +191,8 @@ class SqlQueryForm
                 $GLOBALS['cfg']['DefaultTabTable'],
                 'table'
             );
-            $tmp_tbl_link = '<a href="' . $scriptName . Url::getCommon(['db' => $db, 'table' => $table], '&') . '">';
-            $tmp_tbl_link .= htmlspecialchars($db) . '.' . htmlspecialchars($table) . '</a>';
+            $tmp_tbl_link = '<a href="'.$scriptName.Url::getCommon(['db' => $db, 'table' => $table], '&').'">';
+            $tmp_tbl_link .= htmlspecialchars($db).'.'.htmlspecialchars($table).'</a>';
             $legend = sprintf(__('Run SQL query/queries on table %s'), $tmp_tbl_link);
             if (empty($query)) {
                 $query = Util::expandUserString(
@@ -202,7 +201,7 @@ class SqlQueryForm
                 );
             }
         }
-        $legend .= ': ' . MySQLDocumentation::show('SELECT');
+        $legend .= ': '.MySQLDocumentation::show('SELECT');
 
         return [
             $legend,

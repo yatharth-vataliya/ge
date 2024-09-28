@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Controllers;
 
+use const PHP_EOL;
+
 use PhpMyAdmin\Controllers\Database\ExportController as DatabaseExportController;
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Encoding;
@@ -21,7 +23,7 @@ use PhpMyAdmin\SqlParser\Utils\Misc;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
-use const PHP_EOL;
+
 use function count;
 use function function_exists;
 use function in_array;
@@ -43,7 +45,7 @@ final class ExportController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct($response, Template $template, Export $export, Relation $relation)
     {
@@ -472,18 +474,18 @@ final class ExportController extends AbstractController
             }
 
             // Will we need relation & co. setup?
-            $do_relation = isset($GLOBALS[$what . '_relation']);
-            $do_comments = isset($GLOBALS[$what . '_include_comments'])
-                || isset($GLOBALS[$what . '_comments']);
-            $do_mime     = isset($GLOBALS[$what . '_mime']);
+            $do_relation = isset($GLOBALS[$what.'_relation']);
+            $do_comments = isset($GLOBALS[$what.'_include_comments'])
+                || isset($GLOBALS[$what.'_comments']);
+            $do_mime = isset($GLOBALS[$what.'_mime']);
             if ($do_relation || $do_comments || $do_mime) {
                 $this->relation->getRelationsParam();
             }
 
             // Include dates in export?
-            $do_dates = isset($GLOBALS[$what . '_dates']);
+            $do_dates = isset($GLOBALS[$what.'_dates']);
 
-            $whatStrucOrData = $GLOBALS[$what . '_structure_or_data'];
+            $whatStrucOrData = $GLOBALS[$what.'_structure_or_data'];
 
             if ($export_type === 'raw') {
                 $whatStrucOrData = 'raw';
@@ -633,7 +635,7 @@ final class ExportController extends AbstractController
                 throw new ExportException('Failure during footer export.');
             }
         } catch (ExportException $e) {
-            null; // Avoid phpcs error...
+            // Avoid phpcs error...
         }
 
         if ($save_on_server && ! empty($message)) {

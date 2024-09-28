@@ -18,9 +18,8 @@ class Replication
     /**
      * Extracts database or table name from string
      *
-     * @param string $string contains "dbname.tablename"
-     * @param string $what   what to extract (db|table)
-     *
+     * @param  string  $string  contains "dbname.tablename"
+     * @param  string  $what  what to extract (db|table)
      * @return string the extracted part
      */
     public function extractDbOrTable($string, $what = 'db')
@@ -36,13 +35,12 @@ class Replication
     /**
      * Configures replication slave
      *
-     * @param string      $action  possible values: START or STOP
-     * @param string|null $control default: null,
-     *                             possible values: SQL_THREAD or IO_THREAD or null.
-     *                             If it is set to null, it controls both
-     *                             SQL_THREAD and IO_THREAD
-     * @param int         $link    mysql link
-     *
+     * @param  string  $action  possible values: START or STOP
+     * @param  string|null  $control  default: null,
+     *                                possible values: SQL_THREAD or IO_THREAD or null.
+     *                                If it is set to null, it controls both
+     *                                SQL_THREAD and IO_THREAD
+     * @param  int  $link  mysql link
      * @return mixed|int output of DatabaseInterface::tryQuery
      */
     public function slaveControl(string $action, ?string $control, int $link)
@@ -59,22 +57,21 @@ class Replication
             return -1;
         }
 
-        return $dbi->tryQuery($action . ' SLAVE ' . $control . ';', $link);
+        return $dbi->tryQuery($action.' SLAVE '.$control.';', $link);
     }
 
     /**
      * Changes master for replication slave
      *
-     * @param string $user     replication user on master
-     * @param string $password password for the user
-     * @param string $host     master's hostname or IP
-     * @param int    $port     port, where mysql is running
-     * @param array  $pos      position of mysql replication,
-     *                         array should contain fields File and Position
-     * @param bool   $stop     shall we stop slave?
-     * @param bool   $start    shall we start slave?
-     * @param int    $link     mysql link
-     *
+     * @param  string  $user  replication user on master
+     * @param  string  $password  password for the user
+     * @param  string  $host  master's hostname or IP
+     * @param  int  $port  port, where mysql is running
+     * @param  array  $pos  position of mysql replication,
+     *                      array should contain fields File and Position
+     * @param  bool  $stop  shall we stop slave?
+     * @param  bool  $start  shall we start slave?
+     * @param  int  $link  mysql link
      * @return string output of CHANGE MASTER mysql command
      */
     public function slaveChangeMaster(
@@ -94,13 +91,13 @@ class Replication
         }
 
         $out = $dbi->tryQuery(
-            'CHANGE MASTER TO ' .
-            'MASTER_HOST=\'' . $host . '\',' .
-            'MASTER_PORT=' . ($port * 1) . ',' .
-            'MASTER_USER=\'' . $user . '\',' .
-            'MASTER_PASSWORD=\'' . $password . '\',' .
-            'MASTER_LOG_FILE=\'' . $pos['File'] . '\',' .
-            'MASTER_LOG_POS=' . $pos['Position'] . ';',
+            'CHANGE MASTER TO '.
+            'MASTER_HOST=\''.$host.'\','.
+            'MASTER_PORT='.($port * 1).','.
+            'MASTER_USER=\''.$user.'\','.
+            'MASTER_PASSWORD=\''.$password.'\','.
+            'MASTER_LOG_FILE=\''.$pos['File'].'\','.
+            'MASTER_LOG_POS='.$pos['Position'].';',
             $link
         );
 
@@ -114,12 +111,11 @@ class Replication
     /**
      * This function provides connection to remote mysql server
      *
-     * @param string $user     mysql username
-     * @param string $password password for the user
-     * @param string $host     mysql server's hostname or IP
-     * @param int    $port     mysql remote port
-     * @param string $socket   path to unix socket
-     *
+     * @param  string  $user  mysql username
+     * @param  string  $password  password for the user
+     * @param  string  $host  mysql server's hostname or IP
+     * @param  int  $port  mysql remote port
+     * @param  string  $socket  path to unix socket
      * @return mixed mysql link on success
      */
     public function connectToMaster(
@@ -146,10 +142,9 @@ class Replication
     /**
      * Fetches position and file of current binary log on master
      *
-     * @param int $link mysql link
-     *
+     * @param  int  $link  mysql link
      * @return array an array containing File and Position in MySQL replication
-     * on master server, useful for slaveChangeMaster()
+     *               on master server, useful for slaveChangeMaster()
      *
      * @phpstan-return array{'File'?: string, 'Position'?: string}
      */

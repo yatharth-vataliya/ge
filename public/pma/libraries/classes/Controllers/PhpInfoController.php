@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Controllers;
 use const INFO_CONFIGURATION;
 use const INFO_GENERAL;
 use const INFO_MODULES;
+
 use function phpinfo;
 
 /**

@@ -17,6 +17,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function in_array;
 use function intval;
 use function mb_strtolower;
@@ -39,49 +40,48 @@ class SearchController extends AbstractController
     /**
      * Names of columns
      *
-     * @access private
      * @var array
      */
     private $columnNames;
+
     /**
      * Types of columns
      *
-     * @access private
      * @var array
      */
     private $columnTypes;
+
     /**
      * Types of columns without any replacement
      *
-     * @access private
      * @var array
      */
     private $originalColumnTypes;
+
     /**
      * Collations of columns
      *
-     * @access private
      * @var array
      */
     private $columnCollations;
+
     /**
      * Null Flags of columns
      *
-     * @access private
      * @var array
      */
     private $columnNullFlags;
+
     /**
      * Whether a geometry column is present
      *
-     * @access private
      * @var bool
      */
     private $geomColumnFlag;
+
     /**
      * Foreign Keys
      *
-     * @access private
      * @var array
      */
     private $foreigners;
@@ -96,10 +96,10 @@ class SearchController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param string            $table    Table name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  string  $table  Table name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -237,10 +237,10 @@ class SearchController extends AbstractController
         }
 
         $extra_data = [];
-        $row_info_query = 'SELECT * FROM ' . Util::backquote($_POST['db']) . '.'
-            . Util::backquote($_POST['table']) . ' WHERE ' . $_POST['where_clause'];
+        $row_info_query = 'SELECT * FROM '.Util::backquote($_POST['db']).'.'
+            .Util::backquote($_POST['table']).' WHERE '.$_POST['where_clause'];
         $result = $this->dbi->query(
-            $row_info_query . ';',
+            $row_info_query.';',
             DatabaseInterface::CONNECT_USER,
             DatabaseInterface::QUERY_STORE
         );
@@ -284,7 +284,7 @@ class SearchController extends AbstractController
             $this->relation,
             new RelationCleanup($this->dbi, $this->relation),
             new Operations($this->dbi, $this->relation),
-            new Transformations(),
+            new Transformations,
             $this->template
         );
 
@@ -349,16 +349,15 @@ class SearchController extends AbstractController
     /**
      * Finds minimum and maximum value of a given column.
      *
-     * @param string $column Column name
-     *
+     * @param  string  $column  Column name
      * @return array
      */
     public function getColumnMinMax($column)
     {
-        $sql_query = 'SELECT MIN(' . Util::backquote($column) . ') AS `min`, '
-            . 'MAX(' . Util::backquote($column) . ') AS `max` '
-            . 'FROM ' . Util::backquote($this->db) . '.'
-            . Util::backquote($this->table);
+        $sql_query = 'SELECT MIN('.Util::backquote($column).') AS `min`, '
+            .'MAX('.Util::backquote($column).') AS `max` '
+            .'FROM '.Util::backquote($this->db).'.'
+            .Util::backquote($this->table);
 
         return $this->dbi->fetchSingleRow($sql_query);
     }
@@ -367,9 +366,8 @@ class SearchController extends AbstractController
      * Provides a column's type, collation, operators list, and criteria value
      * to display in table search form
      *
-     * @param int $search_index Row number in table search form
-     * @param int $column_index Column index in ColumnNames array
-     *
+     * @param  int  $search_index  Row number in table search form
+     * @param  int  $column_index  Column index in ColumnNames array
      * @return array Array containing column's properties
      */
     public function getColumnProperties($search_index, $column_index)
@@ -408,12 +406,12 @@ class SearchController extends AbstractController
                 $cleanType,
                 ! $is_unsigned
             );
-            $htmlAttributes = 'data-min="' . $minMaxValues[0] . '" '
-                            . 'data-max="' . $minMaxValues[1] . '"';
+            $htmlAttributes = 'data-min="'.$minMaxValues[0].'" '
+                            .'data-max="'.$minMaxValues[1].'"';
         }
 
         $htmlAttributes .= ' onfocus="return '
-                        . 'verifyAfterSearchFieldChange(' . $search_index . ', \'#tbl_search_form\')"';
+                        .'verifyAfterSearchFieldChange('.$search_index.', \'#tbl_search_form\')"';
 
         $value = $this->template->render('table/search/input_box', [
             'str' => '',

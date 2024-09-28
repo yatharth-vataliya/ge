@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Export;
 
+use const E_USER_ERROR;
+use const PHP_VERSION;
+
 use PhpMyAdmin\Charsets;
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Plugins\ExportPlugin;
@@ -26,8 +29,7 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Statements\CreateStatement;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\Util;
-use const E_USER_ERROR;
-use const PHP_VERSION;
+
 use function bin2hex;
 use function count;
 use function defined;
@@ -104,7 +106,7 @@ class ExportSql extends ExportPlugin
             return;
         }
 
-        $exportPluginProperties = new ExportPluginProperties();
+        $exportPluginProperties = new ExportPluginProperties;
         $exportPluginProperties->setText('SQL');
         $exportPluginProperties->setExtension('sql');
         $exportPluginProperties->setMimeType('text/x-sql');
@@ -126,7 +128,7 @@ class ExportSql extends ExportPlugin
             'include_comments',
             __(
                 'Display comments <i>(includes info such as export'
-                . ' timestamp, PHP version, and server version)</i>'
+                .' timestamp, PHP version, and server version)</i>'
             )
         );
         $subgroup->setSubgroupHeader($leaf);
@@ -140,7 +142,7 @@ class ExportSql extends ExportPlugin
             'dates',
             __(
                 'Include a timestamp of when databases were created, last'
-                . ' updated, and last checked'
+                .' updated, and last checked'
             )
         );
         $subgroup->addProperty($leaf);
@@ -214,7 +216,7 @@ class ExportSql extends ExportPlugin
                 'compatibility',
                 __(
                     'Database system or older MySQL server to maximize output'
-                    . ' compatibility with:'
+                    .' compatibility with:'
                 )
             );
             $leaf->setValues($values);
@@ -237,8 +239,8 @@ class ExportSql extends ExportPlugin
         $leaf = new RadioPropertyItem('structure_or_data');
         $leaf->setValues(
             [
-                'structure'          => __('structure'),
-                'data'               => __('data'),
+                'structure' => __('structure'),
+                'data' => __('data'),
                 'structure_and_data' => __('structure and data'),
             ]
         );
@@ -257,7 +259,7 @@ class ExportSql extends ExportPlugin
             $structureOptions->setForce('data');
 
             // begin SQL Statements
-            $subgroup = new OptionsPropertySubgroup();
+            $subgroup = new OptionsPropertySubgroup;
             $leaf = new MessageOnlyPropertyItem(
                 'add_statements',
                 __('Add statements:')
@@ -291,7 +293,7 @@ class ExportSql extends ExportPlugin
                     : '<code>DROP TABLE</code>';
             } else {
                 $drop_clause = '<code>DROP TABLE / VIEW / PROCEDURE'
-                    . ' / FUNCTION / EVENT</code>';
+                    .' / FUNCTION / EVENT</code>';
             }
 
             $drop_clause .= '<code> / TRIGGER</code>';
@@ -302,7 +304,7 @@ class ExportSql extends ExportPlugin
             );
             $subgroup->addProperty($leaf);
 
-            $subgroup_create_table = new OptionsPropertySubgroup();
+            $subgroup_create_table = new OptionsPropertySubgroup;
 
             // Add table structure option
             $leaf = new BoolPropertyItem(
@@ -313,9 +315,9 @@ class ExportSql extends ExportPlugin
 
             $leaf = new BoolPropertyItem(
                 'if_not_exists',
-                '<code>IF NOT EXISTS</code> ' . __(
+                '<code>IF NOT EXISTS</code> '.__(
                     '(less efficient as indexes will be generated during table '
-                    . 'creation)'
+                    .'creation)'
                 )
             );
             $subgroup_create_table->addProperty($leaf);
@@ -329,7 +331,7 @@ class ExportSql extends ExportPlugin
             $subgroup->addProperty($subgroup_create_table);
 
             // Add view option
-            $subgroup_create_view = new OptionsPropertySubgroup();
+            $subgroup_create_view = new OptionsPropertySubgroup;
             $leaf = new BoolPropertyItem(
                 'create_view',
                 sprintf(__('Add %s statement'), '<code>CREATE VIEW</code>')
@@ -379,8 +381,8 @@ class ExportSql extends ExportPlugin
                 'backquotes',
                 __(
                     'Enclose table and column names with backquotes '
-                    . '<i>(Protects column and table names formed with'
-                    . ' special characters or keywords)</i>'
+                    .'<i>(Protects column and table names formed with'
+                    .' special characters or keywords)</i>'
                 )
             );
 
@@ -403,7 +405,7 @@ class ExportSql extends ExportPlugin
         $dataOptions->addProperty($leaf);
 
         // begin SQL Statements
-        $subgroup = new OptionsPropertySubgroup();
+        $subgroup = new OptionsPropertySubgroup;
         $leaf = new MessageOnlyPropertyItem(
             __('Instead of <code>INSERT</code> statements, use:')
         );
@@ -441,15 +443,15 @@ class ExportSql extends ExportPlugin
         );
         $leaf->setValues(
             [
-                'INSERT'  => 'INSERT',
-                'UPDATE'  => 'UPDATE',
+                'INSERT' => 'INSERT',
+                'UPDATE' => 'UPDATE',
                 'REPLACE' => 'REPLACE',
             ]
         );
         $dataOptions->addProperty($leaf);
 
         /* Syntax to use when inserting data */
-        $subgroup = new OptionsPropertySubgroup();
+        $subgroup = new OptionsPropertySubgroup;
         $leaf = new MessageOnlyPropertyItem(
             null,
             __('Syntax to use when inserting data:')
@@ -463,22 +465,22 @@ class ExportSql extends ExportPlugin
             [
                 'complete' => __(
                     'include column names in every <code>INSERT</code> statement'
-                    . ' <br> &nbsp; &nbsp; &nbsp; Example: <code>INSERT INTO'
-                    . ' tbl_name (col_A,col_B,col_C) VALUES (1,2,3)</code>'
+                    .' <br> &nbsp; &nbsp; &nbsp; Example: <code>INSERT INTO'
+                    .' tbl_name (col_A,col_B,col_C) VALUES (1,2,3)</code>'
                 ),
                 'extended' => __(
                     'insert multiple rows in every <code>INSERT</code> statement'
-                    . '<br> &nbsp; &nbsp; &nbsp; Example: <code>INSERT INTO'
-                    . ' tbl_name VALUES (1,2,3), (4,5,6), (7,8,9)</code>'
+                    .'<br> &nbsp; &nbsp; &nbsp; Example: <code>INSERT INTO'
+                    .' tbl_name VALUES (1,2,3), (4,5,6), (7,8,9)</code>'
                 ),
-                'both'     => __(
+                'both' => __(
                     'both of the above<br> &nbsp; &nbsp; &nbsp; Example:'
-                    . ' <code>INSERT INTO tbl_name (col_A,col_B,col_C) VALUES'
-                    . ' (1,2,3), (4,5,6), (7,8,9)</code>'
+                    .' <code>INSERT INTO tbl_name (col_A,col_B,col_C) VALUES'
+                    .' (1,2,3), (4,5,6), (7,8,9)</code>'
                 ),
-                'none'     => __(
+                'none' => __(
                     'neither of the above<br> &nbsp; &nbsp; &nbsp; Example:'
-                    . ' <code>INSERT INTO tbl_name VALUES (1,2,3)</code>'
+                    .' <code>INSERT INTO tbl_name VALUES (1,2,3)</code>'
                 ),
             ]
         );
@@ -497,7 +499,7 @@ class ExportSql extends ExportPlugin
             'hex_for_binary',
             __(
                 'Dump binary columns in hexadecimal notation'
-                . ' <i>(for example, "abc" becomes 0x616263)</i>'
+                .' <i>(for example, "abc" becomes 0x616263)</i>'
             )
         );
         $dataOptions->addProperty($leaf);
@@ -507,8 +509,8 @@ class ExportSql extends ExportPlugin
             'utc_time',
             __(
                 'Dump TIMESTAMP columns in UTC <i>(enables TIMESTAMP columns'
-                . ' to be dumped and reloaded between servers in different'
-                . ' time zones)</i>'
+                .' to be dumped and reloaded between servers in different'
+                .' time zones)</i>'
             )
         );
         $dataOptions->addProperty($leaf);
@@ -524,13 +526,12 @@ class ExportSql extends ExportPlugin
     /**
      * Generates SQL for routines export
      *
-     * @param string $db        Database
-     * @param array  $aliases   Aliases of db/table/columns
-     * @param string $type      Type of exported routine
-     * @param string $name      Verbose name of exported routine
-     * @param array  $routines  List of routines to export
-     * @param string $delimiter Delimiter to use in SQL
-     *
+     * @param  string  $db  Database
+     * @param  array  $aliases  Aliases of db/table/columns
+     * @param  string  $type  Type of exported routine
+     * @param  string  $name  Verbose name of exported routine
+     * @param  array  $routines  List of routines to export
+     * @param  string  $delimiter  Delimiter to use in SQL
      * @return string SQL query
      */
     protected function exportRoutineSQL(
@@ -544,17 +545,17 @@ class ExportSql extends ExportPlugin
         global $crlf, $dbi;
 
         $text = $this->exportComment()
-            . $this->exportComment($name)
-            . $this->exportComment();
+            .$this->exportComment($name)
+            .$this->exportComment();
 
         $used_alias = false;
         $proc_query = '';
 
         foreach ($routines as $routine) {
             if (! empty($GLOBALS['sql_drop_table'])) {
-                $proc_query .= 'DROP ' . $type . ' IF EXISTS '
-                    . Util::backquote($routine)
-                    . $delimiter . $crlf;
+                $proc_query .= 'DROP '.$type.' IF EXISTS '
+                    .Util::backquote($routine)
+                    .$delimiter.$crlf;
             }
             $create_query = $this->replaceWithAliases(
                 $dbi->getDefinition($db, $type, $routine),
@@ -567,16 +568,16 @@ class ExportSql extends ExportPlugin
             if ($flag) {
                 $used_alias = true;
             }
-            $proc_query .= $create_query . $delimiter . $crlf . $crlf;
+            $proc_query .= $create_query.$delimiter.$crlf.$crlf;
         }
         if ($used_alias) {
             $text .= $this->exportComment(
                 __('It appears your database uses routines;')
             )
-            . $this->exportComment(
+            .$this->exportComment(
                 __('alias export may not work reliably in all cases.')
             )
-            . $this->exportComment();
+            .$this->exportComment();
         }
         $text .= $proc_query;
 
@@ -586,9 +587,8 @@ class ExportSql extends ExportPlugin
     /**
      * Exports routines (procedures and functions)
      *
-     * @param string $db      Database
-     * @param array  $aliases Aliases of db/table/columns
-     *
+     * @param  string  $db  Database
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportRoutines($db, array $aliases = [])
@@ -607,7 +607,7 @@ class ExportSql extends ExportPlugin
 
         if ($procedure_names || $function_names) {
             $text .= $crlf
-                . 'DELIMITER ' . $delimiter . $crlf;
+                .'DELIMITER '.$delimiter.$crlf;
 
             if ($procedure_names) {
                 $text .= $this->exportRoutineSQL(
@@ -631,7 +631,7 @@ class ExportSql extends ExportPlugin
                 );
             }
 
-            $text .= 'DELIMITER ;' . $crlf;
+            $text .= 'DELIMITER ;'.$crlf;
         }
 
         if (! empty($text)) {
@@ -644,8 +644,7 @@ class ExportSql extends ExportPlugin
     /**
      * Possibly outputs comment
      *
-     * @param string $text Text of comment
-     *
+     * @param  string  $text  Text of comment
      * @return string The formatted comment
      */
     private function exportComment($text = '')
@@ -655,13 +654,13 @@ class ExportSql extends ExportPlugin
         ) {
             // see https://dev.mysql.com/doc/refman/5.0/en/ansi-diff-comments.html
             if (empty($text)) {
-                return '--' . $GLOBALS['crlf'];
+                return '--'.$GLOBALS['crlf'];
             }
 
-            $lines = preg_split("/\\r\\n|\\r|\\n/", $text);
+            $lines = preg_split('/\\r\\n|\\r|\\n/', $text);
             $result = [];
             foreach ($lines as $line) {
-                $result[] = '-- ' . $line . $GLOBALS['crlf'];
+                $result[] = '-- '.$line.$GLOBALS['crlf'];
             }
 
             return implode('', $result);
@@ -698,28 +697,28 @@ class ExportSql extends ExportPlugin
         $foot = '';
 
         if (isset($GLOBALS['sql_disable_fk'])) {
-            $foot .= 'SET FOREIGN_KEY_CHECKS=1;' . $crlf;
+            $foot .= 'SET FOREIGN_KEY_CHECKS=1;'.$crlf;
         }
 
         if (isset($GLOBALS['sql_use_transaction'])) {
-            $foot .= 'COMMIT;' . $crlf;
+            $foot .= 'COMMIT;'.$crlf;
         }
 
         // restore connection settings
         if ($this->sentCharset) {
             $foot .= $crlf
-                . '/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;'
-                . $crlf
-                . '/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;'
-                . $crlf
-                . '/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;'
-                . $crlf;
+                .'/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;'
+                .$crlf
+                .'/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;'
+                .$crlf
+                .'/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;'
+                .$crlf;
             $this->sentCharset = false;
         }
 
         /* Restore timezone */
         if (isset($GLOBALS['sql_utc_time']) && $GLOBALS['sql_utc_time']) {
-            $dbi->query('SET time_zone = "' . $GLOBALS['old_tz'] . '"');
+            $dbi->query('SET time_zone = "'.$GLOBALS['old_tz'].'"');
         }
 
         return $this->export->outputHandler($foot);
@@ -740,27 +739,27 @@ class ExportSql extends ExportPlugin
             if ($tmp_compat === 'NONE') {
                 $tmp_compat = '';
             }
-            $dbi->tryQuery('SET SQL_MODE="' . $tmp_compat . '"');
+            $dbi->tryQuery('SET SQL_MODE="'.$tmp_compat.'"');
             unset($tmp_compat);
         }
         $head = $this->exportComment('phpMyAdmin SQL Dump')
-            . $this->exportComment('version ' . PMA_VERSION)
-            . $this->exportComment('https://www.phpmyadmin.net/')
-            . $this->exportComment();
-        $host_string = __('Host:') . ' ' . $cfg['Server']['host'];
+            .$this->exportComment('version '.PMA_VERSION)
+            .$this->exportComment('https://www.phpmyadmin.net/')
+            .$this->exportComment();
+        $host_string = __('Host:').' '.$cfg['Server']['host'];
         if (! empty($cfg['Server']['port'])) {
-            $host_string .= ':' . $cfg['Server']['port'];
+            $host_string .= ':'.$cfg['Server']['port'];
         }
         $head .= $this->exportComment($host_string);
         $head .= $this->exportComment(
-            __('Generation Time:') . ' '
-            . Util::localisedDate()
+            __('Generation Time:').' '
+            .Util::localisedDate()
         )
-        . $this->exportComment(
-            __('Server version:') . ' ' . $dbi->getVersionString()
+        .$this->exportComment(
+            __('Server version:').' '.$dbi->getVersionString()
         )
-        . $this->exportComment(__('PHP Version:') . ' ' . PHP_VERSION)
-        . $this->possibleCRLF();
+        .$this->exportComment(__('PHP Version:').' '.PHP_VERSION)
+        .$this->possibleCRLF();
 
         if (isset($GLOBALS['sql_header_comment'])
             && ! empty($GLOBALS['sql_header_comment'])
@@ -776,7 +775,7 @@ class ExportSql extends ExportPlugin
         }
 
         if (isset($GLOBALS['sql_disable_fk'])) {
-            $head .= 'SET FOREIGN_KEY_CHECKS=0;' . $crlf;
+            $head .= 'SET FOREIGN_KEY_CHECKS=0;'.$crlf;
         }
 
         // We want exported AUTO_INCREMENT columns to have still same value,
@@ -784,16 +783,16 @@ class ExportSql extends ExportPlugin
         if (! isset($GLOBALS['sql_compatibility'])
             || $GLOBALS['sql_compatibility'] === 'NONE'
         ) {
-            $head .= 'SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";' . $crlf;
+            $head .= 'SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";'.$crlf;
         }
 
         if (isset($GLOBALS['sql_use_transaction'])) {
-            $head .= 'START TRANSACTION;' . $crlf;
+            $head .= 'START TRANSACTION;'.$crlf;
         }
 
         /* Change timezone if we should export timestamps in UTC */
         if (isset($GLOBALS['sql_utc_time']) && $GLOBALS['sql_utc_time']) {
-            $head .= 'SET time_zone = "+00:00";' . $crlf;
+            $head .= 'SET time_zone = "+00:00";'.$crlf;
             $GLOBALS['old_tz'] = $dbi
                 ->fetchValue('SELECT @@session.time_zone');
             $dbi->query('SET time_zone = "+00:00"');
@@ -816,13 +815,13 @@ class ExportSql extends ExportPlugin
                 $set_names = 'utf8mb4';
             }
             $head .= $crlf
-                . '/*!40101 SET @OLD_CHARACTER_SET_CLIENT='
-                . '@@CHARACTER_SET_CLIENT */;' . $crlf
-                . '/*!40101 SET @OLD_CHARACTER_SET_RESULTS='
-                . '@@CHARACTER_SET_RESULTS */;' . $crlf
-                . '/*!40101 SET @OLD_COLLATION_CONNECTION='
-                . '@@COLLATION_CONNECTION */;' . $crlf
-                . '/*!40101 SET NAMES ' . $set_names . ' */;' . $crlf . $crlf;
+                .'/*!40101 SET @OLD_CHARACTER_SET_CLIENT='
+                .'@@CHARACTER_SET_CLIENT */;'.$crlf
+                .'/*!40101 SET @OLD_CHARACTER_SET_RESULTS='
+                .'@@CHARACTER_SET_RESULTS */;'.$crlf
+                .'/*!40101 SET @OLD_COLLATION_CONNECTION='
+                .'@@COLLATION_CONNECTION */;'.$crlf
+                .'/*!40101 SET NAMES '.$set_names.' */;'.$crlf.$crlf;
             $this->sentCharset = true;
         }
 
@@ -832,10 +831,9 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs CREATE DATABASE statement
      *
-     * @param string $db          Database name
-     * @param string $export_type 'server', 'database', 'table'
-     * @param string $db_alias    Aliases of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $export_type  'server', 'database', 'table'
+     * @param  string  $db_alias  Aliases of db
      * @return bool Whether it succeeded
      */
     public function exportDBCreate($db, $export_type, $db_alias = '')
@@ -853,12 +851,12 @@ class ExportSql extends ExportPlugin
         if (isset($GLOBALS['sql_drop_database'])) {
             if (! $this->export->outputHandler(
                 'DROP DATABASE IF EXISTS '
-                . Util::backquoteCompat(
+                .Util::backquoteCompat(
                     $db_alias,
                     $compat,
                     isset($GLOBALS['sql_backquotes'])
                 )
-                . ';' . $crlf
+                .';'.$crlf
             )
             ) {
                 return false;
@@ -869,7 +867,7 @@ class ExportSql extends ExportPlugin
         }
 
         $create_query = 'CREATE DATABASE IF NOT EXISTS '
-            . Util::backquoteCompat(
+            .Util::backquoteCompat(
                 $db_alias,
                 $compat,
                 isset($GLOBALS['sql_backquotes'])
@@ -877,16 +875,16 @@ class ExportSql extends ExportPlugin
         $collation = $dbi->getDbCollation($db);
         if (mb_strpos($collation, '_')) {
             $create_query .= ' DEFAULT CHARACTER SET '
-                . mb_substr(
+                .mb_substr(
                     $collation,
                     0,
                     (int) mb_strpos($collation, '_')
                 )
-                . ' COLLATE ' . $collation;
+                .' COLLATE '.$collation;
         } else {
-            $create_query .= ' DEFAULT CHARACTER SET ' . $collation;
+            $create_query .= ' DEFAULT CHARACTER SET '.$collation;
         }
-        $create_query .= ';' . $crlf;
+        $create_query .= ';'.$crlf;
         if (! $this->export->outputHandler($create_query)) {
             return false;
         }
@@ -897,9 +895,8 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs USE statement
      *
-     * @param string $db     db to use
-     * @param string $compat sql compatibility
-     *
+     * @param  string  $db  db to use
+     * @param  string  $compat  sql compatibility
      * @return bool Whether it succeeded
      */
     private function exportUseStatement($db, $compat)
@@ -911,15 +908,15 @@ class ExportSql extends ExportPlugin
         ) {
             $result = $this->export->outputHandler(
                 'USE '
-                . Util::backquoteCompat(
+                .Util::backquoteCompat(
                     $db,
                     $compat,
                     isset($GLOBALS['sql_backquotes'])
                 )
-                . ';' . $crlf
+                .';'.$crlf
             );
         } else {
-            $result = $this->export->outputHandler('USE ' . $db . ';' . $crlf);
+            $result = $this->export->outputHandler('USE '.$db.';'.$crlf);
         }
 
         return $result;
@@ -928,9 +925,8 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs database header
      *
-     * @param string $db       Database name
-     * @param string $db_alias Alias of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $db_alias  Alias of db
      * @return bool Whether it succeeded
      */
     public function exportDBHeader($db, $db_alias = '')
@@ -944,15 +940,15 @@ class ExportSql extends ExportPlugin
             $compat = 'NONE';
         }
         $head = $this->exportComment()
-            . $this->exportComment(
-                __('Database:') . ' '
-                . Util::backquoteCompat(
+            .$this->exportComment(
+                __('Database:').' '
+                .Util::backquoteCompat(
                     $db_alias,
                     $compat,
                     isset($GLOBALS['sql_backquotes'])
                 )
             )
-            . $this->exportComment();
+            .$this->exportComment();
 
         return $this->export->outputHandler($head);
     }
@@ -960,8 +956,7 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs database footer
      *
-     * @param string $db Database name
-     *
+     * @param  string  $db  Database name
      * @return bool Whether it succeeded
      */
     public function exportDBFooter($db)
@@ -992,8 +987,7 @@ class ExportSql extends ExportPlugin
     /**
      * Exports events
      *
-     * @param string $db Database
-     *
+     * @param  string  $db  Database
      * @return bool Whether it succeeded
      */
     public function exportEvents($db)
@@ -1005,29 +999,29 @@ class ExportSql extends ExportPlugin
 
         $event_names = $dbi->fetchResult(
             'SELECT EVENT_NAME FROM information_schema.EVENTS WHERE'
-            . " EVENT_SCHEMA= '" . $dbi->escapeString($db)
-            . "';"
+            ." EVENT_SCHEMA= '".$dbi->escapeString($db)
+            ."';"
         );
 
         if ($event_names) {
             $text .= $crlf
-                . 'DELIMITER ' . $delimiter . $crlf;
+                .'DELIMITER '.$delimiter.$crlf;
 
             $text .= $this->exportComment()
-                . $this->exportComment(__('Events'))
-                . $this->exportComment();
+                .$this->exportComment(__('Events'))
+                .$this->exportComment();
 
             foreach ($event_names as $event_name) {
                 if (! empty($GLOBALS['sql_drop_table'])) {
                     $text .= 'DROP EVENT IF EXISTS '
-                        . Util::backquote($event_name)
-                        . $delimiter . $crlf;
+                        .Util::backquote($event_name)
+                        .$delimiter.$crlf;
                 }
                 $text .= $dbi->getDefinition($db, 'EVENT', $event_name)
-                    . $delimiter . $crlf . $crlf;
+                    .$delimiter.$crlf.$crlf;
             }
 
-            $text .= 'DELIMITER ;' . $crlf;
+            $text .= 'DELIMITER ;'.$crlf;
         }
 
         if (! empty($text)) {
@@ -1040,10 +1034,9 @@ class ExportSql extends ExportPlugin
     /**
      * Exports metadata from Configuration Storage
      *
-     * @param string       $db            database being exported
-     * @param string|array $tables        table(s) being exported
-     * @param array        $metadataTypes types of metadata to export
-     *
+     * @param  string  $db  database being exported
+     * @param  string|array  $tables  table(s) being exported
+     * @param  array  $metadataTypes  types of metadata to export
      * @return bool Whether it succeeded
      */
     public function exportMetadata(
@@ -1057,10 +1050,10 @@ class ExportSql extends ExportPlugin
         }
 
         $comment = $this->possibleCRLF()
-            . $this->possibleCRLF()
-            . $this->exportComment()
-            . $this->exportComment(__('Metadata'))
-            . $this->exportComment();
+            .$this->possibleCRLF()
+            .$this->exportComment()
+            .$this->exportComment(__('Metadata'))
+            .$this->exportComment();
         if (! $this->export->outputHandler($comment)) {
             return false;
         }
@@ -1092,10 +1085,9 @@ class ExportSql extends ExportPlugin
     /**
      * Exports metadata from Configuration Storage
      *
-     * @param string      $db            database being exported
-     * @param string|null $table         table being exported
-     * @param array       $metadataTypes types of metadata to export
-     *
+     * @param  string  $db  database being exported
+     * @param  string|null  $table  table being exported
+     * @param  array  $metadataTypes  types of metadata to export
      * @return bool Whether it succeeded
      */
     private function exportConfigurationMetadata(
@@ -1109,16 +1101,16 @@ class ExportSql extends ExportPlugin
 
         if (isset($table)) {
             $types = [
-                'column_info'   => 'db_name',
+                'column_info' => 'db_name',
                 'table_uiprefs' => 'db_name',
-                'tracking'      => 'db_name',
+                'tracking' => 'db_name',
             ];
         } else {
             $types = [
-                'bookmark'        => 'dbase',
-                'relation'        => 'master_db',
-                'pdf_pages'       => 'db_name',
-                'savedsearches'   => 'db_name',
+                'bookmark' => 'dbase',
+                'relation' => 'master_db',
+                'pdf_pages' => 'db_name',
+                'savedsearches' => 'db_name',
                 'central_columns' => 'db_name',
             ];
         }
@@ -1126,7 +1118,7 @@ class ExportSql extends ExportPlugin
         $aliases = [];
 
         $comment = $this->possibleCRLF()
-            . $this->exportComment();
+            .$this->exportComment();
 
         if (isset($table)) {
             $comment .= $this->exportComment(
@@ -1158,10 +1150,10 @@ class ExportSql extends ExportPlugin
             // special case, designer pages and their coordinates
             if ($type === 'pdf_pages') {
                 $sql_query = 'SELECT `page_nr`, `page_descr` FROM '
-                    . Util::backquote($cfgRelation['db'])
-                    . '.' . Util::backquote($cfgRelation[$type])
-                    . ' WHERE ' . Util::backquote($dbNameColumn)
-                    . " = '" . $dbi->escapeString($db) . "'";
+                    .Util::backquote($cfgRelation['db'])
+                    .'.'.Util::backquote($cfgRelation[$type])
+                    .' WHERE '.Util::backquote($dbNameColumn)
+                    ." = '".$dbi->escapeString($db)."'";
 
                 $result = $dbi->fetchResult(
                     $sql_query,
@@ -1172,15 +1164,15 @@ class ExportSql extends ExportPlugin
                 foreach ($result as $page => $name) {
                     // insert row for pdf_page
                     $sql_query_row = 'SELECT `db_name`, `page_descr` FROM '
-                        . Util::backquote($cfgRelation['db'])
-                        . '.' . Util::backquote(
+                        .Util::backquote($cfgRelation['db'])
+                        .'.'.Util::backquote(
                             $cfgRelation[$type]
                         )
-                        . ' WHERE ' . Util::backquote(
+                        .' WHERE '.Util::backquote(
                             $dbNameColumn
                         )
-                        . " = '" . $dbi->escapeString($db) . "'"
-                        . " AND `page_nr` = '" . intval($page) . "'";
+                        ." = '".$dbi->escapeString($db)."'"
+                        ." AND `page_nr` = '".intval($page)."'";
 
                     if (! $this->exportData(
                         $cfgRelation['db'],
@@ -1195,19 +1187,19 @@ class ExportSql extends ExportPlugin
                     }
 
                     $lastPage = $GLOBALS['crlf']
-                        . 'SET @LAST_PAGE = LAST_INSERT_ID();'
-                        . $GLOBALS['crlf'];
+                        .'SET @LAST_PAGE = LAST_INSERT_ID();'
+                        .$GLOBALS['crlf'];
                     if (! $this->export->outputHandler($lastPage)) {
                         return false;
                     }
 
                     $sql_query_coords = 'SELECT `db_name`, `table_name`, '
-                        . "'@LAST_PAGE' AS `pdf_page_number`, `x`, `y` FROM "
-                        . Util::backquote($cfgRelation['db'])
-                        . '.' . Util::backquote(
+                        ."'@LAST_PAGE' AS `pdf_page_number`, `x`, `y` FROM "
+                        .Util::backquote($cfgRelation['db'])
+                        .'.'.Util::backquote(
                             $cfgRelation['table_coords']
                         )
-                        . " WHERE `pdf_page_number` = '" . $page . "'";
+                        ." WHERE `pdf_page_number` = '".$page."'";
 
                     $GLOBALS['exporting_metadata'] = true;
                     if (! $this->exportData(
@@ -1225,6 +1217,7 @@ class ExportSql extends ExportPlugin
                     }
                     $GLOBALS['exporting_metadata'] = false;
                 }
+
                 continue;
             }
 
@@ -1233,22 +1226,22 @@ class ExportSql extends ExportPlugin
                 $sql_query = 'SELECT `dbase`, `user`, `label`, `query` FROM ';
             } elseif ($type === 'column_info') {
                 $sql_query = 'SELECT `db_name`, `table_name`, `column_name`,'
-                    . ' `comment`, `mimetype`, `transformation`,'
-                    . ' `transformation_options`, `input_transformation`,'
-                    . ' `input_transformation_options` FROM';
+                    .' `comment`, `mimetype`, `transformation`,'
+                    .' `transformation_options`, `input_transformation`,'
+                    .' `input_transformation_options` FROM';
             } elseif ($type === 'savedsearches') {
                 $sql_query = 'SELECT `username`, `db_name`, `search_name`,'
-                    . ' `search_data` FROM';
+                    .' `search_data` FROM';
             } else {
                 $sql_query = 'SELECT * FROM ';
             }
             $sql_query .= Util::backquote($cfgRelation['db'])
-                . '.' . Util::backquote($cfgRelation[$type])
-                . ' WHERE ' . Util::backquote($dbNameColumn)
-                . " = '" . $dbi->escapeString($db) . "'";
+                .'.'.Util::backquote($cfgRelation[$type])
+                .' WHERE '.Util::backquote($dbNameColumn)
+                ." = '".$dbi->escapeString($db)."'";
             if (isset($table)) {
                 $sql_query .= " AND `table_name` = '"
-                    . $dbi->escapeString($table) . "'";
+                    .$dbi->escapeString($table)."'";
             }
 
             if (! $this->exportData(
@@ -1270,11 +1263,10 @@ class ExportSql extends ExportPlugin
     /**
      * Returns a stand-in CREATE definition to resolve view dependencies
      *
-     * @param string $db      the database name
-     * @param string $view    the view name
-     * @param string $crlf    the end of line sequence
-     * @param array  $aliases Aliases of db/table/columns
-     *
+     * @param  string  $db  the database name
+     * @param  string  $view  the view name
+     * @param  string  $crlf  the end of line sequence
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return string resulting definition
      */
     public function getTableDefStandIn($db, $view, $crlf, $aliases = [])
@@ -1287,8 +1279,8 @@ class ExportSql extends ExportPlugin
         $create_query = '';
         if (! empty($GLOBALS['sql_drop_table'])) {
             $create_query .= 'DROP VIEW IF EXISTS '
-                . Util::backquote($view_alias)
-                . ';' . $crlf;
+                .Util::backquote($view_alias)
+                .';'.$crlf;
         }
 
         $create_query .= 'CREATE TABLE ';
@@ -1298,7 +1290,7 @@ class ExportSql extends ExportPlugin
         ) {
             $create_query .= 'IF NOT EXISTS ';
         }
-        $create_query .= Util::backquote($view_alias) . ' (' . $crlf;
+        $create_query .= Util::backquote($view_alias).' ('.$crlf;
         $tmp = [];
         $columns = $dbi->getColumnsFull($db, $view);
         foreach ($columns as $column_name => $definition) {
@@ -1306,23 +1298,22 @@ class ExportSql extends ExportPlugin
             if (! empty($aliases[$db]['tables'][$view]['columns'][$col_alias])) {
                 $col_alias = $aliases[$db]['tables'][$view]['columns'][$col_alias];
             }
-            $tmp[] = Util::backquote($col_alias) . ' ' .
-                $definition['Type'] . $crlf;
+            $tmp[] = Util::backquote($col_alias).' '.
+                $definition['Type'].$crlf;
         }
 
-        return $create_query . implode(',', $tmp) . ');' . $crlf;
+        return $create_query.implode(',', $tmp).');'.$crlf;
     }
 
     /**
      * Returns CREATE definition that matches $view's structure
      *
-     * @param string $db            the database name
-     * @param string $view          the view name
-     * @param string $crlf          the end of line sequence
-     * @param bool   $add_semicolon whether to add semicolon and end-of-line at
-     *                              the end
-     * @param array  $aliases       Aliases of db/table/columns
-     *
+     * @param  string  $db  the database name
+     * @param  string  $view  the view name
+     * @param  string  $crlf  the end of line sequence
+     * @param  bool  $add_semicolon  whether to add semicolon and end-of-line at
+     *                               the end
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return string resulting schema
      */
     private function getTableDefForView(
@@ -1341,7 +1332,7 @@ class ExportSql extends ExportPlugin
         if (isset($GLOBALS['sql_if_not_exists'])) {
             $create_query .= ' IF NOT EXISTS ';
         }
-        $create_query .= Util::backquote($view_alias) . '(' . $crlf;
+        $create_query .= Util::backquote($view_alias).'('.$crlf;
 
         $columns = $dbi->getColumns($db, $view, null, true);
 
@@ -1356,21 +1347,21 @@ class ExportSql extends ExportPlugin
             );
 
             if (! $firstCol) {
-                $create_query .= ',' . $crlf;
+                $create_query .= ','.$crlf;
             }
-            $create_query .= '    ' . Util::backquote($col_alias);
-            $create_query .= ' ' . $column['Type'];
+            $create_query .= '    '.Util::backquote($col_alias);
+            $create_query .= ' '.$column['Type'];
             if ($extracted_columnspec['can_contain_collation']
                 && ! empty($column['Collation'])
             ) {
-                $create_query .= ' COLLATE ' . $column['Collation'];
+                $create_query .= ' COLLATE '.$column['Collation'];
             }
             if ($column['Null'] === 'NO') {
                 $create_query .= ' NOT NULL';
             }
             if (isset($column['Default'])) {
                 $create_query .= " DEFAULT '"
-                    . $dbi->escapeString($column['Default']) . "'";
+                    .$dbi->escapeString($column['Default'])."'";
             } else {
                 if ($column['Null'] === 'YES') {
                     $create_query .= ' DEFAULT NULL';
@@ -1378,11 +1369,11 @@ class ExportSql extends ExportPlugin
             }
             if (! empty($column['Comment'])) {
                 $create_query .= " COMMENT '"
-                    . $dbi->escapeString($column['Comment']) . "'";
+                    .$dbi->escapeString($column['Comment'])."'";
             }
             $firstCol = false;
         }
-        $create_query .= $crlf . ')' . ($add_semicolon ? ';' : '') . $crlf;
+        $create_query .= $crlf.')'.($add_semicolon ? ';' : '').$crlf;
 
         if (isset($GLOBALS['sql_compatibility'])) {
             $compat = $GLOBALS['sql_compatibility'];
@@ -1401,20 +1392,19 @@ class ExportSql extends ExportPlugin
     /**
      * Returns $table's CREATE definition
      *
-     * @param string $db                        the database name
-     * @param string $table                     the table name
-     * @param string $crlf                      the end of line sequence
-     * @param string $error_url                 the url to go back in case
-     *                                          of error
-     * @param bool   $show_dates                whether to include creation/
-     *                                          update/check dates
-     * @param bool   $add_semicolon             whether to add semicolon and
-     *                                          end-of-line at the end
-     * @param bool   $view                      whether we're handling a view
-     * @param bool   $update_indexes_increments whether we need to update
-     *                                          two global variables
-     * @param array  $aliases                   Aliases of db/table/columns
-     *
+     * @param  string  $db  the database name
+     * @param  string  $table  the table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case
+     *                             of error
+     * @param  bool  $show_dates  whether to include creation/
+     *                            update/check dates
+     * @param  bool  $add_semicolon  whether to add semicolon and
+     *                               end-of-line at the end
+     * @param  bool  $view  whether we're handling a view
+     * @param  bool  $update_indexes_increments  whether we need to update
+     *                                           two global variables
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return string resulting schema
      */
     public function getTableDef(
@@ -1429,8 +1419,8 @@ class ExportSql extends ExportPlugin
         array $aliases = []
     ) {
         global $sql_drop_table, $sql_backquotes, $sql_constraints,
-               $sql_constraints_query, $sql_indexes, $sql_indexes_query,
-               $sql_auto_increments, $sql_drop_foreign_keys, $dbi;
+        $sql_constraints_query, $sql_indexes, $sql_indexes_query,
+        $sql_auto_increments, $sql_drop_foreign_keys, $dbi;
 
         $db_alias = $db;
         $table_alias = $table;
@@ -1449,8 +1439,8 @@ class ExportSql extends ExportPlugin
         // need to use PhpMyAdmin\DatabaseInterface::QUERY_STORE
         // with $dbi->numRows() in mysqli
         $result = $dbi->tryQuery(
-            'SHOW TABLE STATUS FROM ' . Util::backquote($db)
-            . ' WHERE Name = \'' . $dbi->escapeString((string) $table) . '\'',
+            'SHOW TABLE STATUS FROM '.Util::backquote($db)
+            .' WHERE Name = \''.$dbi->escapeString((string) $table).'\'',
             DatabaseInterface::CONNECT_USER,
             DatabaseInterface::QUERY_STORE
         );
@@ -1465,7 +1455,7 @@ class ExportSql extends ExportPlugin
                     && ! empty($tmpres['Auto_increment'])
                 ) {
                     $auto_increment .= ' AUTO_INCREMENT='
-                        . $tmpres['Auto_increment'] . ' ';
+                        .$tmpres['Auto_increment'].' ';
                 }
 
                 if ($show_dates
@@ -1473,12 +1463,12 @@ class ExportSql extends ExportPlugin
                     && ! empty($tmpres['Create_time'])
                 ) {
                     $schema_create .= $this->exportComment(
-                        __('Creation:') . ' '
-                        . Util::localisedDate(
+                        __('Creation:').' '
+                        .Util::localisedDate(
                             strtotime($tmpres['Create_time'])
                         )
                     );
-                    $new_crlf = $this->exportComment() . $crlf;
+                    $new_crlf = $this->exportComment().$crlf;
                 }
 
                 if ($show_dates
@@ -1486,12 +1476,12 @@ class ExportSql extends ExportPlugin
                     && ! empty($tmpres['Update_time'])
                 ) {
                     $schema_create .= $this->exportComment(
-                        __('Last update:') . ' '
-                        . Util::localisedDate(
+                        __('Last update:').' '
+                        .Util::localisedDate(
                             strtotime($tmpres['Update_time'])
                         )
                     );
-                    $new_crlf = $this->exportComment() . $crlf;
+                    $new_crlf = $this->exportComment().$crlf;
                 }
 
                 if ($show_dates
@@ -1499,12 +1489,12 @@ class ExportSql extends ExportPlugin
                     && ! empty($tmpres['Check_time'])
                 ) {
                     $schema_create .= $this->exportComment(
-                        __('Last check:') . ' '
-                        . Util::localisedDate(
+                        __('Last check:').' '
+                        .Util::localisedDate(
                             strtotime($tmpres['Check_time'])
                         )
                     );
-                    $new_crlf = $this->exportComment() . $crlf;
+                    $new_crlf = $this->exportComment().$crlf;
                 }
             }
             $dbi->freeResult($result);
@@ -1516,8 +1506,8 @@ class ExportSql extends ExportPlugin
             && $dbi->getTable($db, $table)->isView()
         ) {
             $schema_create .= 'DROP VIEW IF EXISTS '
-                . Util::backquote($table_alias, $sql_backquotes) . ';'
-                . $crlf;
+                .Util::backquote($table_alias, $sql_backquotes).';'
+                .$crlf;
         }
 
         // no need to generate a DROP VIEW here, it was done earlier
@@ -1525,8 +1515,8 @@ class ExportSql extends ExportPlugin
             && ! $dbi->getTable($db, $table)->isView()
         ) {
             $schema_create .= 'DROP TABLE IF EXISTS '
-                . Util::backquote($table_alias, $sql_backquotes) . ';'
-                . $crlf;
+                .Util::backquote($table_alias, $sql_backquotes).';'
+                .$crlf;
         }
 
         // Complete table dump,
@@ -1547,16 +1537,16 @@ class ExportSql extends ExportPlugin
         // Note: SHOW CREATE TABLE, at least in MySQL 5.1.23, does not
         // produce a displayable result for the default value of a BIT
         // column, nor does the mysqldump command. See MySQL bug 35796
-        $dbi->tryQuery('USE ' . Util::backquote($db));
+        $dbi->tryQuery('USE '.Util::backquote($db));
         $result = $dbi->tryQuery(
-            'SHOW CREATE TABLE ' . Util::backquote($db) . '.'
-            . Util::backquote($table)
+            'SHOW CREATE TABLE '.Util::backquote($db).'.'
+            .Util::backquote($table)
         );
         // an error can happen, for example the table is crashed
         $tmp_error = $dbi->getError();
         if ($tmp_error) {
-            $message = sprintf(__('Error reading structure for table %s:'), $db . '.' . $table);
-            $message .= ' ' . $tmp_error;
+            $message = sprintf(__('Error reading structure for table %s:'), $db.'.'.$table);
+            $message .= ' '.$tmp_error;
             if (! defined('TESTSUITE')) {
                 trigger_error($message, E_USER_ERROR);
             }
@@ -1598,7 +1588,7 @@ class ExportSql extends ExportPlugin
             if ($view) {
                 //TODO: use parser
                 $create_query = preg_replace(
-                    '/' . preg_quote(Util::backquote($db), '/') . '\./',
+                    '/'.preg_quote(Util::backquote($db), '/').'\./',
                     '',
                     $create_query
                 );
@@ -1645,13 +1635,13 @@ class ExportSql extends ExportPlugin
             // One warning per view.
             if ($flag && $view) {
                 $warning = $this->exportComment()
-                    . $this->exportComment(
+                    .$this->exportComment(
                         __('It appears your database uses views;')
                     )
-                    . $this->exportComment(
+                    .$this->exportComment(
                         __('alias export may not work reliably in all cases.')
                     )
-                    . $this->exportComment();
+                    .$this->exportComment();
             }
 
             // Adding IF NOT EXISTS, if required.
@@ -1776,7 +1766,7 @@ class ExportSql extends ExportPlugin
                     // Creating the parts that drop foreign keys.
                     if (! empty($field->key)) {
                         if ($field->key->type === 'FOREIGN KEY') {
-                            $dropped[] = 'FOREIGN KEY ' . Context::escape(
+                            $dropped[] = 'FOREIGN KEY '.Context::escape(
                                 $field->name
                             );
                             unset($statement->fields[$key]);
@@ -1803,7 +1793,7 @@ class ExportSql extends ExportPlugin
                  *
                  * @var string
                  */
-                $alter_header = 'ALTER TABLE ' .
+                $alter_header = 'ALTER TABLE '.
                     Util::backquoteCompat(
                         $table_alias,
                         $compat,
@@ -1815,13 +1805,13 @@ class ExportSql extends ExportPlugin
                  *
                  * @var string
                  */
-                $alter_footer = ';' . $crlf;
+                $alter_footer = ';'.$crlf;
 
                 // Generating constraints-related query.
                 if (! empty($constraints)) {
-                    $sql_constraints_query = $alter_header . $crlf . '  ADD '
-                        . implode(',' . $crlf . '  ADD ', $constraints)
-                        . $alter_footer;
+                    $sql_constraints_query = $alter_header.$crlf.'  ADD '
+                        .implode(','.$crlf.'  ADD ', $constraints)
+                        .$alter_footer;
 
                     $sql_constraints = $this->generateComment(
                         $crlf,
@@ -1830,27 +1820,27 @@ class ExportSql extends ExportPlugin
                         __('Constraints for table'),
                         $table_alias,
                         $compat
-                    ) . $sql_constraints_query;
+                    ).$sql_constraints_query;
                 }
 
                 // Generating indexes-related query.
                 $sql_indexes_query = '';
 
                 if (! empty($indexes)) {
-                    $sql_indexes_query .= $alter_header . $crlf . '  ADD '
-                        . implode(',' . $crlf . '  ADD ', $indexes)
-                        . $alter_footer;
+                    $sql_indexes_query .= $alter_header.$crlf.'  ADD '
+                        .implode(','.$crlf.'  ADD ', $indexes)
+                        .$alter_footer;
                 }
 
                 if (! empty($indexes_fulltext)) {
                     // InnoDB supports one FULLTEXT index creation at a time.
                     // So FULLTEXT indexes are created one-by-one after other
                     // indexes where created.
-                    $sql_indexes_query .= $alter_header .
-                        ' ADD ' . implode(
-                            $alter_footer . $alter_header . ' ADD ',
+                    $sql_indexes_query .= $alter_header.
+                        ' ADD '.implode(
+                            $alter_footer.$alter_header.' ADD ',
                             $indexes_fulltext
-                        ) . $alter_footer;
+                        ).$alter_footer;
                 }
 
                 if (! empty($indexes) || ! empty($indexes_fulltext)) {
@@ -1861,20 +1851,20 @@ class ExportSql extends ExportPlugin
                         __('Indexes for table'),
                         $table_alias,
                         $compat
-                    ) . $sql_indexes_query;
+                    ).$sql_indexes_query;
                 }
 
                 // Generating drop foreign keys-related query.
                 if (! empty($dropped)) {
-                    $sql_drop_foreign_keys = $alter_header . $crlf . '  DROP '
-                        . implode(',' . $crlf . '  DROP ', $dropped)
-                        . $alter_footer;
+                    $sql_drop_foreign_keys = $alter_header.$crlf.'  DROP '
+                        .implode(','.$crlf.'  DROP ', $dropped)
+                        .$alter_footer;
                 }
 
                 // Generating auto-increment-related query.
                 if (! empty($auto_increment) && $update_indexes_increments) {
-                    $sql_auto_increments_query = $alter_header . $crlf . '  MODIFY '
-                        . implode(',' . $crlf . '  MODIFY ', $auto_increment);
+                    $sql_auto_increments_query = $alter_header.$crlf.'  MODIFY '
+                        .implode(','.$crlf.'  MODIFY ', $auto_increment);
                     if (isset($GLOBALS['sql_auto_increment'])
                         && ($statement->entityOptions->has('AUTO_INCREMENT') !== false)
                     ) {
@@ -1883,10 +1873,10 @@ class ExportSql extends ExportPlugin
                             && in_array($table, $GLOBALS['table_data']))
                         ) {
                             $sql_auto_increments_query .= ', AUTO_INCREMENT='
-                                . $statement->entityOptions->has('AUTO_INCREMENT');
+                                .$statement->entityOptions->has('AUTO_INCREMENT');
                         }
                     }
-                    $sql_auto_increments_query .= ';' . $crlf;
+                    $sql_auto_increments_query .= ';'.$crlf;
 
                     $sql_auto_increments = $this->generateComment(
                         $crlf,
@@ -1895,7 +1885,7 @@ class ExportSql extends ExportPlugin
                         __('AUTO_INCREMENT for table'),
                         $table_alias,
                         $compat
-                    ) . $sql_auto_increments_query;
+                    ).$sql_auto_increments_query;
                 }
 
                 // Removing the `AUTO_INCREMENT` attribute from the `CREATE TABLE`
@@ -1919,19 +1909,18 @@ class ExportSql extends ExportPlugin
         // Restoring old mode.
         Context::$MODE = $old_mode;
 
-        return $warning . $schema_create . ($add_semicolon ? ';' . $crlf : '');
+        return $warning.$schema_create.($add_semicolon ? ';'.$crlf : '');
     }
 
     /**
      * Returns $table's comments, relations etc.
      *
-     * @param string $db          database name
-     * @param string $table       table name
-     * @param string $crlf        end of line sequence
-     * @param bool   $do_relation whether to include relation comments
-     * @param bool   $do_mime     whether to include mime comments
-     * @param array  $aliases     Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  end of line sequence
+     * @param  bool  $do_relation  whether to include relation comments
+     * @param  bool  $do_mime  whether to include mime comments
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return string resulting comments
      */
     private function getTableComments(
@@ -1966,19 +1955,19 @@ class ExportSql extends ExportPlugin
 
         if (isset($mime_map) && count($mime_map) > 0) {
             $schema_create .= $this->possibleCRLF()
-                . $this->exportComment()
-                . $this->exportComment(
-                    __('MEDIA TYPES FOR TABLE') . ' '
-                    . Util::backquote($table, $sql_backquotes) . ':'
+                .$this->exportComment()
+                .$this->exportComment(
+                    __('MEDIA TYPES FOR TABLE').' '
+                    .Util::backquote($table, $sql_backquotes).':'
                 );
             foreach ($mime_map as $mime_field => $mime) {
                 $schema_create .= $this->exportComment(
                     '  '
-                    . Util::backquote($mime_field, $sql_backquotes)
+                    .Util::backquote($mime_field, $sql_backquotes)
                 )
-                . $this->exportComment(
+                .$this->exportComment(
                     '      '
-                    . Util::backquote(
+                    .Util::backquote(
                         $mime['mimetype'],
                         $sql_backquotes
                     )
@@ -1989,11 +1978,11 @@ class ExportSql extends ExportPlugin
 
         if ($have_rel) {
             $schema_create .= $this->possibleCRLF()
-                . $this->exportComment()
-                . $this->exportComment(
-                    __('RELATIONSHIPS FOR TABLE') . ' '
-                    . Util::backquote($table_alias, $sql_backquotes)
-                    . ':'
+                .$this->exportComment()
+                .$this->exportComment(
+                    __('RELATIONSHIPS FOR TABLE').' '
+                    .Util::backquote($table_alias, $sql_backquotes)
+                    .':'
                 );
 
             foreach ($res_rel as $rel_field => $rel) {
@@ -2004,19 +1993,19 @@ class ExportSql extends ExportPlugin
                         : $rel_field;
                     $schema_create .= $this->exportComment(
                         '  '
-                        . Util::backquote(
+                        .Util::backquote(
                             $rel_field_alias,
                             $sql_backquotes
                         )
                     )
-                    . $this->exportComment(
+                    .$this->exportComment(
                         '      '
-                        . Util::backquote(
+                        .Util::backquote(
                             $rel['foreign_table'],
                             $sql_backquotes
                         )
-                        . ' -> '
-                        . Util::backquote(
+                        .' -> '
+                        .Util::backquote(
                             $rel['foreign_field'],
                             $sql_backquotes
                         )
@@ -2030,19 +2019,19 @@ class ExportSql extends ExportPlugin
                                 : $field;
                             $schema_create .= $this->exportComment(
                                 '  '
-                                . Util::backquote(
+                                .Util::backquote(
                                     $rel_field_alias,
                                     $sql_backquotes
                                 )
                             )
-                            . $this->exportComment(
+                            .$this->exportComment(
                                 '      '
-                                . Util::backquote(
+                                .Util::backquote(
                                     $one_key['ref_table_name'],
                                     $sql_backquotes
                                 )
-                                . ' -> '
-                                . Util::backquote(
+                                .' -> '
+                                .Util::backquote(
                                     $one_key['ref_index_list'][$index],
                                     $sql_backquotes
                                 )
@@ -2060,10 +2049,9 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs a raw query
      *
-     * @param string $err_url   the url to go back in case of error
-     * @param string $sql_query the rawquery to output
-     * @param string $crlf      the seperator for a file
-     *
+     * @param  string  $err_url  the url to go back in case of error
+     * @param  string  $sql_query  the rawquery to output
+     * @param  string  $crlf  the seperator for a file
      * @return bool if succeeded
      */
     public function exportRawQuery(string $err_url, string $sql_query, string $crlf): bool
@@ -2074,24 +2062,23 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs table's structure
      *
-     * @param string $db          database name
-     * @param string $table       table name
-     * @param string $crlf        the end of line sequence
-     * @param string $error_url   the url to go back in case of error
-     * @param string $export_mode 'create_table','triggers','create_view',
-     *                            'stand_in'
-     * @param string $export_type 'server', 'database', 'table'
-     * @param bool   $relation    whether to include relation comments
-     * @param bool   $comments    whether to include the pmadb-style column
-     *                            comments as comments in the structure; this is
-     *                            deprecated but the parameter is left here
-     *                            because /export calls exportStructure()
-     *                            also for other export types which use this
-     *                            parameter
-     * @param bool   $mime        whether to include mime comments
-     * @param bool   $dates       whether to include creation/update/check dates
-     * @param array  $aliases     Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case of error
+     * @param  string  $export_mode  'create_table','triggers','create_view',
+     *                               'stand_in'
+     * @param  string  $export_type  'server', 'database', 'table'
+     * @param  bool  $relation  whether to include relation comments
+     * @param  bool  $comments  whether to include the pmadb-style column
+     *                          comments as comments in the structure; this is
+     *                          deprecated but the parameter is left here
+     *                          because /export calls exportStructure()
+     *                          also for other export types which use this
+     *                          parameter
+     * @param  bool  $mime  whether to include mime comments
+     * @param  bool  $dates  whether to include creation/update/check dates
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportStructure(
@@ -2124,14 +2111,14 @@ class ExportSql extends ExportPlugin
             isset($GLOBALS['sql_backquotes'])
         );
         $dump = $this->possibleCRLF()
-            . $this->exportComment(str_repeat('-', 56))
-            . $this->possibleCRLF()
-            . $this->exportComment();
+            .$this->exportComment(str_repeat('-', 56))
+            .$this->possibleCRLF()
+            .$this->exportComment();
 
         switch ($export_mode) {
             case 'create_table':
                 $dump .= $this->exportComment(
-                    __('Table structure for table') . ' ' . $formatted_table_name
+                    __('Table structure for table').' '.$formatted_table_name
                 );
                 $dump .= $this->exportComment();
                 $dump .= $this->getTableDef(
@@ -2160,19 +2147,19 @@ class ExportSql extends ExportPlugin
                 $triggers = $dbi->getTriggers($db, $table, $delimiter);
                 if ($triggers) {
                     $dump .= $this->possibleCRLF()
-                    . $this->exportComment()
-                    . $this->exportComment(
-                        __('Triggers') . ' ' . $formatted_table_name
+                    .$this->exportComment()
+                    .$this->exportComment(
+                        __('Triggers').' '.$formatted_table_name
                     )
-                        . $this->exportComment();
+                        .$this->exportComment();
                     $used_alias = false;
                     $trigger_query = '';
                     foreach ($triggers as $trigger) {
                         if (! empty($GLOBALS['sql_drop_table'])) {
-                            $trigger_query .= $trigger['drop'] . ';' . $crlf;
+                            $trigger_query .= $trigger['drop'].';'.$crlf;
                         }
 
-                        $trigger_query .= 'DELIMITER ' . $delimiter . $crlf;
+                        $trigger_query .= 'DELIMITER '.$delimiter.$crlf;
                         $trigger_query .= $this->replaceWithAliases(
                             $trigger['create'],
                             $aliases,
@@ -2183,17 +2170,17 @@ class ExportSql extends ExportPlugin
                         if ($flag) {
                             $used_alias = true;
                         }
-                        $trigger_query .= 'DELIMITER ;' . $crlf;
+                        $trigger_query .= 'DELIMITER ;'.$crlf;
                     }
                     // One warning per table.
                     if ($used_alias) {
                         $dump .= $this->exportComment(
                             __('It appears your table uses triggers;')
                         )
-                        . $this->exportComment(
+                        .$this->exportComment(
                             __('alias export may not work reliably in all cases.')
                         )
-                        . $this->exportComment();
+                        .$this->exportComment();
                     }
                     $dump .= $trigger_query;
                 }
@@ -2202,14 +2189,14 @@ class ExportSql extends ExportPlugin
                 if (empty($GLOBALS['sql_views_as_tables'])) {
                     $dump .= $this->exportComment(
                         __('Structure for view')
-                        . ' '
-                        . $formatted_table_name
+                        .' '
+                        .$formatted_table_name
                     )
-                    . $this->exportComment();
+                    .$this->exportComment();
                     // delete the stand-in table previously created (if any)
                     if ($export_type !== 'table') {
                         $dump .= 'DROP TABLE IF EXISTS '
-                            . Util::backquote($table_alias) . ';' . $crlf;
+                            .Util::backquote($table_alias).';'.$crlf;
                     }
                     $dump .= $this->getTableDef(
                         $db,
@@ -2229,11 +2216,11 @@ class ExportSql extends ExportPlugin
                             $formatted_table_name
                         )
                     )
-                    . $this->exportComment();
+                    .$this->exportComment();
                     // delete the stand-in table previously created (if any)
                     if ($export_type !== 'table') {
                         $dump .= 'DROP TABLE IF EXISTS '
-                        . Util::backquote($table_alias) . ';' . $crlf;
+                        .Util::backquote($table_alias).';'.$crlf;
                     }
                     $dump .= $this->getTableDefForView(
                         $db,
@@ -2246,12 +2233,12 @@ class ExportSql extends ExportPlugin
                 break;
             case 'stand_in':
                 $dump .= $this->exportComment(
-                    __('Stand-in structure for view') . ' ' . $formatted_table_name
+                    __('Stand-in structure for view').' '.$formatted_table_name
                 )
-                    . $this->exportComment(
+                    .$this->exportComment(
                         __('(See below for the actual view)')
                     )
-                    . $this->exportComment();
+                    .$this->exportComment();
                 // export a stand-in definition to resolve view dependencies
                 $dump .= $this->getTableDefStandIn($db, $table, $crlf, $aliases);
         }
@@ -2266,13 +2253,12 @@ class ExportSql extends ExportPlugin
     /**
      * Outputs the content of a table in SQL format
      *
-     * @param string $db        database name
-     * @param string $table     table name
-     * @param string $crlf      the end of line sequence
-     * @param string $error_url the url to go back in case of error
-     * @param string $sql_query SQL query for obtaining data
-     * @param array  $aliases   Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case of error
+     * @param  string  $sql_query  SQL query for obtaining data
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportData(
@@ -2312,11 +2298,11 @@ class ExportSql extends ExportPlugin
             && empty($GLOBALS['sql_views_as_tables'])
         ) {
             $head = $this->possibleCRLF()
-                . $this->exportComment()
-                . $this->exportComment('VIEW ' . $formatted_table_name)
-                . $this->exportComment(__('Data:') . ' ' . __('None'))
-                . $this->exportComment()
-                . $this->possibleCRLF();
+                .$this->exportComment()
+                .$this->exportComment('VIEW '.$formatted_table_name)
+                .$this->exportComment(__('Data:').' '.__('None'))
+                .$this->exportComment()
+                .$this->possibleCRLF();
 
             return $this->export->outputHandler($head);
         }
@@ -2329,8 +2315,8 @@ class ExportSql extends ExportPlugin
         // a possible error: the table has crashed
         $tmp_error = $dbi->getError();
         if ($tmp_error) {
-            $message = sprintf(__('Error reading data for table %s:'), $db . '.' . $table);
-            $message .= ' ' . $tmp_error;
+            $message = sprintf(__('Error reading data for table %s:'), $db.'.'.$table);
+            $message .= ' '.$tmp_error;
             if (! defined('TESTSUITE')) {
                 trigger_error($message, E_USER_ERROR);
             }
@@ -2381,7 +2367,7 @@ class ExportSql extends ExportPlugin
                 $table_alias,
                 $compat,
                 $sql_backquotes
-            ) . ' SET';
+            ).' SET';
         } else {
             // insert or replace
             if (isset($GLOBALS['sql_type'])
@@ -2409,19 +2395,19 @@ class ExportSql extends ExportPlugin
                 && $sql_command === 'INSERT'
             ) {
                 $truncate = 'TRUNCATE TABLE '
-                    . Util::backquoteCompat(
+                    .Util::backquoteCompat(
                         $table_alias,
                         $compat,
                         $sql_backquotes
-                    ) . ';';
+                    ).';';
                 $truncatehead = $this->possibleCRLF()
-                    . $this->exportComment()
-                    . $this->exportComment(
-                        __('Truncate table before insert') . ' '
-                        . $formatted_table_name
+                    .$this->exportComment()
+                    .$this->exportComment(
+                        __('Truncate table before insert').' '
+                        .$formatted_table_name
                     )
-                    . $this->exportComment()
-                    . $crlf;
+                    .$this->exportComment()
+                    .$crlf;
                 $this->export->outputHandler($truncatehead);
                 $this->export->outputHandler($truncate);
             }
@@ -2431,22 +2417,22 @@ class ExportSql extends ExportPlugin
                 || $GLOBALS['sql_insert_syntax'] === 'both'
             ) {
                 $fields = implode(', ', $field_set);
-                $schema_insert = $sql_command . $insert_delayed . ' INTO '
-                    . Util::backquoteCompat(
+                $schema_insert = $sql_command.$insert_delayed.' INTO '
+                    .Util::backquoteCompat(
                         $table_alias,
                         $compat,
                         $sql_backquotes
                     )
                     // avoid EOL blank
-                    . ' (' . $fields . ') VALUES';
+                    .' ('.$fields.') VALUES';
             } else {
-                $schema_insert = $sql_command . $insert_delayed . ' INTO '
-                    . Util::backquoteCompat(
+                $schema_insert = $sql_command.$insert_delayed.' INTO '
+                    .Util::backquoteCompat(
                         $table_alias,
                         $compat,
                         $sql_backquotes
                     )
-                    . ' VALUES';
+                    .' VALUES';
             }
         }
 
@@ -2467,13 +2453,13 @@ class ExportSql extends ExportPlugin
         while ($row = $dbi->fetchRow($result)) {
             if ($current_row == 0) {
                 $head = $this->possibleCRLF()
-                    . $this->exportComment()
-                    . $this->exportComment(
-                        __('Dumping data for table') . ' '
-                        . $formatted_table_name
+                    .$this->exportComment()
+                    .$this->exportComment(
+                        __('Dumping data for table').' '
+                        .$formatted_table_name
                     )
-                    . $this->exportComment()
-                    . $crlf;
+                    .$this->exportComment()
+                    .$crlf;
                 if (! $this->export->outputHandler($head)) {
                     return false;
                 }
@@ -2485,12 +2471,12 @@ class ExportSql extends ExportPlugin
             ) {
                 if (! $this->export->outputHandler(
                     'SET IDENTITY_INSERT '
-                    . Util::backquoteCompat(
+                    .Util::backquoteCompat(
                         $table_alias,
                         $compat,
                         $sql_backquotes
                     )
-                    . ' ON ;' . $crlf
+                    .' ON ;'.$crlf
                 )
                 ) {
                     return false;
@@ -2525,20 +2511,20 @@ class ExportSql extends ExportPlugin
                     if (empty($row[$j]) && $row[$j] != '0') {
                         $values[] = '\'\'';
                     } else {
-                        $values[] = '0x' . bin2hex($row[$j]);
+                        $values[] = '0x'.bin2hex($row[$j]);
                     }
                 } elseif ($fields_meta[$j]->type === 'bit') {
                     // detection of 'bit' works only on mysqli extension
-                    $values[] = "b'" . $dbi->escapeString(
+                    $values[] = "b'".$dbi->escapeString(
                         Util::printableBitValue(
                             (int) $row[$j],
                             (int) $fields_meta[$j]->length
                         )
                     )
-                    . "'";
+                    ."'";
                 } elseif ($fields_meta[$j]->type === 'geometry') {
                     // export GIS types as hex
-                    $values[] = '0x' . bin2hex($row[$j]);
+                    $values[] = '0x'.bin2hex($row[$j]);
                 } elseif (! empty($GLOBALS['exporting_metadata'])
                     && $row[$j] === '@LAST_PAGE'
                 ) {
@@ -2546,8 +2532,8 @@ class ExportSql extends ExportPlugin
                 } else {
                     // something else -> treat as a string
                     $values[] = '\''
-                        . $dbi->escapeString($row[$j])
-                        . '\'';
+                        .$dbi->escapeString($row[$j])
+                        .'\'';
                 }
             }
 
@@ -2564,7 +2550,7 @@ class ExportSql extends ExportPlugin
                         // avoid EOL blank
                         $insert_line .= ',';
                     }
-                    $insert_line .= $field_set[$i] . ' = ' . $values[$i];
+                    $insert_line .= $field_set[$i].' = '.$values[$i];
                 }
 
                 [$tmp_unique_condition, $tmp_clause_is_unique] = Util::getUniqueCondition(
@@ -2573,7 +2559,7 @@ class ExportSql extends ExportPlugin
                     $fields_meta,
                     $row
                 );
-                $insert_line .= ' WHERE ' . $tmp_unique_condition;
+                $insert_line .= ' WHERE '.$tmp_unique_condition;
                 unset($tmp_unique_condition, $tmp_clause_is_unique);
             } else {
                 // Extended inserts case
@@ -2581,36 +2567,36 @@ class ExportSql extends ExportPlugin
                     || $GLOBALS['sql_insert_syntax'] === 'both'
                 ) {
                     if ($current_row == 1) {
-                        $insert_line = $schema_insert . '('
-                            . implode(', ', $values) . ')';
+                        $insert_line = $schema_insert.'('
+                            .implode(', ', $values).')';
                     } else {
-                        $insert_line = '(' . implode(', ', $values) . ')';
+                        $insert_line = '('.implode(', ', $values).')';
                         $insertLineSize = mb_strlen($insert_line);
                         $sql_max_size = $GLOBALS['sql_max_query_size'];
                         if (isset($sql_max_size)
                             && $sql_max_size > 0
                             && $query_size + $insertLineSize > $sql_max_size
                         ) {
-                            if (! $this->export->outputHandler(';' . $crlf)) {
+                            if (! $this->export->outputHandler(';'.$crlf)) {
                                 return false;
                             }
                             $query_size = 0;
                             $current_row = 1;
-                            $insert_line = $schema_insert . $insert_line;
+                            $insert_line = $schema_insert.$insert_line;
                         }
                     }
                     $query_size += mb_strlen($insert_line);
                     // Other inserts case
                 } else {
                     $insert_line = $schema_insert
-                        . '(' . implode(', ', $values) . ')';
+                        .'('.implode(', ', $values).')';
                 }
             }
             unset($values);
 
             if (! $this->export->outputHandler(
-                ($current_row == 1 ? '' : $separator . $crlf)
-                . $insert_line
+                ($current_row == 1 ? '' : $separator.$crlf)
+                .$insert_line
             )
             ) {
                 return false;
@@ -2618,7 +2604,7 @@ class ExportSql extends ExportPlugin
         }
 
         if ($current_row > 0) {
-            if (! $this->export->outputHandler(';' . $crlf)) {
+            if (! $this->export->outputHandler(';'.$crlf)) {
                 return false;
             }
         }
@@ -2629,13 +2615,13 @@ class ExportSql extends ExportPlugin
             && $current_row > 0
         ) {
             $outputSucceeded = $this->export->outputHandler(
-                $crlf . 'SET IDENTITY_INSERT '
-                . Util::backquoteCompat(
+                $crlf.'SET IDENTITY_INSERT '
+                .Util::backquoteCompat(
                     $table_alias,
                     $compat,
                     $sql_backquotes
                 )
-                . ' OFF;' . $crlf
+                .' OFF;'.$crlf
             );
             if (! $outputSucceeded) {
                 return false;
@@ -2650,8 +2636,7 @@ class ExportSql extends ExportPlugin
     /**
      * Make a create table statement compatible with MSSQL
      *
-     * @param string $create_query MySQL create table statement
-     *
+     * @param  string  $create_query  MySQL create table statement
      * @return string MSSQL compatible create table statement
      */
     private function makeCreateTableMSSQLCompatible($create_query)
@@ -2675,12 +2660,12 @@ class ExportSql extends ExportPlugin
         // inside DEFAULT field value
         $create_query = (string) preg_replace(
             "/\" date DEFAULT NULL(,)?\n/",
-            '" datetime DEFAULT NULL$1' . "\n",
+            '" datetime DEFAULT NULL$1'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
             "/\" date NOT NULL(,)?\n/",
-            '" datetime NOT NULL$1' . "\n",
+            '" datetime NOT NULL$1'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
@@ -2694,12 +2679,12 @@ class ExportSql extends ExportPlugin
         // inside DEFAULT field value
         $create_query = (string) preg_replace(
             "/\) unsigned NOT NULL(,)?\n/",
-            ') NOT NULL$1' . "\n",
+            ') NOT NULL$1'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
             "/\) unsigned DEFAULT NULL(,)?\n/",
-            ') DEFAULT NULL$1' . "\n",
+            ') DEFAULT NULL$1'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
@@ -2714,12 +2699,12 @@ class ExportSql extends ExportPlugin
         // value
         $create_query = (string) preg_replace(
             '/" (int|tinyint|smallint|bigint)\([0-9]+\) DEFAULT NULL(,)?\n/',
-            '" $1 DEFAULT NULL$2' . "\n",
+            '" $1 DEFAULT NULL$2'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
             '/" (int|tinyint|smallint|bigint)\([0-9]+\) NOT NULL(,)?\n/',
-            '" $1 NOT NULL$2' . "\n",
+            '" $1 NOT NULL$2'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
@@ -2734,12 +2719,12 @@ class ExportSql extends ExportPlugin
         // float([0-9,]{1,}) text inside DEFAULT field value
         $create_query = (string) preg_replace(
             '/" (float|double)(\([0-9]+,[0-9,]+\))? DEFAULT NULL(,)?\n/',
-            '" float DEFAULT NULL$3' . "\n",
+            '" float DEFAULT NULL$3'."\n",
             $create_query
         );
         $create_query = (string) preg_replace(
             '/" (float|double)(\([0-9,]+,[0-9,]+\))? NOT NULL(,)?\n/',
-            '" float NOT NULL$3' . "\n",
+            '" float NOT NULL$3'."\n",
             $create_query
         );
 
@@ -2755,12 +2740,11 @@ class ExportSql extends ExportPlugin
     /**
      * replaces db/table/column names with their aliases
      *
-     * @param string $sql_query SQL query in which aliases are to be substituted
-     * @param array  $aliases   Alias information for db/table/column
-     * @param string $db        the database name
-     * @param string $table     the tablename
-     * @param string $flag      the flag denoting whether any replacement was done
-     *
+     * @param  string  $sql_query  SQL query in which aliases are to be substituted
+     * @param  array  $aliases  Alias information for db/table/column
+     * @param  string  $db  the database name
+     * @param  string  $table  the tablename
+     * @param  string  $flag  the flag denoting whether any replacement was done
      * @return string query replaced with aliases
      */
     public function replaceWithAliases(
@@ -2913,7 +2897,7 @@ class ExportSql extends ExportPlugin
             || $statement->options->has('VIEW')
         ) {
             // Replacing the body.
-            for ($i = 0, $count = count((array) $statement->body); $i < $count; ++$i) {
+            for ($i = 0, $count = count((array) $statement->body); $i < $count; $i++) {
 
                 /**
                  * Token parsed at this moment.
@@ -2954,13 +2938,12 @@ class ExportSql extends ExportPlugin
     /**
      * Generate comment
      *
-     * @param string      $crlf          Carriage return character
-     * @param string|null $sql_statement SQL statement
-     * @param string      $comment1      Comment for dumped table
-     * @param string      $comment2      Comment for current table
-     * @param string      $table_alias   Table alias
-     * @param string      $compat        Compatibility mode
-     *
+     * @param  string  $crlf  Carriage return character
+     * @param  string|null  $sql_statement  SQL statement
+     * @param  string  $comment1  Comment for dumped table
+     * @param  string  $comment2  Comment for current table
+     * @param  string  $table_alias  Table alias
+     * @param  string  $compat  Compatibility mode
      * @return string
      */
     protected function generateComment(
@@ -2976,24 +2959,24 @@ class ExportSql extends ExportPlugin
                 $sql_statement = '';
             } else {
                 $sql_statement = $crlf
-                    . $this->exportComment()
-                    . $this->exportComment($comment1)
-                    . $this->exportComment();
+                    .$this->exportComment()
+                    .$this->exportComment($comment1)
+                    .$this->exportComment();
             }
         }
 
         // comments for current table
         if (! isset($GLOBALS['no_constraints_comments'])) {
             $sql_statement .= $crlf
-                . $this->exportComment()
-                . $this->exportComment(
-                    $comment2 . ' ' . Util::backquoteCompat(
+                .$this->exportComment()
+                .$this->exportComment(
+                    $comment2.' '.Util::backquoteCompat(
                         $table_alias,
                         $compat,
                         isset($GLOBALS['sql_backquotes'])
                     )
                 )
-                . $this->exportComment();
+                .$this->exportComment();
         }
 
         return $sql_statement;

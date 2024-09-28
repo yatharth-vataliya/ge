@@ -20,8 +20,8 @@ class EnginesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $dbi)
     {
@@ -47,7 +47,7 @@ class EnginesController extends AbstractController
     /**
      * Displays details about a given Storage Engine
      *
-     * @param array $params Request params
+     * @param  array  $params  Request params
      */
     public function show(array $params): void
     {

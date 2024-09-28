@@ -12,6 +12,7 @@ use PhpMyAdmin\Relation;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function array_fill;
 use function count;
 use function is_array;
@@ -30,9 +31,9 @@ class ChangeController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name.
-     * @param string   $table    Table name.
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
      */
     public function __construct(
         $response,
@@ -98,7 +99,7 @@ class ChangeController extends AbstractController
         }
 
         $_url_params = $this->insertEdit->getUrlParameters($db, $table);
-        $err_url = $GLOBALS['goto'] . Url::getCommon(
+        $err_url = $GLOBALS['goto'].Url::getCommon(
             $_url_params,
             mb_strpos($GLOBALS['goto'], '?') === false ? '?' : '&'
         );
@@ -109,7 +110,6 @@ class ChangeController extends AbstractController
         /**
          * START REGULAR OUTPUT
          */
-
         $this->addScriptFiles([
             'makegrid.js',
             'vendor/stickyfill.min.js',
@@ -147,20 +147,20 @@ class ChangeController extends AbstractController
          */
         // autocomplete feature of IE kills the "onchange" event handler and it
         //        must be replaced by the "onpropertychange" one in this case
-        $chg_evt_handler =  'onchange';
+        $chg_evt_handler = 'onchange';
         // Had to put the URI because when hosted on an https server,
         // some browsers send wrongly this form to the http server.
 
         $html_output = '';
         // Set if we passed the first timestamp field
         $timestamp_seen = false;
-        $columns_cnt     = count($table_columns);
+        $columns_cnt = count($table_columns);
 
-        $tabindex              = 0;
+        $tabindex = 0;
         $tabindex_for_function = +3000;
-        $tabindex_for_null     = +6000;
-        $tabindex_for_value    = 0;
-        $o_rows                = 0;
+        $tabindex_for_null = +6000;
+        $tabindex_for_value = 0;
+        $o_rows = 0;
         $biggest_max_file_size = 0;
 
         $url_params['db'] = $db;
@@ -213,7 +213,7 @@ class ChangeController extends AbstractController
             }
 
             $jsvkey = $row_id;
-            $vkey = '[multi_edit][' . $jsvkey . ']';
+            $vkey = '[multi_edit]['.$jsvkey.']';
 
             $current_result = (isset($result) && is_array($result) && isset($result[$row_id])
                 ? $result[$row_id]
@@ -275,7 +275,7 @@ class ChangeController extends AbstractController
         );
 
         if ($biggest_max_file_size > 0) {
-            $html_output .= '<input type="hidden" name="MAX_FILE_SIZE" value="' . $biggest_max_file_size . '">' . "\n";
+            $html_output .= '<input type="hidden" name="MAX_FILE_SIZE" value="'.$biggest_max_file_size.'">'."\n";
         }
         $html_output .= '</form>';
 

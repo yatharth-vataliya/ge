@@ -20,6 +20,7 @@ use PhpMyAdmin\Table;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Util;
+
 use function array_values;
 use function class_exists;
 use function count;
@@ -48,10 +49,10 @@ final class ReplaceController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -199,7 +200,7 @@ final class ReplaceController extends AbstractController
         $unsaved_values = [];
         foreach ($loop_array as $rownumber => $where_clause) {
             // skip fields to be ignored
-            if (! $using_key && isset($_POST['insert_ignore_' . $where_clause])) {
+            if (! $using_key && isset($_POST['insert_ignore_'.$where_clause])) {
                 continue;
             }
 
@@ -247,7 +248,7 @@ final class ReplaceController extends AbstractController
                 // Note: $key is an md5 of the fieldname. The actual fieldname is
                 // available in $multi_edit_columns_name[$key]
 
-                $file_to_insert = new File();
+                $file_to_insert = new File;
                 $file_to_insert->checkTblChangeForm((string) $key, (string) $rownumber);
 
                 $possibly_uploaded_val = $file_to_insert->getContent();
@@ -259,12 +260,12 @@ final class ReplaceController extends AbstractController
                     && ! empty($mime_map[$column_name]['input_transformation'])
                 ) {
                     $filename = 'libraries/classes/Plugins/Transformations/'
-                        . $mime_map[$column_name]['input_transformation'];
+                        .$mime_map[$column_name]['input_transformation'];
                     if (is_file($filename)) {
                         $classname = $this->transformations->getClassName($filename);
                         if (class_exists($classname)) {
                             /** @var IOTransformationsPlugin $transformation_plugin */
-                            $transformation_plugin = new $classname();
+                            $transformation_plugin = new $classname;
                             $transformation_options = $this->transformations->getOptions(
                                 $mime_map[$column_name]['input_transformation_options']
                             );
@@ -363,10 +364,10 @@ final class ReplaceController extends AbstractController
                 $value_sets[] = implode(', ', $query_values);
             } else {
                 // build update query
-                $query[] = 'UPDATE ' . Util::backquote($table)
-                    . ' SET ' . implode(', ', $query_values)
-                    . ' WHERE ' . $where_clause
-                    . ($_POST['clause_is_unique'] ? '' : ' LIMIT 1');
+                $query[] = 'UPDATE '.Util::backquote($table)
+                    .' SET '.implode(', ', $query_values)
+                    .' WHERE '.$where_clause
+                    .($_POST['clause_is_unique'] ? '' : ' LIMIT 1');
             }
         }
         unset(
@@ -433,7 +434,7 @@ final class ReplaceController extends AbstractController
                 return;
             }
 
-            include ROOT_PATH . Core::securePath((string) $goto_include);
+            include ROOT_PATH.Core::securePath((string) $goto_include);
 
             return;
         }
@@ -516,7 +517,7 @@ final class ReplaceController extends AbstractController
                 // loop for each relation cell
                 foreach ($relation_fields as $cell_index => $curr_rel_field) {
                     foreach ($curr_rel_field as $relation_field => $relation_field_value) {
-                        $where_comparison = "='" . $relation_field_value . "'";
+                        $where_comparison = "='".$relation_field_value."'";
                         $dispval = $this->insertEdit->getDisplayValueForForeignTableColumn(
                             $where_comparison,
                             $map,
@@ -646,6 +647,6 @@ final class ReplaceController extends AbstractController
         /**
          * Load target page.
          */
-        require ROOT_PATH . Core::securePath((string) $goto_include);
+        require ROOT_PATH.Core::securePath((string) $goto_include);
     }
 }

@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Navigation\Nodes;
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function in_array;
 use function intval;
 use function strpos;
@@ -25,10 +26,10 @@ class NodeTable extends NodeDatabaseChild
     /**
      * Initialises the class
      *
-     * @param string $name    An identifier for the new node
-     * @param int    $type    Type of node, may be one of CONTAINER or OBJECT
-     * @param bool   $isGroup Whether this object has been created
-     *                        while grouping nodes
+     * @param  string  $name  An identifier for the new node
+     * @param  int  $type  Type of node, may be one of CONTAINER or OBJECT
+     * @param  bool  $isGroup  Whether this object has been created
+     *                         while grouping nodes
      */
     public function __construct($name, $type = Node::OBJECT, $isGroup = false)
     {
@@ -64,17 +65,17 @@ class NodeTable extends NodeDatabaseChild
             'table'
         );
         $this->links = [
-            'text'  => $scriptName . (strpos($scriptName, '?') === false ? '?' : '&')
-                . 'server=' . $GLOBALS['server']
-                . '&amp;db=%2$s&amp;table=%1$s'
-                . '&amp;pos=0',
-            'icon'  => [
-                $firstIconLink . (strpos($firstIconLink, '?') === false ? '?' : '&')
-                . 'server=' . $GLOBALS['server']
-                . '&amp;db=%2$s&amp;table=%1$s',
-                $secondIconLink . (strpos($secondIconLink, '?') === false ? '?' : '&')
-                . 'server=' . $GLOBALS['server']
-                . '&amp;db=%2$s&amp;table=%1$s',
+            'text' => $scriptName.(strpos($scriptName, '?') === false ? '?' : '&')
+                .'server='.$GLOBALS['server']
+                .'&amp;db=%2$s&amp;table=%1$s'
+                .'&amp;pos=0',
+            'icon' => [
+                $firstIconLink.(strpos($firstIconLink, '?') === false ? '?' : '&')
+                .'server='.$GLOBALS['server']
+                .'&amp;db=%2$s&amp;table=%1$s',
+                $secondIconLink.(strpos($secondIconLink, '?') === false ? '?' : '&')
+                .'server='.$GLOBALS['server']
+                .'&amp;db=%2$s&amp;table=%1$s',
             ],
             'title' => $this->title,
         ];
@@ -86,10 +87,9 @@ class NodeTable extends NodeDatabaseChild
      * This method is overridden by the PhpMyAdmin\Navigation\Nodes\NodeDatabase
      * and PhpMyAdmin\Navigation\Nodes\NodeTable classes
      *
-     * @param string $type         The type of item we are looking for
-     *                             ('columns' or 'indexes')
-     * @param string $searchClause A string used to filter the results of the query
-     *
+     * @param  string  $type  The type of item we are looking for
+     *                        ('columns' or 'indexes')
+     * @param  string  $searchClause  A string used to filter the results of the query
      * @return int
      */
     public function getPresence($type = '', $searchClause = '')
@@ -106,13 +106,13 @@ class NodeTable extends NodeDatabaseChild
                     $table = $dbi->escapeString($table);
                     $query = 'SELECT COUNT(*) ';
                     $query .= 'FROM `INFORMATION_SCHEMA`.`COLUMNS` ';
-                    $query .= "WHERE `TABLE_NAME`='" . $table . "' ";
-                    $query .= "AND `TABLE_SCHEMA`='" . $db . "'";
+                    $query .= "WHERE `TABLE_NAME`='".$table."' ";
+                    $query .= "AND `TABLE_SCHEMA`='".$db."'";
                     $retval = (int) $dbi->fetchValue($query);
                 } else {
                     $db = Util::backquote($db);
                     $table = Util::backquote($table);
-                    $query = 'SHOW COLUMNS FROM ' . $table . ' FROM ' . $db . '';
+                    $query = 'SHOW COLUMNS FROM '.$table.' FROM '.$db.'';
                     $retval = (int) $dbi->numRows(
                         $dbi->tryQuery($query)
                     );
@@ -121,7 +121,7 @@ class NodeTable extends NodeDatabaseChild
             case 'indexes':
                 $db = Util::backquote($db);
                 $table = Util::backquote($table);
-                $query = 'SHOW INDEXES FROM ' . $table . ' FROM ' . $db;
+                $query = 'SHOW INDEXES FROM '.$table.' FROM '.$db;
                 $retval = (int) $dbi->numRows(
                     $dbi->tryQuery($query)
                 );
@@ -133,14 +133,14 @@ class NodeTable extends NodeDatabaseChild
                     $query = 'SELECT COUNT(*) ';
                     $query .= 'FROM `INFORMATION_SCHEMA`.`TRIGGERS` ';
                     $query .= 'WHERE `EVENT_OBJECT_SCHEMA` '
-                    . Util::getCollateForIS() . "='" . $db . "' ";
+                    .Util::getCollateForIS()."='".$db."' ";
                     $query .= 'AND `EVENT_OBJECT_TABLE` '
-                    . Util::getCollateForIS() . "='" . $table . "'";
+                    .Util::getCollateForIS()."='".$table."'";
                     $retval = (int) $dbi->fetchValue($query);
                 } else {
                     $db = Util::backquote($db);
                     $table = $dbi->escapeString($table);
-                    $query = 'SHOW TRIGGERS FROM ' . $db . " WHERE `Table` = '" . $table . "'";
+                    $query = 'SHOW TRIGGERS FROM '.$db." WHERE `Table` = '".$table."'";
                     $retval = (int) $dbi->numRows(
                         $dbi->tryQuery($query)
                     );
@@ -158,11 +158,10 @@ class NodeTable extends NodeDatabaseChild
      * This method is overridden by the PhpMyAdmin\Navigation\Nodes\NodeDatabase
      * and PhpMyAdmin\Navigation\Nodes\NodeTable classes
      *
-     * @param string $type         The type of item we are looking for
-     *                             ('tables', 'views', etc)
-     * @param int    $pos          The offset of the list within the results
-     * @param string $searchClause A string used to filter the results of the query
-     *
+     * @param  string  $type  The type of item we are looking for
+     *                        ('tables', 'views', etc)
+     * @param  int  $pos  The offset of the list within the results
+     * @param  string  $searchClause  A string used to filter the results of the query
      * @return array
      */
     public function getData($type, $pos, $searchClause = '')
@@ -184,17 +183,17 @@ class NodeTable extends NodeDatabaseChild
                     $query .= ',`COLUMN_DEFAULT` AS `default` ';
                     $query .= ",IF (`IS_NULLABLE` = 'NO', '', 'nullable') AS `nullable` ";
                     $query .= 'FROM `INFORMATION_SCHEMA`.`COLUMNS` ';
-                    $query .= "WHERE `TABLE_NAME`='" . $table . "' ";
-                    $query .= "AND `TABLE_SCHEMA`='" . $db . "' ";
+                    $query .= "WHERE `TABLE_NAME`='".$table."' ";
+                    $query .= "AND `TABLE_SCHEMA`='".$db."' ";
                     $query .= 'ORDER BY `COLUMN_NAME` ASC ';
-                    $query .= 'LIMIT ' . intval($pos) . ', ' . $maxItems;
+                    $query .= 'LIMIT '.intval($pos).', '.$maxItems;
                     $retval = $dbi->fetchResult($query);
                     break;
                 }
 
                 $db = Util::backquote($db);
                 $table = Util::backquote($table);
-                $query = 'SHOW COLUMNS FROM ' . $table . ' FROM ' . $db;
+                $query = 'SHOW COLUMNS FROM '.$table.' FROM '.$db;
                 $handle = $dbi->tryQuery($query);
                 if ($handle === false) {
                     break;
@@ -211,7 +210,7 @@ class NodeTable extends NodeDatabaseChild
                             'name' => $arr['Field'],
                             'key' => $arr['Key'],
                             'type' => Util::extractColumnSpec($arr['Type'])['type'],
-                            'default' =>  $arr['Default'],
+                            'default' => $arr['Default'],
                             'nullable' => ($arr['Null'] === 'NO' ? '' : 'nullable'),
                         ];
                         $count++;
@@ -221,7 +220,7 @@ class NodeTable extends NodeDatabaseChild
             case 'indexes':
                 $db = Util::backquote($db);
                 $table = Util::backquote($table);
-                $query = 'SHOW INDEXES FROM ' . $table . ' FROM ' . $db;
+                $query = 'SHOW INDEXES FROM '.$table.' FROM '.$db;
                 $handle = $dbi->tryQuery($query);
                 if ($handle === false) {
                     break;
@@ -246,18 +245,18 @@ class NodeTable extends NodeDatabaseChild
                     $query = 'SELECT `TRIGGER_NAME` AS `name` ';
                     $query .= 'FROM `INFORMATION_SCHEMA`.`TRIGGERS` ';
                     $query .= 'WHERE `EVENT_OBJECT_SCHEMA` '
-                    . Util::getCollateForIS() . "='" . $db . "' ";
+                    .Util::getCollateForIS()."='".$db."' ";
                     $query .= 'AND `EVENT_OBJECT_TABLE` '
-                    . Util::getCollateForIS() . "='" . $table . "' ";
+                    .Util::getCollateForIS()."='".$table."' ";
                     $query .= 'ORDER BY `TRIGGER_NAME` ASC ';
-                    $query .= 'LIMIT ' . intval($pos) . ', ' . $maxItems;
+                    $query .= 'LIMIT '.intval($pos).', '.$maxItems;
                     $retval = $dbi->fetchResult($query);
                     break;
                 }
 
                 $db = Util::backquote($db);
                 $table = $dbi->escapeString($table);
-                $query = 'SHOW TRIGGERS FROM ' . $db . " WHERE `Table` = '" . $table . "'";
+                $query = 'SHOW TRIGGERS FROM '.$db." WHERE `Table` = '".$table."'";
                 $handle = $dbi->tryQuery($query);
                 if ($handle === false) {
                     break;
@@ -295,8 +294,7 @@ class NodeTable extends NodeDatabaseChild
     /**
      * Add an icon to navigation tree
      *
-     * @param string $page Page name to redirect
-     *
+     * @param  string  $page  Page name to redirect
      * @return void
      */
     private function addIcon($page)

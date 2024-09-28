@@ -6,6 +6,7 @@ namespace PhpMyAdmin\Query;
 
 use PhpMyAdmin\Error;
 use PhpMyAdmin\Url;
+
 use function array_slice;
 use function debug_backtrace;
 use function explode;
@@ -51,9 +52,9 @@ class Utilities
     /**
      * Checks whether given schema is a system schema
      *
-     * @param string $schema_name        Name of schema (database) to test
-     * @param bool   $testForMysqlSchema Whether 'mysql' schema should
-     *                                   be treated the same as IS and DD
+     * @param  string  $schema_name  Name of schema (database) to test
+     * @param  bool  $testForMysqlSchema  Whether 'mysql' schema should
+     *                                    be treated the same as IS and DD
      */
     public static function isSystemSchema(
         string $schema_name,
@@ -74,37 +75,36 @@ class Utilities
      * This is needed because some errors messages cannot
      * be obtained by mysql_error().
      *
-     * @param int    $error_number  Error code
-     * @param string $error_message Error message as returned by server
-     *
+     * @param  int  $error_number  Error code
+     * @param  string  $error_message  Error message as returned by server
      * @return string HML text with error details
      */
     public static function formatError(int $error_number, string $error_message): string
     {
         $error_message = htmlspecialchars($error_message);
 
-        $error = '#' . ((string) $error_number);
+        $error = '#'.((string) $error_number);
         $separator = ' &mdash; ';
 
         if ($error_number == 2002) {
-            $error .= ' - ' . $error_message;
+            $error .= ' - '.$error_message;
             $error .= $separator;
             $error .= __(
                 'The server is not responding (or the local server\'s socket'
-                . ' is not correctly configured).'
+                .' is not correctly configured).'
             );
         } elseif ($error_number == 2003) {
-            $error .= ' - ' . $error_message;
-            $error .= $separator . __('The server is not responding.');
+            $error .= ' - '.$error_message;
+            $error .= $separator.__('The server is not responding.');
         } elseif ($error_number == 1698) {
-            $error .= ' - ' . $error_message;
-            $error .= $separator . '<a href="' . Url::getFromRoute('/logout') . '" class="disableAjax">';
-            $error .= __('Logout and try as another user.') . '</a>';
+            $error .= ' - '.$error_message;
+            $error .= $separator.'<a href="'.Url::getFromRoute('/logout').'" class="disableAjax">';
+            $error .= __('Logout and try as another user.').'</a>';
         } elseif ($error_number == 1005) {
             if (strpos($error_message, 'errno: 13') !== false) {
-                $error .= ' - ' . $error_message;
+                $error .= ' - '.$error_message;
                 $error .= $separator
-                    . __(
+                    .__(
                         'Please check privileges of directory containing database.'
                     );
             } else {
@@ -113,13 +113,13 @@ class Utilities
                  * https://dev.mysql.com/doc/refman/5.0/en/
                  * innodb-foreign-key-constraints.html
                  */
-                $error .= ' - ' . $error_message .
-                    ' (<a href="' .
-                    Url::getFromRoute('/server/engines/InnoDB/Status') .
-                    '">' . __('Details…') . '</a>)';
+                $error .= ' - '.$error_message.
+                    ' (<a href="'.
+                    Url::getFromRoute('/server/engines/InnoDB/Status').
+                    '">'.__('Details…').'</a>)';
             }
         } else {
-            $error .= ' - ' . $error_message;
+            $error .= ' - '.$error_message;
         }
 
         return $error;
@@ -128,13 +128,12 @@ class Utilities
     /**
      * usort comparison callback
      *
-     * @param array  $a         first argument to sort
-     * @param array  $b         second argument to sort
-     * @param string $sortBy    Key to sort by
-     * @param string $sortOrder The order (ASC/DESC)
-     *
-     * @return int  a value representing whether $a should be before $b in the
-     *              sorted array or not
+     * @param  array  $a  first argument to sort
+     * @param  array  $b  second argument to sort
+     * @param  string  $sortBy  Key to sort by
+     * @param  string  $sortOrder  The order (ASC/DESC)
+     * @return int a value representing whether $a should be before $b in the
+     *             sorted array or not
      */
     public static function usortComparisonCallback(array $a, array $b, string $sortBy, string $sortOrder): int
     {
@@ -162,7 +161,7 @@ class Utilities
     /**
      * Convert version string to integer.
      *
-     * @param string $version MySQL server version
+     * @param  string  $version  MySQL server version
      */
     public static function versionToInt(string $version): int
     {
@@ -174,10 +173,10 @@ class Utilities
     /**
      * Stores query data into session data for debugging purposes
      *
-     * @param string      $query        Query text
-     * @param string|null $errorMessage Error message from getError()
-     * @param object|bool $result       Query result
-     * @param int|float   $time         Time to execute query
+     * @param  string  $query  Query text
+     * @param  string|null  $errorMessage  Error message from getError()
+     * @param  object|bool  $result  Query result
+     * @param  int|float  $time  Time to execute query
      */
     public static function debugLogQueryIntoSession(string $query, ?string $errorMessage, $result, $time): void
     {
@@ -186,7 +185,7 @@ class Utilities
         if ($result === false && $errorMessage !== null) {
             $dbgInfo['error']
                 = '<span class="color_red">'
-                . htmlspecialchars($errorMessage) . '</span>';
+                .htmlspecialchars($errorMessage).'</span>';
         }
         $dbgInfo['query'] = htmlspecialchars($query);
         $dbgInfo['time'] = $time;

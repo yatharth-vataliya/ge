@@ -50,12 +50,12 @@ class PageSettings
     private $userPreferences;
 
     /**
-     * @param string $formGroupName The name of config form group to display
-     * @param string $elemId        Id of the div containing settings
+     * @param  string  $formGroupName  The name of config form group to display
+     * @param  string  $elemId  Id of the div containing settings
      */
     public function __construct($formGroupName, $elemId = null)
     {
-        $this->userPreferences = new UserPreferences();
+        $this->userPreferences = new UserPreferences;
 
         $formClass = PageFormList::get($formGroupName);
         if ($formClass === null) {
@@ -91,10 +91,9 @@ class PageSettings
     /**
      * Process response to form
      *
-     * @param FormDisplay  $formDisplay Form
-     * @param ConfigFile   $cf          Configuration file
-     * @param Message|null $error       Error message
-     *
+     * @param  FormDisplay  $formDisplay  Form
+     * @param  ConfigFile  $cf  Configuration file
+     * @param  Message|null  $error  Error message
      * @return void
      */
     private function processPageSettings(&$formDisplay, &$cf, &$error)
@@ -120,9 +119,8 @@ class PageSettings
     /**
      * Store errors in _errorHTML
      *
-     * @param FormDisplay  $formDisplay Form
-     * @param Message|null $error       Error message
-     *
+     * @param  FormDisplay  $formDisplay  Form
+     * @param  Message|null  $error  Error message
      * @return void
      */
     private function storeError(&$formDisplay, &$error)
@@ -134,12 +132,12 @@ class PageSettings
         if ($formDisplay->hasErrors()) {
             // form has errors
             $retval .= '<div class="alert alert-danger config-form" role="alert">'
-                . '<b>' . __(
+                .'<b>'.__(
                     'Cannot save settings, submitted configuration form contains '
-                    . 'errors!'
-                ) . '</b>'
-                . $formDisplay->displayErrors()
-                . '</div>';
+                    .'errors!'
+                ).'</b>'
+                .$formDisplay->displayErrors()
+                .'</div>';
         }
         $this->errorHTML = $retval;
     }
@@ -147,9 +145,8 @@ class PageSettings
     /**
      * Display page-related settings
      *
-     * @param FormDisplay $formDisplay Form
-     * @param Message     $error       Error message
-     *
+     * @param  FormDisplay  $formDisplay  Form
+     * @param  Message  $error  Error message
      * @return string
      */
     private function getPageSettingsDisplay(&$formDisplay, &$error)
@@ -160,7 +157,7 @@ class PageSettings
 
         $this->storeError($formDisplay, $error);
 
-        $retval .= '<div id="' . $this->elemId . '">';
+        $retval .= '<div id="'.$this->elemId.'">';
         $retval .= '<div class="page_settings">';
         $retval .= $formDisplay->getDisplay(
             true,

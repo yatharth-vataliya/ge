@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Gis;
 
 use TCPDF;
+
 use function array_merge;
 use function array_push;
 use function array_slice;
@@ -33,24 +34,18 @@ class GisMultiPolygon extends GisGeometry
 
     /**
      * A private constructor; prevents direct creation of object.
-     *
-     * @access private
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Returns the singleton.
      *
      * @return GisMultiPolygon the singleton
-     *
-     * @access public
      */
     public static function singleton()
     {
         if (! isset(self::$instance)) {
-            self::$instance = new GisMultiPolygon();
+            self::$instance = new GisMultiPolygon;
         }
 
         return self::$instance;
@@ -59,11 +54,8 @@ class GisMultiPolygon extends GisGeometry
     /**
      * Scales each row.
      *
-     * @param string $spatial spatial data of a row
-     *
+     * @param  string  $spatial  spatial data of a row
      * @return array an array containing the min, max values for x and y coordinates
-     *
-     * @access public
      */
     public function scaleRow($spatial)
     {
@@ -97,15 +89,12 @@ class GisMultiPolygon extends GisGeometry
     /**
      * Adds to the PNG image object, the data related to a row in the GIS dataset.
      *
-     * @param string      $spatial    GIS POLYGON object
-     * @param string|null $label      Label for the GIS POLYGON object
-     * @param string      $fill_color Color for the GIS POLYGON object
-     * @param array       $scale_data Array containing data related to scaling
-     * @param resource    $image      Image object
-     *
+     * @param  string  $spatial  GIS POLYGON object
+     * @param  string|null  $label  Label for the GIS POLYGON object
+     * @param  string  $fill_color  Color for the GIS POLYGON object
+     * @param  array  $scale_data  Array containing data related to scaling
+     * @param  resource  $image  Image object
      * @return resource the modified image object
-     *
-     * @access public
      */
     public function prepareRowAsPng(
         $spatial,
@@ -181,15 +170,12 @@ class GisMultiPolygon extends GisGeometry
     /**
      * Adds to the TCPDF instance, the data related to a row in the GIS dataset.
      *
-     * @param string      $spatial    GIS MULTIPOLYGON object
-     * @param string|null $label      Label for the GIS MULTIPOLYGON object
-     * @param string      $fill_color Color for the GIS MULTIPOLYGON object
-     * @param array       $scale_data Array containing data related to scaling
-     * @param TCPDF       $pdf        TCPDF instance
-     *
+     * @param  string  $spatial  GIS MULTIPOLYGON object
+     * @param  string|null  $label  Label for the GIS MULTIPOLYGON object
+     * @param  string  $fill_color  Color for the GIS MULTIPOLYGON object
+     * @param  array  $scale_data  Array containing data related to scaling
+     * @param  TCPDF  $pdf  TCPDF instance
      * @return TCPDF the modified TCPDF instance
-     *
-     * @access public
      */
     public function prepareRowAsPdf($spatial, ?string $label, $fill_color, array $scale_data, $pdf)
     {
@@ -258,24 +244,21 @@ class GisMultiPolygon extends GisGeometry
     /**
      * Prepares and returns the code related to a row in the GIS dataset as SVG.
      *
-     * @param string $spatial    GIS MULTIPOLYGON object
-     * @param string $label      Label for the GIS MULTIPOLYGON object
-     * @param string $fill_color Color for the GIS MULTIPOLYGON object
-     * @param array  $scale_data Array containing data related to scaling
-     *
+     * @param  string  $spatial  GIS MULTIPOLYGON object
+     * @param  string  $label  Label for the GIS MULTIPOLYGON object
+     * @param  string  $fill_color  Color for the GIS MULTIPOLYGON object
+     * @param  array  $scale_data  Array containing data related to scaling
      * @return string the code related to a row in the GIS dataset
-     *
-     * @access public
      */
     public function prepareRowAsSvg($spatial, $label, $fill_color, array $scale_data)
     {
         $polygon_options = [
-            'name'         => $label,
-            'class'        => 'multipolygon vector',
-            'stroke'       => 'black',
+            'name' => $label,
+            'class' => 'multipolygon vector',
+            'stroke' => 'black',
             'stroke-width' => 0.5,
-            'fill'         => $fill_color,
-            'fill-rule'    => 'evenodd',
+            'fill' => $fill_color,
+            'fill-rule' => 'evenodd',
             'fill-opacity' => 0.8,
         ];
 
@@ -309,10 +292,10 @@ class GisMultiPolygon extends GisGeometry
                     $row .= $this->drawPath($inner_poly, $scale_data);
                 }
             }
-            $polygon_options['id'] = $label . $this->getRandomId();
+            $polygon_options['id'] = $label.$this->getRandomId();
             $row .= '"';
             foreach ($polygon_options as $option => $val) {
-                $row .= ' ' . $option . '="' . trim((string) $val) . '"';
+                $row .= ' '.$option.'="'.trim((string) $val).'"';
             }
             $row .= '/>';
         }
@@ -324,15 +307,12 @@ class GisMultiPolygon extends GisGeometry
      * Prepares JavaScript related to a row in the GIS dataset
      * to visualize it with OpenLayers.
      *
-     * @param string $spatial    GIS MULTIPOLYGON object
-     * @param int    $srid       Spatial reference ID
-     * @param string $label      Label for the GIS MULTIPOLYGON object
-     * @param array  $fill_color Color for the GIS MULTIPOLYGON object
-     * @param array  $scale_data Array containing data related to scaling
-     *
+     * @param  string  $spatial  GIS MULTIPOLYGON object
+     * @param  int  $srid  Spatial reference ID
+     * @param  string  $label  Label for the GIS MULTIPOLYGON object
+     * @param  array  $fill_color  Color for the GIS MULTIPOLYGON object
+     * @param  array  $scale_data  Array containing data related to scaling
      * @return string JavaScript related to a row in the GIS dataset
-     *
-     * @access public
      */
     public function prepareRowAsOl($spatial, $srid, $label, $fill_color, array $scale_data)
     {
@@ -340,16 +320,16 @@ class GisMultiPolygon extends GisGeometry
         array_push($fill_color, $fill_opacity);
         $fill_style = ['color' => $fill_color];
         $stroke_style = [
-            'color' => [0,0,0],
+            'color' => [0, 0, 0],
             'width' => 0.5,
         ];
-        $row =  'var style = new ol.style.Style({'
-            . 'fill: new ol.style.Fill(' . json_encode($fill_style) . '),'
-            . 'stroke: new ol.style.Stroke(' . json_encode($stroke_style) . ')';
+        $row = 'var style = new ol.style.Style({'
+            .'fill: new ol.style.Fill('.json_encode($fill_style).'),'
+            .'stroke: new ol.style.Stroke('.json_encode($stroke_style).')';
 
         if ($label) {
             $text_style = ['text' => $label];
-            $row .= ',text: new ol.style.Text(' . json_encode($text_style) . ')';
+            $row .= ',text: new ol.style.Text('.json_encode($text_style).')';
         }
 
         $row .= '});';
@@ -369,31 +349,28 @@ class GisMultiPolygon extends GisGeometry
         // Separate each polygon
         $polygons = explode(')),((', $multipolygon);
 
-        return $row . $this->getPolygonArrayForOpenLayers($polygons, $srid)
-            . 'var multiPolygon = new ol.geom.MultiPolygon(polygonArray);'
-            . 'var feature = new ol.Feature(multiPolygon);'
-            . 'feature.setStyle(style);'
-            . 'vectorLayer.addFeature(feature);';
+        return $row.$this->getPolygonArrayForOpenLayers($polygons, $srid)
+            .'var multiPolygon = new ol.geom.MultiPolygon(polygonArray);'
+            .'var feature = new ol.Feature(multiPolygon);'
+            .'feature.setStyle(style);'
+            .'vectorLayer.addFeature(feature);';
     }
 
     /**
      * Draws a ring of the polygon using SVG path element.
      *
-     * @param string $polygon    The ring
-     * @param array  $scale_data Array containing data related to scaling
-     *
+     * @param  string  $polygon  The ring
+     * @param  array  $scale_data  Array containing data related to scaling
      * @return string the code to draw the ring
-     *
-     * @access private
      */
     private function drawPath($polygon, array $scale_data)
     {
         $points_arr = $this->extractPoints($polygon, $scale_data);
 
-        $row = ' M ' . $points_arr[0][0] . ', ' . $points_arr[0][1];
+        $row = ' M '.$points_arr[0][0].', '.$points_arr[0][1];
         $other_points = array_slice($points_arr, 1, count($points_arr) - 2);
         foreach ($other_points as $point) {
-            $row .= ' L ' . $point[0] . ', ' . $point[1];
+            $row .= ' L '.$point[0].', '.$point[1];
         }
         $row .= ' Z ';
 
@@ -403,13 +380,10 @@ class GisMultiPolygon extends GisGeometry
     /**
      * Generate the WKT with the set of parameters passed by the GIS editor.
      *
-     * @param array  $gis_data GIS data
-     * @param int    $index    Index into the parameter object
-     * @param string $empty    Value for empty points
-     *
+     * @param  array  $gis_data  GIS data
+     * @param  int  $index  Index into the parameter object
+     * @param  string  $empty  Value for empty points
      * @return string WKT with the set of parameters passed by the GIS editor
-     *
-     * @access public
      */
     public function generateWkt(array $gis_data, $index, $empty = '')
     {
@@ -437,9 +411,9 @@ class GisMultiPolygon extends GisGeometry
                     $wkt .= (isset($data_row[$k][$i][$j]['x'])
                             && trim((string) $data_row[$k][$i][$j]['x']) != ''
                             ? $data_row[$k][$i][$j]['x'] : $empty)
-                        . ' ' . (isset($data_row[$k][$i][$j]['y'])
+                        .' '.(isset($data_row[$k][$i][$j]['y'])
                             && trim((string) $data_row[$k][$i][$j]['y']) != ''
-                            ? $data_row[$k][$i][$j]['y'] : $empty) . ',';
+                            ? $data_row[$k][$i][$j]['y'] : $empty).',';
                 }
                 $wkt
                     = mb_substr(
@@ -464,17 +438,14 @@ class GisMultiPolygon extends GisGeometry
                 mb_strlen($wkt) - 1
             );
 
-        return $wkt . ')';
+        return $wkt.')';
     }
 
     /**
      * Generate the WKT for the data from ESRI shape files.
      *
-     * @param array $row_data GIS data
-     *
+     * @param  array  $row_data  GIS data
      * @return string the WKT for the data from ESRI shape files
-     *
-     * @access public
      */
     public function getShape(array $row_data)
     {
@@ -534,7 +505,7 @@ class GisMultiPolygon extends GisGeometry
 
             $wkt .= '('; // start of outer ring
             foreach ($ring['points'] as $point) {
-                $wkt .= $point['x'] . ' ' . $point['y'] . ',';
+                $wkt .= $point['x'].' '.$point['y'].',';
             }
             $wkt
                 = mb_substr(
@@ -549,7 +520,7 @@ class GisMultiPolygon extends GisGeometry
                 foreach ($ring['inner'] as $j) {
                     $wkt .= ',('; // start of inner ring
                     foreach ($row_data['parts'][$j]['points'] as $innerPoint) {
-                        $wkt .= $innerPoint['x'] . ' ' . $innerPoint['y'] . ',';
+                        $wkt .= $innerPoint['x'].' '.$innerPoint['y'].',';
                     }
                     $wkt
                         = mb_substr(
@@ -570,18 +541,15 @@ class GisMultiPolygon extends GisGeometry
                 mb_strlen($wkt) - 1
             );
 
-        return $wkt . ')';
+        return $wkt.')';
     }
 
     /**
      * Generate parameters for the GIS data editor from the value of the GIS column.
      *
-     * @param string $value Value of the GIS column
-     * @param int    $index Index of the geometry
-     *
+     * @param  string  $value  Value of the GIS column
+     * @param  int  $index  Index of the geometry
      * @return array params for the GIS data editor from the value of the GIS column
-     *
-     * @access public
      */
     public function generateParams($value, $index = -1)
     {
@@ -606,7 +574,7 @@ class GisMultiPolygon extends GisGeometry
         // Separate each polygon
         $polygons = explode(')),((', $multipolygon);
 
-        $param_row =& $params[$index]['MULTIPOLYGON'];
+        $param_row = &$params[$index]['MULTIPOLYGON'];
         $param_row['no_of_polygons'] = count($polygons);
 
         $k = 0;

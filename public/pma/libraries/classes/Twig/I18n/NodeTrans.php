@@ -8,6 +8,7 @@ use PhpMyAdmin\Twig\Extensions\Node\TransNode;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Node;
+
 use function array_merge;
 use function str_replace;
 use function trim;
@@ -18,13 +19,13 @@ class NodeTrans extends TransNode
      * The nodes are automatically made available as properties ($this->node).
      * The attributes are automatically made available as array items ($this['name']).
      *
-     * @param Node               $body    Body of node trans
-     * @param Node|null          $plural  Node plural
-     * @param AbstractExpression $count   Node count
-     * @param Node|null          $context Node context
-     * @param Node|null          $notes   Node notes
-     * @param int                $lineno  The line number
-     * @param string             $tag     The tag name associated with the Node
+     * @param  Node  $body  Body of node trans
+     * @param  Node|null  $plural  Node plural
+     * @param  AbstractExpression  $count  Node count
+     * @param  Node|null  $context  Node context
+     * @param  Node|null  $notes  Node notes
+     * @param  int  $lineno  The line number
+     * @param  string  $tag  The tag name associated with the Node
      */
     public function __construct(
         Node $body,
@@ -55,8 +56,7 @@ class NodeTrans extends TransNode
     /**
      * Compiles the node to PHP.
      *
-     * @param Compiler $compiler Node compiler
-     *
+     * @param  Compiler  $compiler  Node compiler
      * @return void
      */
     public function compile(Compiler $compiler)
@@ -82,12 +82,12 @@ class NodeTrans extends TransNode
 
             // line breaks are not allowed cause we want a single line comment
             $message = str_replace(["\n", "\r"], ' ', $message);
-            $compiler->write('// l10n: ' . $message . "\n");
+            $compiler->write('// l10n: '.$message."\n");
         }
 
         if ($vars) {
             $compiler
-                ->write('echo strtr(' . $function . '(')
+                ->write('echo strtr('.$function.'(')
                 ->subcompile($msg);
 
             if ($this->hasNode('plural')) {
@@ -110,7 +110,7 @@ class NodeTrans extends TransNode
                         ->raw('), ');
                 } else {
                     $compiler
-                        ->string('%' . $var->getAttribute('name') . '%')
+                        ->string('%'.$var->getAttribute('name').'%')
                         ->raw(' => ')
                         ->subcompile($var)
                         ->raw(', ');
@@ -119,11 +119,11 @@ class NodeTrans extends TransNode
 
             $compiler->raw("));\n");
         } else {
-            $compiler->write('echo ' . $function . '(');
+            $compiler->write('echo '.$function.'(');
 
             if ($this->hasNode('context')) {
                 $context = trim($this->getNode('context')->getAttribute('data'));
-                $compiler->write('"' . $context . '", ');
+                $compiler->write('"'.$context.'", ');
             }
 
             $compiler->subcompile($msg);
@@ -142,8 +142,8 @@ class NodeTrans extends TransNode
     }
 
     /**
-     * @param bool $plural        Return plural or singular function to use
-     * @param bool $hasMsgContext It has message context?
+     * @param  bool  $plural  Return plural or singular function to use
+     * @param  bool  $hasMsgContext  It has message context?
      */
     protected function getTransFunction($plural, bool $hasMsgContext = false): string
     {

@@ -13,6 +13,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_merge;
 use function is_array;
 
@@ -25,8 +26,8 @@ final class ExportController extends AbstractController
     private $exportOptions;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name.
+     * @param  Response  $response
+     * @param  string  $db  Database name.
      */
     public function __construct($response, Template $template, $db, Export $export, Options $exportOptions)
     {
@@ -49,7 +50,7 @@ final class ExportController extends AbstractController
 
         // $sub_part is used in Util::getDbInfo() to see if we are coming from
         // /database/export, in which case we don't obey $cfg['MaxTableList']
-        $sub_part  = '_export';
+        $sub_part = '_export';
 
         Util::checkParameters(['db']);
 

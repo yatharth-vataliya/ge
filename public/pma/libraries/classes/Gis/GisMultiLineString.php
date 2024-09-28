@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Gis;
 
 use TCPDF;
+
 use function count;
 use function explode;
 use function hexdec;
@@ -29,24 +30,18 @@ class GisMultiLineString extends GisGeometry
 
     /**
      * A private constructor; prevents direct creation of object.
-     *
-     * @access private
      */
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Returns the singleton.
      *
      * @return GisMultiLineString the singleton
-     *
-     * @access public
      */
     public static function singleton()
     {
         if (! isset(self::$instance)) {
-            self::$instance = new GisMultiLineString();
+            self::$instance = new GisMultiLineString;
         }
 
         return self::$instance;
@@ -55,11 +50,8 @@ class GisMultiLineString extends GisGeometry
     /**
      * Scales each row.
      *
-     * @param string $spatial spatial data of a row
-     *
+     * @param  string  $spatial  spatial data of a row
      * @return array an array containing the min, max values for x and y coordinates
-     *
-     * @access public
      */
     public function scaleRow($spatial)
     {
@@ -85,15 +77,12 @@ class GisMultiLineString extends GisGeometry
     /**
      * Adds to the PNG image object, the data related to a row in the GIS dataset.
      *
-     * @param string      $spatial    GIS POLYGON object
-     * @param string|null $label      Label for the GIS POLYGON object
-     * @param string      $line_color Color for the GIS POLYGON object
-     * @param array       $scale_data Array containing data related to scaling
-     * @param resource    $image      Image object
-     *
+     * @param  string  $spatial  GIS POLYGON object
+     * @param  string|null  $label  Label for the GIS POLYGON object
+     * @param  string  $line_color  Color for the GIS POLYGON object
+     * @param  array  $scale_data  Array containing data related to scaling
+     * @param  resource  $image  Image object
      * @return resource the modified image object
-     *
-     * @access public
      */
     public function prepareRowAsPng(
         $spatial,
@@ -159,15 +148,12 @@ class GisMultiLineString extends GisGeometry
     /**
      * Adds to the TCPDF instance, the data related to a row in the GIS dataset.
      *
-     * @param string      $spatial    GIS MULTILINESTRING object
-     * @param string|null $label      Label for the GIS MULTILINESTRING object
-     * @param string      $line_color Color for the GIS MULTILINESTRING object
-     * @param array       $scale_data Array containing data related to scaling
-     * @param TCPDF       $pdf        TCPDF instance
-     *
+     * @param  string  $spatial  GIS MULTILINESTRING object
+     * @param  string|null  $label  Label for the GIS MULTILINESTRING object
+     * @param  string  $line_color  Color for the GIS MULTILINESTRING object
+     * @param  array  $scale_data  Array containing data related to scaling
+     * @param  TCPDF  $pdf  TCPDF instance
      * @return TCPDF the modified TCPDF instance
-     *
-     * @access public
      */
     public function prepareRowAsPdf($spatial, ?string $label, $line_color, array $scale_data, $pdf)
     {
@@ -228,22 +214,19 @@ class GisMultiLineString extends GisGeometry
     /**
      * Prepares and returns the code related to a row in the GIS dataset as SVG.
      *
-     * @param string $spatial    GIS MULTILINESTRING object
-     * @param string $label      Label for the GIS MULTILINESTRING object
-     * @param string $line_color Color for the GIS MULTILINESTRING object
-     * @param array  $scale_data Array containing data related to scaling
-     *
+     * @param  string  $spatial  GIS MULTILINESTRING object
+     * @param  string  $label  Label for the GIS MULTILINESTRING object
+     * @param  string  $line_color  Color for the GIS MULTILINESTRING object
+     * @param  array  $scale_data  Array containing data related to scaling
      * @return string the code related to a row in the GIS dataset
-     *
-     * @access public
      */
     public function prepareRowAsSvg($spatial, $label, $line_color, array $scale_data)
     {
         $line_options = [
-            'name'         => $label,
-            'class'        => 'linestring vector',
-            'fill'         => 'none',
-            'stroke'       => $line_color,
+            'name' => $label,
+            'class' => 'linestring vector',
+            'fill' => 'none',
+            'stroke' => $line_color,
             'stroke-width' => 2,
         ];
 
@@ -263,12 +246,12 @@ class GisMultiLineString extends GisGeometry
 
             $row .= '<polyline points="';
             foreach ($points_arr as $point) {
-                $row .= $point[0] . ',' . $point[1] . ' ';
+                $row .= $point[0].','.$point[1].' ';
             }
             $row .= '"';
-            $line_options['id'] = $label . $this->getRandomId();
+            $line_options['id'] = $label.$this->getRandomId();
             foreach ($line_options as $option => $val) {
-                $row .= ' ' . $option . '="' . trim((string) $val) . '"';
+                $row .= ' '.$option.'="'.trim((string) $val).'"';
             }
             $row .= '/>';
         }
@@ -280,15 +263,12 @@ class GisMultiLineString extends GisGeometry
      * Prepares JavaScript related to a row in the GIS dataset
      * to visualize it with OpenLayers.
      *
-     * @param string $spatial    GIS MULTILINESTRING object
-     * @param int    $srid       Spatial reference ID
-     * @param string $label      Label for the GIS MULTILINESTRING object
-     * @param array  $line_color Color for the GIS MULTILINESTRING object
-     * @param array  $scale_data Array containing data related to scaling
-     *
+     * @param  string  $spatial  GIS MULTILINESTRING object
+     * @param  int  $srid  Spatial reference ID
+     * @param  string  $label  Label for the GIS MULTILINESTRING object
+     * @param  array  $line_color  Color for the GIS MULTILINESTRING object
+     * @param  array  $scale_data  Array containing data related to scaling
      * @return string JavaScript related to a row in the GIS dataset
-     *
-     * @access public
      */
     public function prepareRowAsOl($spatial, $srid, $label, $line_color, array $scale_data)
     {
@@ -297,11 +277,11 @@ class GisMultiLineString extends GisGeometry
             'width' => 2,
         ];
 
-        $row =  'var style = new ol.style.Style({'
-            . 'stroke: new ol.style.Stroke(' . json_encode($stroke_style) . ')';
+        $row = 'var style = new ol.style.Style({'
+            .'stroke: new ol.style.Stroke('.json_encode($stroke_style).')';
         if ($label) {
             $text_style = ['text' => $label];
-            $row .= ', text: new ol.style.Text(' . json_encode($text_style) . ')';
+            $row .= ', text: new ol.style.Text('.json_encode($text_style).')';
         }
 
         $row .= '});';
@@ -321,23 +301,20 @@ class GisMultiLineString extends GisGeometry
         // Separate each linestring
         $linestirngs = explode('),(', $multilinestirng);
 
-        return $row . $this->getLineArrayForOpenLayers($linestirngs, $srid)
-            . 'var multiLineString = new ol.geom.MultiLineString(arr);'
-            . 'var feature = new ol.Feature({geometry: multiLineString});'
-            . 'feature.setStyle(style);'
-            . 'vectorLayer.addFeature(feature);';
+        return $row.$this->getLineArrayForOpenLayers($linestirngs, $srid)
+            .'var multiLineString = new ol.geom.MultiLineString(arr);'
+            .'var feature = new ol.Feature({geometry: multiLineString});'
+            .'feature.setStyle(style);'
+            .'vectorLayer.addFeature(feature);';
     }
 
     /**
      * Generate the WKT with the set of parameters passed by the GIS editor.
      *
-     * @param array  $gis_data GIS data
-     * @param int    $index    Index into the parameter object
-     * @param string $empty    Value for empty points
-     *
+     * @param  array  $gis_data  GIS data
+     * @param  int  $index  Index into the parameter object
+     * @param  string  $empty  Value for empty points
      * @return string WKT with the set of parameters passed by the GIS editor
-     *
-     * @access public
      */
     public function generateWkt(array $gis_data, $index, $empty = '')
     {
@@ -359,9 +336,9 @@ class GisMultiLineString extends GisGeometry
                 $wkt .= (isset($data_row[$i][$j]['x'])
                         && trim((string) $data_row[$i][$j]['x']) != ''
                         ? $data_row[$i][$j]['x'] : $empty)
-                    . ' ' . (isset($data_row[$i][$j]['y'])
+                    .' '.(isset($data_row[$i][$j]['y'])
                         && trim((string) $data_row[$i][$j]['y']) != ''
-                        ? $data_row[$i][$j]['y'] : $empty) . ',';
+                        ? $data_row[$i][$j]['y'] : $empty).',';
             }
             $wkt
                 = mb_substr(
@@ -378,17 +355,14 @@ class GisMultiLineString extends GisGeometry
                 mb_strlen($wkt) - 1
             );
 
-        return $wkt . ')';
+        return $wkt.')';
     }
 
     /**
      * Generate the WKT for the data from ESRI shape files.
      *
-     * @param array $row_data GIS data
-     *
+     * @param  array  $row_data  GIS data
      * @return string the WKT for the data from ESRI shape files
-     *
-     * @access public
      */
     public function getShape(array $row_data)
     {
@@ -396,7 +370,7 @@ class GisMultiLineString extends GisGeometry
         for ($i = 0; $i < $row_data['numparts']; $i++) {
             $wkt .= '(';
             foreach ($row_data['parts'][$i]['points'] as $point) {
-                $wkt .= $point['x'] . ' ' . $point['y'] . ',';
+                $wkt .= $point['x'].' '.$point['y'].',';
             }
             $wkt
                 = mb_substr(
@@ -413,18 +387,15 @@ class GisMultiLineString extends GisGeometry
                 mb_strlen($wkt) - 1
             );
 
-        return $wkt . ')';
+        return $wkt.')';
     }
 
     /**
      * Generate parameters for the GIS data editor from the value of the GIS column.
      *
-     * @param string $value Value of the GIS column
-     * @param int    $index Index of the geometry
-     *
+     * @param  string  $value  Value of the GIS column
+     * @param  int  $index  Index of the geometry
      * @return array params for the GIS data editor from the value of the GIS column
-     *
-     * @access public
      */
     public function generateParams($value, $index = -1)
     {

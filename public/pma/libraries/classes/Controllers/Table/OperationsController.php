@@ -20,6 +20,7 @@ use PhpMyAdmin\StorageEngine;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function count;
 use function implode;
 use function mb_strstr;
@@ -43,10 +44,10 @@ class OperationsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -240,12 +241,12 @@ class OperationsController extends AbstractController
             );
 
             if (count($table_alters) > 0) {
-                $sql_query      = 'ALTER TABLE '
-                    . Util::backquote($table);
-                $sql_query     .= "\r\n" . implode("\r\n", $table_alters);
-                $sql_query     .= ';';
-                $result         = (bool) $this->dbi->query($sql_query);
-                $reread_info    = true;
+                $sql_query = 'ALTER TABLE '
+                    .Util::backquote($table);
+                $sql_query .= "\r\n".implode("\r\n", $table_alters);
+                $sql_query .= ';';
+                $result = (bool) $this->dbi->query($sql_query);
+                $reread_info = true;
                 unset($table_alters);
                 $warning_messages = $this->operations->getWarningMessagesArray();
             }
@@ -341,7 +342,7 @@ class OperationsController extends AbstractController
             }
 
             if (! empty($warning_messages)) {
-                $_message = new Message();
+                $_message = new Message;
                 $_message->addMessagesString($warning_messages);
                 $_message->isError(true);
                 if ($this->response->isAjax()) {

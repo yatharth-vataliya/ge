@@ -15,6 +15,7 @@ use PhpMyAdmin\Template;
 use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function is_array;
 use function sprintf;
 
@@ -24,10 +25,10 @@ class DeleteController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param string            $table    Table name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  string  $table  Table name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, $dbi)
     {
@@ -49,7 +50,7 @@ class DeleteController extends AbstractController
             $relation,
             new RelationCleanup($this->dbi, $relation),
             new Operations($this->dbi, $relation),
-            new Transformations(),
+            new Transformations,
             $this->template
         );
 
@@ -63,7 +64,7 @@ class DeleteController extends AbstractController
                     Util::backquote($table),
                     $row
                 );
-                $sql_query .= $query . "\n";
+                $sql_query .= $query."\n";
                 $this->dbi->selectDb($db);
                 $this->dbi->query($query);
             }

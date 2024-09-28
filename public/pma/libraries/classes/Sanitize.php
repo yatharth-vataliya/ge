@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Html\MySQLDocumentation;
+
 use function array_keys;
 use function array_merge;
 use function count;
@@ -35,10 +36,9 @@ class Sanitize
     /**
      * Checks whether given link is valid
      *
-     * @param string $url   URL to check
-     * @param bool   $http  Whether to allow http links
-     * @param bool   $other Whether to allow ftp and mailto links
-     *
+     * @param  string  $url  URL to check
+     * @param  bool  $http  Whether to allow http links
+     * @param  bool  $other  Whether to allow ftp and mailto links
      * @return bool True if string can be used as link
      */
     public static function checkLink($url, $http = false, $other = false)
@@ -58,7 +58,7 @@ class Sanitize
                     continue;
                 }
 
-                $valid_starts[$key] = '.' . $value;
+                $valid_starts[$key] = '.'.$value;
             }
         }
         if ($other) {
@@ -92,8 +92,7 @@ class Sanitize
     /**
      * Callback function for replacing [a@link@target] links in bb code.
      *
-     * @param array $found Array of preg matches
-     *
+     * @param  array  $found  Array of preg matches
      * @return string Replaced string
      */
     public static function replaceBBLink(array $found)
@@ -110,7 +109,7 @@ class Sanitize
         /* Construct target */
         $target = '';
         if (! empty($found[3])) {
-            $target = ' target="' . $found[3] . '"';
+            $target = ' target="'.$found[3].'"';
             if ($found[3] === '_blank') {
                 $target .= ' rel="noopener noreferrer"';
             }
@@ -123,14 +122,13 @@ class Sanitize
             $url = $found[1];
         }
 
-        return '<a href="' . $url . '"' . $target . '>';
+        return '<a href="'.$url.'"'.$target.'>';
     }
 
     /**
      * Callback function for replacing [doc@anchor] links in bb code.
      *
-     * @param array $found Array of preg matches
-     *
+     * @param  array  $found  Array of preg matches
      * @return string Replaced string
      */
     public static function replaceDocLink(array $found)
@@ -153,7 +151,7 @@ class Sanitize
         }
         $link = MySQLDocumentation::getDocumentationLink($page, $anchor, self::isSetup() ? '../' : './');
 
-        return '<a href="' . $link . '" target="documentation">';
+        return '<a href="'.$link.'" target="documentation">';
     }
 
     /**
@@ -168,9 +166,9 @@ class Sanitize
      *
      * <a title="<?php echo Sanitize::sanitizeMessage($foo, true); ?>">bar</a>
      *
-     * @param string $message the message
-     * @param bool   $escape  whether to escape html in result
-     * @param bool   $safe    whether string is safe (can keep < and > chars)
+     * @param  string  $message  the message
+     * @param  bool  $escape  whether to escape html in result
+     * @param  bool  $safe  whether string is safe (can keep < and > chars)
      */
     public static function sanitizeMessage(string $message, $escape = false, $safe = false): string
     {
@@ -180,22 +178,22 @@ class Sanitize
 
         /* Interpret bb code */
         $replace_pairs = [
-            '[em]'      => '<em>',
-            '[/em]'     => '</em>',
-            '[strong]'  => '<strong>',
+            '[em]' => '<em>',
+            '[/em]' => '</em>',
+            '[strong]' => '<strong>',
             '[/strong]' => '</strong>',
-            '[code]'    => '<code>',
-            '[/code]'   => '</code>',
-            '[kbd]'     => '<kbd>',
-            '[/kbd]'    => '</kbd>',
-            '[br]'      => '<br>',
-            '[/a]'      => '</a>',
-            '[/doc]'      => '</a>',
-            '[sup]'     => '<sup>',
-            '[/sup]'    => '</sup>',
+            '[code]' => '<code>',
+            '[/code]' => '</code>',
+            '[kbd]' => '<kbd>',
+            '[/kbd]' => '</kbd>',
+            '[br]' => '<br>',
+            '[/a]' => '</a>',
+            '[/doc]' => '</a>',
+            '[sup]' => '<sup>',
+            '[/sup]' => '</sup>',
             // used in common.inc.php:
             '[conferr]' => '<iframe src="show_config_errors.php"><a href='
-                . '"show_config_errors.php">show_config_errors.php</a></iframe>',
+                .'"show_config_errors.php">show_config_errors.php</a></iframe>',
             // used in libraries/Util.php
             '[dochelpicon]' => Html\Generator::getImage('b_help', __('Documentation')),
         ];
@@ -236,10 +234,9 @@ class Sanitize
      *
      *    When exporting, avoiding generation of an unexpected double-extension file
      *
-     * @param string $filename    The filename
-     * @param bool   $replaceDots Whether to also replace dots
-     *
-     * @return string  the sanitized filename
+     * @param  string  $filename  The filename
+     * @param  bool  $replaceDots  Whether to also replace dots
+     * @return string the sanitized filename
      */
     public static function sanitizeFilename($filename, $replaceDots = false)
     {
@@ -261,12 +258,9 @@ class Sanitize
      * This function is used to displays a javascript confirmation box for
      * "DROP/DELETE/ALTER" queries.
      *
-     * @param string $a_string       the string to format
-     * @param bool   $add_backquotes whether to add backquotes to the string or not
-     *
-     * @return string   the formatted string
-     *
-     * @access public
+     * @param  string  $a_string  the string to format
+     * @param  bool  $add_backquotes  whether to add backquotes to the string or not
+     * @return string the formatted string
      */
     public static function jsFormat($a_string = '', $add_backquotes = true)
     {
@@ -289,9 +283,8 @@ class Sanitize
      * We also remove NUL byte as some browsers (namely MSIE) ignore it and
      * inserting it anywhere inside </script would allow to bypass this check.
      *
-     * @param string $string the string to be escaped
-     *
-     * @return string  the escaped string
+     * @param  string  $string  the string to be escaped
+     * @return string the escaped string
      */
     public static function escapeJsString($string)
     {
@@ -315,8 +308,7 @@ class Sanitize
     /**
      * Formats a value for javascript code.
      *
-     * @param string $value String to be formatted.
-     *
+     * @param  string  $value  String to be formatted.
      * @return int|string formatted value.
      */
     public static function formatJsVal($value)
@@ -333,33 +325,32 @@ class Sanitize
             return (int) $value;
         }
 
-        return '"' . self::escapeJsString($value) . '"';
+        return '"'.self::escapeJsString($value).'"';
     }
 
     /**
      * Formats an javascript assignment with proper escaping of a value
      * and support for assigning array of strings.
      *
-     * @param string $key    Name of value to set
-     * @param mixed  $value  Value to set, can be either string or array of strings
-     * @param bool   $escape Whether to escape value or keep it as it is
-     *                       (for inclusion of js code)
-     *
+     * @param  string  $key  Name of value to set
+     * @param  mixed  $value  Value to set, can be either string or array of strings
+     * @param  bool  $escape  Whether to escape value or keep it as it is
+     *                        (for inclusion of js code)
      * @return string Javascript code.
      */
     public static function getJsValue($key, $value, $escape = true)
     {
-        $result = $key . ' = ';
+        $result = $key.' = ';
         if (! $escape) {
             $result .= $value;
         } elseif (is_array($value)) {
             $result .= '[';
             foreach ($value as $val) {
-                $result .= self::formatJsVal($val) . ',';
+                $result .= self::formatJsVal($val).',';
             }
             $result .= "];\n";
         } else {
-            $result .= self::formatJsVal($value) . ";\n";
+            $result .= self::formatJsVal($value).";\n";
         }
 
         return $result;
@@ -368,9 +359,7 @@ class Sanitize
     /**
      * Removes all variables from request except allowed ones.
      *
-     * @param string[] $allowList list of variables to allow
-     *
-     * @access public
+     * @param  string[]  $allowList  list of variables to allow
      */
     public static function removeRequestVars(&$allowList): void
     {
@@ -384,6 +373,7 @@ class Sanitize
         foreach ($keys as $key) {
             if (! in_array($key, $allowList)) {
                 unset($_REQUEST[$key], $_GET[$key], $_POST[$key]);
+
                 continue;
             }
 

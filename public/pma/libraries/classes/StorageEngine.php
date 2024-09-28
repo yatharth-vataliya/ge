@@ -21,6 +21,7 @@ use PhpMyAdmin\Engines\Pbxt;
 use PhpMyAdmin\Engines\PerformanceSchema;
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Utils\SessionCache;
+
 use function array_key_exists;
 use function define;
 use function explode;
@@ -30,8 +31,8 @@ use function mb_strtolower;
 use function sprintf;
 
 /**
-* defines
-*/
+ * defines
+ */
 define('PMA_ENGINE_SUPPORT_NO', 0);
 define('PMA_ENGINE_SUPPORT_DISABLED', 1);
 define('PMA_ENGINE_SUPPORT_YES', 2);
@@ -48,10 +49,10 @@ define('PMA_ENGINE_DETAILS_TYPE_BOOLEAN', 3); // 'ON' or 'OFF'
 class StorageEngine
 {
     /** @var string engine name */
-    public $engine  = 'dummy';
+    public $engine = 'dummy';
 
     /** @var string engine title/description */
-    public $title   = 'PMA Dummy Engine Class';
+    public $title = 'PMA Dummy Engine Class';
 
     /** @var string engine lang description */
     public $comment
@@ -61,7 +62,7 @@ class StorageEngine
     public $support = PMA_ENGINE_SUPPORT_NO;
 
     /**
-     * @param string $engine The engine ID
+     * @param  string  $engine  The engine ID
      */
     public function __construct($engine)
     {
@@ -70,8 +71,8 @@ class StorageEngine
             return;
         }
 
-        $this->engine  = $engine;
-        $this->title   = $storage_engines[$engine]['Engine'];
+        $this->engine = $engine;
+        $this->title = $storage_engines[$engine]['Engine'];
         $this->comment = ($storage_engines[$engine]['Comment'] ?? '');
         switch ($storage_engines[$engine]['Support']) {
             case 'DEFAULT':
@@ -95,8 +96,8 @@ class StorageEngine
      * @return array[] array of storage engines
      *
      * @static
+     *
      * @staticvar array $storage_engines storage engines
-     * @access public
      */
     public static function getStorageEngines()
     {
@@ -157,8 +158,7 @@ class StorageEngine
     /**
      * Loads the corresponding engine plugin, if available.
      *
-     * @param string $engine The engine ID
-     *
+     * @param  string  $engine  The engine ID
      * @return StorageEngine The engine plugin
      *
      * @static
@@ -198,8 +198,7 @@ class StorageEngine
     /**
      * Returns true if given engine name is supported/valid, otherwise false
      *
-     * @param string $engine name of engine
-     *
+     * @param  string  $engine  name of engine
      * @return bool whether $engine is valid or not
      *
      * @static
@@ -222,48 +221,48 @@ class StorageEngine
      */
     public function getHtmlVariables()
     {
-        $ret        = '';
+        $ret = '';
 
         foreach ($this->getVariablesStatus() as $details) {
-            $ret .= '<tr>' . "\n"
-                  . '    <td>' . "\n";
+            $ret .= '<tr>'."\n"
+                  .'    <td>'."\n";
             if (! empty($details['desc'])) {
                 $ret .= '        '
-                    . Generator::showHint($details['desc'])
-                    . "\n";
+                    .Generator::showHint($details['desc'])
+                    ."\n";
             }
-            $ret .= '    </td>' . "\n"
-                  . '    <th scope="row">' . htmlspecialchars($details['title']) . '</th>'
-                  . "\n"
-                  . '    <td class="text-monospace text-right">';
+            $ret .= '    </td>'."\n"
+                  .'    <th scope="row">'.htmlspecialchars($details['title']).'</th>'
+                  ."\n"
+                  .'    <td class="text-monospace text-right">';
             switch ($details['type']) {
                 case PMA_ENGINE_DETAILS_TYPE_SIZE:
                     $parsed_size = $this->resolveTypeSize($details['value']);
-                    $ret .= $parsed_size[0] . '&nbsp;' . $parsed_size[1];
+                    $ret .= $parsed_size[0].'&nbsp;'.$parsed_size[1];
                     unset($parsed_size);
                     break;
                 case PMA_ENGINE_DETAILS_TYPE_NUMERIC:
-                    $ret .= Util::formatNumber($details['value']) . ' ';
+                    $ret .= Util::formatNumber($details['value']).' ';
                     break;
                 default:
-                    $ret .= htmlspecialchars($details['value']) . '   ';
+                    $ret .= htmlspecialchars($details['value']).'   ';
             }
-            $ret .= '</td>' . "\n"
-                  . '</tr>' . "\n";
+            $ret .= '</td>'."\n"
+                  .'</tr>'."\n";
         }
 
         if (! $ret) {
-            $ret = '<p>' . "\n"
-                . '    '
-                . __(
+            $ret = '<p>'."\n"
+                .'    '
+                .__(
                     'There is no detailed status information available for this '
-                    . 'storage engine.'
+                    .'storage engine.'
                 )
-                . "\n"
-                . '</p>' . "\n";
+                ."\n"
+                .'</p>'."\n";
         } else {
             $ret = '<table class="table table-light table-striped table-hover w-auto">'
-                . "\n" . $ret . '</table>' . "\n";
+                ."\n".$ret.'</table>'."\n";
         }
 
         return $ret;
@@ -277,8 +276,7 @@ class StorageEngine
      * PMA_ENGINE_DETAILS_TYPE_SIZE type needs to be
      * handled differently for a particular engine.
      *
-     * @param int $value Value to format
-     *
+     * @param  int  $value  Value to format
      * @return array the formatted value and its unit
      */
     public function resolveTypeSize($value)
@@ -299,14 +297,14 @@ class StorageEngine
         $like = $this->getVariablesLikePattern();
 
         if ($like) {
-            $like = " LIKE '" . $like . "' ";
+            $like = " LIKE '".$like."' ";
         } else {
             $like = '';
         }
 
         $mysql_vars = [];
 
-        $sql_query = 'SHOW GLOBAL VARIABLES ' . $like . ';';
+        $sql_query = 'SHOW GLOBAL VARIABLES '.$like.';';
         $res = $dbi->query($sql_query);
         while ($row = $dbi->fetchAssoc($res)) {
             if (isset($variables[$row['Variable_name']])) {
@@ -402,7 +400,7 @@ class StorageEngine
      */
     public function getMysqlHelpPage()
     {
-        return $this->engine . '-storage-engine';
+        return $this->engine.'-storage-engine';
     }
 
     /**
@@ -429,8 +427,7 @@ class StorageEngine
     /**
      * Generates the requested information page
      *
-     * @param string $id page id
-     *
+     * @param  string  $id  page id
      * @return string html output
      */
     public function getPage($id)
@@ -439,7 +436,7 @@ class StorageEngine
             return '';
         }
 
-        $id = 'getPage' . $id;
+        $id = 'getPage'.$id;
 
         return $this->$id();
     }

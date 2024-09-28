@@ -73,13 +73,13 @@ final class Collation
     private $padAttribute;
 
     /**
-     * @param string $name         Collation name
-     * @param string $charset      Related charset
-     * @param int    $id           Collation ID
-     * @param bool   $isDefault    Whether is the default
-     * @param bool   $isCompiled   Whether the charset is compiled
-     * @param int    $sortLength   Sort length
-     * @param string $padAttribute Pad attribute
+     * @param  string  $name  Collation name
+     * @param  string  $charset  Related charset
+     * @param  int  $id  Collation ID
+     * @param  bool  $isDefault  Whether is the default
+     * @param  bool  $isCompiled  Whether the charset is compiled
+     * @param  int  $sortLength  Sort length
+     * @param  string  $padAttribute  Pad attribute
      */
     private function __construct(
         string $name,
@@ -101,7 +101,7 @@ final class Collation
     }
 
     /**
-     * @param array $state State obtained from the database server
+     * @param  array  $state  State obtained from the database server
      */
     public static function fromServer(array $state): self
     {
@@ -184,6 +184,7 @@ final class Collation
                     $name, // By reference
                     $variant// Same
                 );
+
                 continue;
             }
             if ($level === 1) {
@@ -210,6 +211,7 @@ final class Collation
                 /* Germal variant */
                 if ($part === 'pb') {
                     $name = _pgettext('Collation', 'German (phone book order)');
+
                     continue;
                 }
                 $name = _pgettext('Collation', 'German (dictionary order)');
@@ -221,6 +223,7 @@ final class Collation
                 /* Spanish variant */
                 if ($part === 'trad') {
                     $name = _pgettext('Collation', 'Spanish (traditional)');
+
                     continue;
                 }
                 $name = _pgettext('Collation', 'Spanish (modern)');
@@ -256,10 +259,10 @@ final class Collation
     private function buildName(string $result, ?string $variant, array $suffixes): string
     {
         if ($variant !== null) {
-            $result .= ' (' . $variant . ')';
+            $result .= ' ('.$variant.')';
         }
         if (count($suffixes) > 0) {
-            $result .= ', ' . implode(', ', $suffixes);
+            $result .= ', '.implode(', ', $suffixes);
         }
 
         return $result;
@@ -325,10 +328,10 @@ final class Collation
             case 'binary':
                 $name = _pgettext('Collation', 'Binary');
                 break;
-            // Unicode charsets
+                // Unicode charsets
             case 'utf8mb4':
                 $variant = 'UCA 4.0.0';
-            // Fall through to other unicode
+                // Fall through to other unicode
             case 'ucs2':
             case 'utf8':
             case 'utf16':
@@ -338,7 +341,7 @@ final class Collation
                 $name = _pgettext('Collation', 'Unicode');
                 $unicode = true;
                 break;
-            // West European charsets
+                // West European charsets
             case 'ascii':
             case 'cp850':
             case 'dec8':
@@ -347,19 +350,19 @@ final class Collation
             case 'macroman':
                 $name = _pgettext('Collation', 'West European');
                 break;
-            // Central European charsets
+                // Central European charsets
             case 'cp1250':
             case 'cp852':
             case 'latin2':
             case 'macce':
                 $name = _pgettext('Collation', 'Central European');
                 break;
-            // Russian charsets
+                // Russian charsets
             case 'cp866':
             case 'koi8r':
                 $name = _pgettext('Collation', 'Russian');
                 break;
-            // Chinese charsets
+                // Chinese charsets
             case 'gb2312':
             case 'gbk':
                 $name = _pgettext('Collation', 'Simplified Chinese');
@@ -371,19 +374,19 @@ final class Collation
                 $name = _pgettext('Collation', 'Chinese');
                 $unicode = true;
                 break;
-            // Japanese charsets
+                // Japanese charsets
             case 'sjis':
             case 'ujis':
             case 'cp932':
             case 'eucjpms':
                 $name = _pgettext('Collation', 'Japanese');
                 break;
-            // Baltic charsets
+                // Baltic charsets
             case 'cp1257':
             case 'latin7':
                 $name = _pgettext('Collation', 'Baltic');
                 break;
-            // Other
+                // Other
             case 'armscii8':
             case 'armscii':
                 $name = _pgettext('Collation', 'Armenian');

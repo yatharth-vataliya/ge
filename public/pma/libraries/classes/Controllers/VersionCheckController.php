@@ -6,6 +6,7 @@ namespace PhpMyAdmin\Controllers;
 
 use PhpMyAdmin\Core;
 use PhpMyAdmin\VersionInformation;
+
 use function json_encode;
 
 /**
@@ -23,7 +24,7 @@ class VersionCheckController extends AbstractController
         // Always send the correct headers
         Core::headerJSON();
 
-        $versionInformation = new VersionInformation();
+        $versionInformation = new VersionInformation;
         $versionDetails = $versionInformation->getLatestVersion();
 
         if (empty($versionDetails)) {

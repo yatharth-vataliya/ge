@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Controllers;
 
 use PhpMyAdmin\ThemeManager;
+
 use function preg_replace;
 
 /**
@@ -17,7 +18,7 @@ class ThemesController extends AbstractController
         $this->response->getFooter()->setMinimal();
         $header = $this->response->getHeader();
         $header->setBodyId('bodythemes');
-        $header->setTitle('phpMyAdmin - ' . __('Theme'));
+        $header->setTitle('phpMyAdmin - '.__('Theme'));
         $header->disableMenuAndConsole();
 
         $this->render('themes', [

@@ -11,6 +11,7 @@ use PhpMyAdmin\Export;
 use PhpMyAdmin\Properties\Plugins\ExportPluginProperties;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Transformations;
+
 use function stripos;
 
 /**
@@ -44,7 +45,7 @@ abstract class ExportPlugin
 
         $this->relation = new Relation($dbi);
         $this->export = new Export($dbi);
-        $this->transformations = new Transformations();
+        $this->transformations = new Transformations;
     }
 
     /**
@@ -64,9 +65,8 @@ abstract class ExportPlugin
     /**
      * Outputs database header
      *
-     * @param string $db       Database name
-     * @param string $db_alias Aliases of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $db_alias  Aliases of db
      * @return bool Whether it succeeded
      */
     abstract public function exportDBHeader($db, $db_alias = '');
@@ -74,8 +74,7 @@ abstract class ExportPlugin
     /**
      * Outputs database footer
      *
-     * @param string $db Database name
-     *
+     * @param  string  $db  Database name
      * @return bool Whether it succeeded
      */
     abstract public function exportDBFooter($db);
@@ -83,10 +82,9 @@ abstract class ExportPlugin
     /**
      * Outputs CREATE DATABASE statement
      *
-     * @param string $db          Database name
-     * @param string $export_type 'server', 'database', 'table'
-     * @param string $db_alias    Aliases of db
-     *
+     * @param  string  $db  Database name
+     * @param  string  $export_type  'server', 'database', 'table'
+     * @param  string  $db_alias  Aliases of db
      * @return bool Whether it succeeded
      */
     abstract public function exportDBCreate($db, $export_type, $db_alias = '');
@@ -94,13 +92,12 @@ abstract class ExportPlugin
     /**
      * Outputs the content of a table
      *
-     * @param string $db        database name
-     * @param string $table     table name
-     * @param string $crlf      the end of line sequence
-     * @param string $error_url the url to go back in case of error
-     * @param string $sql_query SQL query for obtaining data
-     * @param array  $aliases   Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case of error
+     * @param  string  $sql_query  SQL query for obtaining data
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     abstract public function exportData(
@@ -120,9 +117,8 @@ abstract class ExportPlugin
     /**
      * Exports routines (procedures and functions)
      *
-     * @param string $db      Database
-     * @param array  $aliases Aliases of db/table/columns
-     *
+     * @param  string  $db  Database
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportRoutines($db, array $aliases = [])
@@ -133,8 +129,7 @@ abstract class ExportPlugin
     /**
      * Exports events
      *
-     * @param string $db Database
-     *
+     * @param  string  $db  Database
      * @return bool Whether it succeeded
      */
     public function exportEvents($db)
@@ -145,10 +140,9 @@ abstract class ExportPlugin
     /**
      * Outputs for raw query
      *
-     * @param string $err_url   the url to go back in case of error
-     * @param string $sql_query the rawquery to output
-     * @param string $crlf      the seperator for a file
-     *
+     * @param  string  $err_url  the url to go back in case of error
+     * @param  string  $sql_query  the rawquery to output
+     * @param  string  $crlf  the seperator for a file
      * @return bool if succeeded
      */
     public function exportRawQuery(
@@ -162,23 +156,22 @@ abstract class ExportPlugin
     /**
      * Outputs table's structure
      *
-     * @param string $db          database name
-     * @param string $table       table name
-     * @param string $crlf        the end of line sequence
-     * @param string $error_url   the url to go back in case of error
-     * @param string $export_mode 'create_table','triggers','create_view',
-     *                            'stand_in'
-     * @param string $export_type 'server', 'database', 'table'
-     * @param bool   $relation    whether to include relation comments
-     * @param bool   $comments    whether to include the pmadb-style column comments
-     *                            as comments in the structure; this is deprecated
-     *                            but the parameter is left here because /export
-     *                            calls exportStructure() also for other export
-     *                            types which use this parameter
-     * @param bool   $mime        whether to include mime comments
-     * @param bool   $dates       whether to include creation/update/check dates
-     * @param array  $aliases     Aliases of db/table/columns
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
+     * @param  string  $crlf  the end of line sequence
+     * @param  string  $error_url  the url to go back in case of error
+     * @param  string  $export_mode  'create_table','triggers','create_view',
+     *                               'stand_in'
+     * @param  string  $export_type  'server', 'database', 'table'
+     * @param  bool  $relation  whether to include relation comments
+     * @param  bool  $comments  whether to include the pmadb-style column comments
+     *                          as comments in the structure; this is deprecated
+     *                          but the parameter is left here because /export
+     *                          calls exportStructure() also for other export
+     *                          types which use this parameter
+     * @param  bool  $mime  whether to include mime comments
+     * @param  bool  $dates  whether to include creation/update/check dates
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return bool Whether it succeeded
      */
     public function exportStructure(
@@ -200,10 +193,9 @@ abstract class ExportPlugin
     /**
      * Exports metadata from Configuration Storage
      *
-     * @param string       $db            database being exported
-     * @param string|array $tables        table(s) being exported
-     * @param array        $metadataTypes types of metadata to export
-     *
+     * @param  string  $db  database being exported
+     * @param  string|array  $tables  table(s) being exported
+     * @param  array  $metadataTypes  types of metadata to export
      * @return bool Whether it succeeded
      */
     public function exportMetadata(
@@ -217,11 +209,10 @@ abstract class ExportPlugin
     /**
      * Returns a stand-in CREATE definition to resolve view dependencies
      *
-     * @param string $db      the database name
-     * @param string $view    the view name
-     * @param string $crlf    the end of line sequence
-     * @param array  $aliases Aliases of db/table/columns
-     *
+     * @param  string  $db  the database name
+     * @param  string  $view  the view name
+     * @param  string  $crlf  the end of line sequence
+     * @param  array  $aliases  Aliases of db/table/columns
      * @return string resulting definition
      */
     public function getTableDefStandIn($db, $view, $crlf, $aliases = [])
@@ -232,9 +223,8 @@ abstract class ExportPlugin
     /**
      * Outputs triggers
      *
-     * @param string $db    database name
-     * @param string $table table name
-     *
+     * @param  string  $db  database name
+     * @param  string  $table  table name
      * @return string Formatted triggers list
      */
     protected function getTriggers($db, $table)
@@ -247,9 +237,7 @@ abstract class ExportPlugin
      *
      * @return void
      */
-    protected function initSpecificVariables()
-    {
-    }
+    protected function initSpecificVariables() {}
 
     /* ~~~~~~~~~~~~~~~~~~~~ Getters and Setters ~~~~~~~~~~~~~~~~~~~~ */
 
@@ -281,10 +269,9 @@ abstract class ExportPlugin
     /**
      * Initialize aliases
      *
-     * @param array  $aliases Alias information for db/table/column
-     * @param string $db      the database
-     * @param string $table   the table
-     *
+     * @param  array  $aliases  Alias information for db/table/column
+     * @param  string  $db  the database
+     * @param  string  $table  the table
      * @return void
      */
     public function initAlias($aliases, &$db, &$table = null)
@@ -302,13 +289,12 @@ abstract class ExportPlugin
     /**
      * Search for alias of a identifier.
      *
-     * @param array  $aliases Alias information for db/table/column
-     * @param string $id      the identifier to be searched
-     * @param string $type    db/tbl/col or any combination of them
+     * @param  array  $aliases  Alias information for db/table/column
+     * @param  string  $id  the identifier to be searched
+     * @param  string  $type  db/tbl/col or any combination of them
      *                        representing what to be searched
-     * @param string $db      the database in which search is to be done
-     * @param string $tbl     the table in which search is to be done
-     *
+     * @param  string  $db  the database in which search is to be done
+     * @param  string  $tbl  the table in which search is to be done
      * @return string alias of the identifier if found or ''
      */
     public function getAlias(array $aliases, $id, $type = 'dbtblcol', $db = '', $tbl = '')
@@ -369,11 +355,10 @@ abstract class ExportPlugin
      * in this format:
      * [Foreign Table] ([Foreign Field])
      *
-     * @param array  $res_rel    the foreigners array
-     * @param string $field_name the field name
-     * @param string $db         the field name
-     * @param array  $aliases    Alias information for db/table/column
-     *
+     * @param  array  $res_rel  the foreigners array
+     * @param  string  $field_name  the field name
+     * @param  string  $db  the field name
+     * @param  array  $aliases  Alias information for db/table/column
      * @return string the Relation string
      */
     public function getRelationString(
@@ -393,7 +378,7 @@ abstract class ExportPlugin
             if (! empty($aliases[$db]['tables'][$ftable]['alias'])) {
                 $ftable = $aliases[$db]['tables'][$ftable]['alias'];
             }
-            $relation = $ftable . ' (' . $ffield . ')';
+            $relation = $ftable.' ('.$ffield.')';
         }
 
         return $relation;

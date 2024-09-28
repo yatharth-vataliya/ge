@@ -86,7 +86,7 @@ class OutputBuffering
     public static function getInstance()
     {
         if (empty(self::$instance)) {
-            self::$instance = new OutputBuffering();
+            self::$instance = new OutputBuffering;
         }
 
         return self::$instance;
@@ -110,7 +110,7 @@ class OutputBuffering
         }
         ob_start();
         if (! defined('TESTSUITE')) {
-            header('X-ob_mode: ' . $this->mode);
+            header('X-ob_mode: '.$this->mode);
         }
         register_shutdown_function(
             [

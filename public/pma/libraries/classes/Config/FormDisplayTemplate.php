@@ -11,6 +11,7 @@ use PhpMyAdmin\Config;
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Template;
+
 use function array_flip;
 use function array_merge;
 use function array_shift;
@@ -19,9 +20,9 @@ use function htmlspecialchars;
 use function htmlspecialchars_decode;
 use function implode;
 use function is_bool;
+use function is_string;
 use function mb_strtolower;
 use function sprintf;
-use function is_string;
 
 /**
  * PhpMyAdmin\Config\FormDisplayTemplate class
@@ -38,20 +39,20 @@ class FormDisplayTemplate
     public $template;
 
     /**
-     * @param Config $config Config instance
+     * @param  Config  $config  Config instance
      */
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->template = new Template();
+        $this->template = new Template;
     }
 
     /**
      * Displays top part of the form
      *
-     * @param string     $action       default: $_SERVER['REQUEST_URI']
-     * @param string     $method       'post' or 'get'
-     * @param array|null $hiddenFields array of form hidden fields (key: field name)
+     * @param  string  $action  default: $_SERVER['REQUEST_URI']
+     * @param  string  $method  'post' or 'get'
+     * @param  array|null  $hiddenFields  array of form hidden fields (key: field name)
      */
     public function displayFormTop(
         $action = null,
@@ -87,7 +88,7 @@ class FormDisplayTemplate
      * Displays form tabs which are given by an array indexed by fieldset id
      * ({@link self::displayFieldsetTop}), with values being tab titles.
      *
-     * @param array $tabs tab names
+     * @param  array  $tabs  tab names
      */
     public function displayTabsTop(array $tabs): string
     {
@@ -97,10 +98,10 @@ class FormDisplayTemplate
     /**
      * Displays top part of a fieldset
      *
-     * @param string     $title       title of fieldset
-     * @param string     $description description shown on top of fieldset
-     * @param array|null $errors      error messages to display
-     * @param array      $attributes  optional extra attributes of fieldset
+     * @param  string  $title  title of fieldset
+     * @param  string  $description  description shown on top of fieldset
+     * @param  array|null  $errors  error messages to display
+     * @param  array  $attributes  optional extra attributes of fieldset
      */
     public function displayFieldsetTop(
         $title = '',
@@ -138,13 +139,13 @@ class FormDisplayTemplate
      * o comment - (string) tooltip comment
      * o comment_warning - (bool) whether this comments warns about something
      *
-     * @param string     $path           config option path
-     * @param string     $name           config option name
-     * @param string     $type           type of config option
-     * @param mixed      $value          current value
-     * @param string     $description    verbose description
-     * @param bool       $valueIsDefault whether value is default
-     * @param array|null $opts           see above description
+     * @param  string  $path  config option path
+     * @param  string  $name  config option name
+     * @param  string  $type  type of config option
+     * @param  mixed  $value  current value
+     * @param  string  $description  verbose description
+     * @param  bool  $valueIsDefault  whether value is default
+     * @param  array|null  $opts  see above description
      */
     public function displayInput(
         $path,
@@ -169,11 +170,11 @@ class FormDisplayTemplate
             // The first element contains the filename and the second
             // element is used for the "alt" and "title" attributes.
             $iconInit = [
-                'edit'   => [
+                'edit' => [
                     'b_edit',
                     '',
                 ],
-                'help'   => [
+                'help' => [
                     'b_help',
                     __('Documentation'),
                 ],
@@ -193,12 +194,12 @@ class FormDisplayTemplate
                 foreach ($iconInit as $k => $v) {
                     $title = '';
                     if (! empty($v[1])) {
-                        $title = ' title="' . $v[1] . '"';
+                        $title = ' title="'.$v[1].'"';
                     }
                     $icons[$k] = sprintf(
                         '<img alt="%s" src="%s"%s>',
                         $v[1],
-                        '../themes/pmahomme/img/' . $v[0] . '.png',
+                        '../themes/pmahomme/img/'.$v[0].'.png',
                         $title
                     );
                 }
@@ -215,36 +216,36 @@ class FormDisplayTemplate
         $hasErrors = isset($opts['errors']) && ! empty($opts['errors']);
         $optionIsDisabled = ! $isSetupScript && isset($opts['userprefs_allow'])
             && ! $opts['userprefs_allow'];
-        $nameId = 'name="' . htmlspecialchars($path) . '" id="'
-            . htmlspecialchars($path) . '"';
+        $nameId = 'name="'.htmlspecialchars($path).'" id="'
+            .htmlspecialchars($path).'"';
         $fieldClass = $type === 'checkbox' ? 'checkbox' : '';
         if (! $valueIsDefault) {
             $fieldClass .= ($fieldClass == '' ? '' : ' ')
-                . ($hasErrors ? 'custom field-error' : 'custom');
+                .($hasErrors ? 'custom field-error' : 'custom');
         }
-        $fieldClass = $fieldClass ? ' class="' . $fieldClass . '"' : '';
+        $fieldClass = $fieldClass ? ' class="'.$fieldClass.'"' : '';
         $trClass = $this->group > 0
-            ? 'group-field group-field-' . $this->group
+            ? 'group-field group-field-'.$this->group
             : '';
         if (isset($opts['setvalue']) && $opts['setvalue'] === ':group') {
             unset($opts['setvalue']);
             $this->group++;
-            $trClass = 'group-header-field group-header-' . $this->group;
+            $trClass = 'group-header-field group-header-'.$this->group;
         }
         if ($optionIsDisabled) {
-            $trClass .= ($trClass ? ' ' : '') . 'disabled-field';
+            $trClass .= ($trClass ? ' ' : '').'disabled-field';
         }
-        $trClass = $trClass ? ' class="' . $trClass . '"' : '';
+        $trClass = $trClass ? ' class="'.$trClass.'"' : '';
 
-        $htmlOutput = '<tr' . $trClass . '>';
+        $htmlOutput = '<tr'.$trClass.'>';
         $htmlOutput .= '<th>';
-        $htmlOutput .= '<label for="' . htmlspecialchars($path) . '">' . htmlspecialchars_decode($name)
-            . '</label>';
+        $htmlOutput .= '<label for="'.htmlspecialchars($path).'">'.htmlspecialchars_decode($name)
+            .'</label>';
 
         if (! empty($opts['doc'])) {
             $htmlOutput .= '<span class="doc">';
-            $htmlOutput .= '<a href="' . $opts['doc']
-                . '" target="documentation">' . $icons['help'] . '</a>';
+            $htmlOutput .= '<a href="'.$opts['doc']
+                .'" target="documentation">'.$icons['help'].'</a>';
             $htmlOutput .= "\n";
             $htmlOutput .= '</span>';
         }
@@ -254,11 +255,11 @@ class FormDisplayTemplate
             $htmlOutput .= __(
                 'This setting is disabled, it will not be applied to your configuration.'
             );
-            $htmlOutput .= '">' . __('Disabled') . '</span>';
+            $htmlOutput .= '">'.__('Disabled').'</span>';
         }
 
         if (! empty($description)) {
-            $htmlOutput .= '<small>' . $description . '</small>';
+            $htmlOutput .= '<small>'.$description.'</small>';
         }
 
         $htmlOutput .= '</th>';
@@ -266,33 +267,33 @@ class FormDisplayTemplate
 
         switch ($type) {
             case 'text':
-                $htmlOutput .= '<input type="text" class="w-75" ' . $nameId . $fieldClass
-                . ' value="' . htmlspecialchars($value) . '">';
+                $htmlOutput .= '<input type="text" class="w-75" '.$nameId.$fieldClass
+                .' value="'.htmlspecialchars($value).'">';
                 break;
             case 'password':
-                $htmlOutput .= '<input type="password" class="w-75" ' . $nameId . $fieldClass
-                . ' value="' . htmlspecialchars($value) . '">';
+                $htmlOutput .= '<input type="password" class="w-75" '.$nameId.$fieldClass
+                .' value="'.htmlspecialchars($value).'">';
                 break;
             case 'short_text':
                 // As seen in the reporting server (#15042) we sometimes receive
                 // an array here. No clue about its origin nor content, so let's avoid
                 // a notice on htmlspecialchars().
                 if (is_string($value)) {
-                    $htmlOutput .= '<input type="text" size="25" ' . $nameId
-                    . $fieldClass . ' value="' . htmlspecialchars($value)
-                    . '">';
+                    $htmlOutput .= '<input type="text" size="25" '.$nameId
+                    .$fieldClass.' value="'.htmlspecialchars($value)
+                    .'">';
                 }
                 break;
             case 'number_text':
-                $htmlOutput .= '<input type="number" ' . $nameId . $fieldClass
-                . ' value="' . htmlspecialchars((string) $value) . '">';
+                $htmlOutput .= '<input type="number" '.$nameId.$fieldClass
+                .' value="'.htmlspecialchars((string) $value).'">';
                 break;
             case 'checkbox':
-                $htmlOutput .= '<span' . $fieldClass . '><input type="checkbox" ' . $nameId
-                  . ($value ? ' checked="checked"' : '') . '></span>';
+                $htmlOutput .= '<span'.$fieldClass.'><input type="checkbox" '.$nameId
+                  .($value ? ' checked="checked"' : '').'></span>';
                 break;
             case 'select':
-                $htmlOutput .= '<select class="w-75" ' . $nameId . $fieldClass . '>';
+                $htmlOutput .= '<select class="w-75" '.$nameId.$fieldClass.'>';
                 $escape = ! (isset($opts['values_escaped']) && $opts['values_escaped']);
                 $valuesDisabled = isset($opts['values_disabled'])
                 ? array_flip($opts['values_disabled']) : [];
@@ -316,14 +317,14 @@ class FormDisplayTemplate
                     $selected = is_bool($value)
                     ? (int) $value === $optValueKey
                     : $optValueKey === $value;
-                    $htmlOutput .= '<option value="' . $displayValue . '"';
+                    $htmlOutput .= '<option value="'.$displayValue.'"';
                     if ($selected) {
                         $htmlOutput .= ' selected="selected"';
                     }
                     if (isset($valuesDisabled[$optValueKey])) {
                         $htmlOutput .= ' disabled="disabled"';
                     }
-                    $htmlOutput .= '>' . $display . '</option>';
+                    $htmlOutput .= '>'.$display.'</option>';
                 }
                 $htmlOutput .= '</select>';
                 break;
@@ -332,8 +333,8 @@ class FormDisplayTemplate
                 if (isset($val['wrapper_params'])) {
                     unset($val['wrapper_params']);
                 }
-                $htmlOutput .= '<textarea cols="35" rows="5" ' . $nameId . $fieldClass
-                . '>' . htmlspecialchars(implode("\n", $val)) . '</textarea>';
+                $htmlOutput .= '<textarea cols="35" rows="5" '.$nameId.$fieldClass
+                .'>'.htmlspecialchars(implode("\n", $val)).'</textarea>';
                 break;
         }
         if ($isSetupScript
@@ -341,33 +342,33 @@ class FormDisplayTemplate
             && $opts['userprefs_comment']
         ) {
             $htmlOutput .= '<a class="userprefs-comment" title="'
-                . htmlspecialchars($opts['userprefs_comment']) . '">'
-                . $icons['tblops'] . '</a>';
+                .htmlspecialchars($opts['userprefs_comment']).'">'
+                .$icons['tblops'].'</a>';
         }
         if (isset($opts['setvalue']) && $opts['setvalue']) {
             $htmlOutput .= '<a class="set-value hide" href="#'
-                . htmlspecialchars($path . '=' . $opts['setvalue']) . '" title="'
-                . sprintf(__('Set value: %s'), htmlspecialchars($opts['setvalue']))
-                . '">' . $icons['edit'] . '</a>';
+                .htmlspecialchars($path.'='.$opts['setvalue']).'" title="'
+                .sprintf(__('Set value: %s'), htmlspecialchars($opts['setvalue']))
+                .'">'.$icons['edit'].'</a>';
         }
         if (isset($opts['show_restore_default']) && $opts['show_restore_default']) {
-            $htmlOutput .= '<a class="restore-default hide" href="#' . $path . '" title="'
-                . __('Restore default value') . '">' . $icons['reload'] . '</a>';
+            $htmlOutput .= '<a class="restore-default hide" href="#'.$path.'" title="'
+                .__('Restore default value').'">'.$icons['reload'].'</a>';
         }
         // this must match with displayErrors() in scripts/config.js
         if ($hasErrors) {
             $htmlOutput .= "\n        <dl class=\"inline_errors\">";
             foreach ($opts['errors'] as $error) {
-                $htmlOutput .= '<dd>' . htmlspecialchars($error) . '</dd>';
+                $htmlOutput .= '<dd>'.htmlspecialchars($error).'</dd>';
             }
             $htmlOutput .= '</dl>';
         }
         $htmlOutput .= '</td>';
         if ($isSetupScript && isset($opts['userprefs_allow'])) {
-            $htmlOutput .= '<td class="userprefs-allow" title="' .
-                __('Allow users to customize this value') . '">';
-            $htmlOutput .= '<input type="checkbox" name="' . $path
-                . '-userprefs-allow" ';
+            $htmlOutput .= '<td class="userprefs-allow" title="'.
+                __('Allow users to customize this value').'">';
+            $htmlOutput .= '<input type="checkbox" name="'.$path
+                .'-userprefs-allow" ';
             if ($opts['userprefs_allow']) {
                 $htmlOutput .= 'checked="checked"';
             }
@@ -384,7 +385,7 @@ class FormDisplayTemplate
     /**
      * Display group header
      *
-     * @param string $headerText Text of header
+     * @param  string  $headerText  Text of header
      */
     public function displayGroupHeader(string $headerText): string
     {
@@ -412,7 +413,7 @@ class FormDisplayTemplate
     /**
      * Displays bottom part of a fieldset
      *
-     * @param bool $showButtons Whether show submit and reset button
+     * @param  bool  $showButtons  Whether show submit and reset button
      */
     public function displayFieldsetBottom(bool $showButtons = true): string
     {
@@ -441,9 +442,9 @@ class FormDisplayTemplate
     /**
      * Appends JS validation code to $js_array
      *
-     * @param string       $fieldId    ID of field to validate
-     * @param string|array $validators validators callback
-     * @param array        $jsArray    will be updated with javascript code
+     * @param  string  $fieldId  ID of field to validate
+     * @param  string|array  $validators  validators callback
+     * @param  array  $jsArray  will be updated with javascript code
      */
     public function addJsValidate($fieldId, $validators, array &$jsArray): void
     {
@@ -454,15 +455,15 @@ class FormDisplayTemplate
             foreach ($validator as $arg) {
                 $vArgs[] = Sanitize::escapeJsString($arg);
             }
-            $vArgs = $vArgs ? ", ['" . implode("', '", $vArgs) . "']" : '';
-            $jsArray[] = "registerFieldValidator('" . $fieldId . "', '" . $vName . "', true" . $vArgs . ')';
+            $vArgs = $vArgs ? ", ['".implode("', '", $vArgs)."']" : '';
+            $jsArray[] = "registerFieldValidator('".$fieldId."', '".$vName."', true".$vArgs.')';
         }
     }
 
     /**
      * Displays JavaScript code
      *
-     * @param array $jsArray lines of javascript code
+     * @param  array  $jsArray  lines of javascript code
      */
     public function displayJavascript(array $jsArray): string
     {
@@ -476,9 +477,8 @@ class FormDisplayTemplate
     /**
      * Displays error list
      *
-     * @param string $name      Name of item with errors
-     * @param array  $errorList List of errors to show
-     *
+     * @param  string  $name  Name of item with errors
+     * @param  array  $errorList  List of errors to show
      * @return string HTML for errors
      */
     public function displayErrors($name, array $errorList): string

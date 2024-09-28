@@ -27,11 +27,11 @@ class NodeFunctionContainer extends NodeDatabaseChildContainer
             'text' => Url::getFromRoute('/database/routines', [
                 'server' => $GLOBALS['server'],
                 'type' => 'FUNCTION',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
             'icon' => Url::getFromRoute('/database/routines', [
                 'server' => $GLOBALS['server'],
                 'type' => 'FUNCTION',
-            ]) . '&amp;db=%1$s',
+            ]).'&amp;db=%1$s',
         ];
         $this->realName = 'functions';
 
@@ -46,12 +46,12 @@ class NodeFunctionContainer extends NodeDatabaseChildContainer
                 'server' => $GLOBALS['server'],
                 'item_type' => 'FUNCTION',
                 'add_item' => 1,
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
             'icon' => Url::getFromRoute('/database/routines', [
                 'server' => $GLOBALS['server'],
                 'item_type' => 'FUNCTION',
                 'add_item' => 1,
-            ]) . '&amp;db=%2$s',
+            ]).'&amp;db=%2$s',
         ];
         $this->addChild($new);
     }

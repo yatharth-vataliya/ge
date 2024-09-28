@@ -11,6 +11,7 @@ use PhpMyAdmin\Plugins\Schema\Eps\TableStatsEps;
 use PhpMyAdmin\Plugins\Schema\ExportRelationSchema;
 use PhpMyAdmin\Plugins\Schema\Pdf\TableStatsPdf;
 use PhpMyAdmin\Plugins\Schema\Svg\TableStatsSvg;
+
 use function in_array;
 
 /**
@@ -58,11 +59,11 @@ class DiaRelationSchema extends ExportRelationSchema
      * @see TableStatsDia
      * @see RelationStatsDia
      *
-     * @param string $db database name
+     * @param  string  $db  database name
      */
     public function __construct($db)
     {
-        parent::__construct($db, new Dia());
+        parent::__construct($db, new Dia);
 
         $this->setShowColor(isset($_REQUEST['dia_show_color']));
         $this->setShowKeys(isset($_REQUEST['dia_show_keys']));
@@ -119,6 +120,7 @@ class DiaRelationSchema extends ExportRelationSchema
                             $this->showKeys
                         );
                     }
+
                     continue;
                 }
 
@@ -151,8 +153,6 @@ class DiaRelationSchema extends ExportRelationSchema
      * Output Dia Document for download
      *
      * @return void
-     *
-     * @access public
      */
     public function showOutput()
     {
@@ -164,15 +164,12 @@ class DiaRelationSchema extends ExportRelationSchema
      *
      * @see    TableStatsDia::__construct(),RelationStatsDia::__construct()
      *
-     * @param string $masterTable  The master table name
-     * @param string $masterField  The relation field in the master table
-     * @param string $foreignTable The foreign table name
-     * @param string $foreignField The relation field in the foreign table
-     * @param bool   $showKeys     Whether to display ONLY keys or not
-     *
+     * @param  string  $masterTable  The master table name
+     * @param  string  $masterField  The relation field in the master table
+     * @param  string  $foreignTable  The foreign table name
+     * @param  string  $foreignField  The relation field in the foreign table
+     * @param  bool  $showKeys  Whether to display ONLY keys or not
      * @return void
-     *
-     * @access private
      */
     private function addRelation(
         $masterTable,
@@ -218,8 +215,6 @@ class DiaRelationSchema extends ExportRelationSchema
      * @see    RelationStatsDia::relationDraw()
      *
      * @return void
-     *
-     * @access private
      */
     private function drawRelations()
     {
@@ -237,8 +232,6 @@ class DiaRelationSchema extends ExportRelationSchema
      * @see    TableStatsDia::tableDraw()
      *
      * @return void
-     *
-     * @access private
      */
     private function drawTables()
     {

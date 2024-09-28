@@ -38,6 +38,7 @@ use PhpMyAdmin\Transformations;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
 use stdClass;
+
 use function array_keys;
 use function array_splice;
 use function count;
@@ -61,7 +62,7 @@ use function trim;
  */
 class StructureController extends AbstractController
 {
-    /** @var Table  The table object */
+    /** @var Table The table object */
     protected $tableObj;
 
     /** @var CreateAddField */
@@ -80,10 +81,10 @@ class StructureController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param string            $table    Table name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  string  $table  Table name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -314,7 +315,7 @@ class StructureController extends AbstractController
 
         $i = 1;
         $selectedCount = count($selected);
-        $sql_query = 'ALTER TABLE ' . Util::backquote($table) . ' ADD FULLTEXT(';
+        $sql_query = 'ALTER TABLE '.Util::backquote($table).' ADD FULLTEXT(';
 
         foreach ($selected as $field) {
             $sql_query .= Util::backquote($field);
@@ -350,7 +351,7 @@ class StructureController extends AbstractController
 
         $i = 1;
         $selectedCount = count($selected);
-        $sql_query = 'ALTER TABLE ' . Util::backquote($table) . ' ADD SPATIAL(';
+        $sql_query = 'ALTER TABLE '.Util::backquote($table).' ADD SPATIAL(';
 
         foreach ($selected as $field) {
             $sql_query .= Util::backquote($field);
@@ -386,7 +387,7 @@ class StructureController extends AbstractController
 
         $i = 1;
         $selectedCount = count($selected);
-        $sql_query = 'ALTER TABLE ' . Util::backquote($table) . ' ADD UNIQUE(';
+        $sql_query = 'ALTER TABLE '.Util::backquote($table).' ADD UNIQUE(';
 
         foreach ($selected as $field) {
             $sql_query .= Util::backquote($field);
@@ -422,7 +423,7 @@ class StructureController extends AbstractController
 
         $i = 1;
         $selectedCount = count($selected);
-        $sql_query = 'ALTER TABLE ' . Util::backquote($table) . ' ADD INDEX(';
+        $sql_query = 'ALTER TABLE '.Util::backquote($table).' ADD INDEX(';
 
         foreach ($selected as $field) {
             $sql_query .= Util::backquote($field);
@@ -485,7 +486,7 @@ class StructureController extends AbstractController
         }
 
         if ($mult_btn === __('Yes')) {
-            $sql_query = 'ALTER TABLE ' . Util::backquote($table);
+            $sql_query = 'ALTER TABLE '.Util::backquote($table);
             if (! empty($primary)) {
                 $sql_query .= ' DROP PRIMARY KEY,';
             }
@@ -531,11 +532,11 @@ class StructureController extends AbstractController
         if (($_POST['mult_btn'] ?? '') === __('Yes')) {
             $i = 1;
             $selectedCount = count($selected);
-            $sql_query = 'ALTER TABLE ' . Util::backquote($table);
+            $sql_query = 'ALTER TABLE '.Util::backquote($table);
 
             foreach ($selected as $field) {
                 $this->relationCleanup->column($db, $table, $field);
-                $sql_query .= ' DROP ' . Util::backquote($field);
+                $sql_query .= ' DROP '.Util::backquote($field);
                 $sql_query .= $i++ === $selectedCount ? ';' : ',';
             }
 
@@ -652,7 +653,7 @@ class StructureController extends AbstractController
                 $data['Expression'] = is_array($expressions) ? $expressions[$column] : null;
             }
 
-            $changes[] = 'CHANGE ' . Table::generateAlter(
+            $changes[] = 'CHANGE '.Table::generateAlter(
                 $column,
                 $column,
                 mb_strtoupper($extracted_columnspec['type']),
@@ -717,7 +718,7 @@ class StructureController extends AbstractController
     /**
      * Displays HTML for changing one or more columns
      *
-     * @param array|null $selected the selected columns
+     * @param  array|null  $selected  the selected columns
      */
     protected function displayHtmlForColumnChange($selected): void
     {
@@ -889,7 +890,7 @@ class StructureController extends AbstractController
         for ($i = 0, $iMax = (int) $partitionDetails['partition_count']; $i < $iMax; $i++) {
             if (! isset($stmt->partitions[$i])) {
                 $partitionDetails['partitions'][$i] = [
-                    'name' => 'p' . $i,
+                    'name' => 'p'.$i,
                     'value_type' => '',
                     'value' => '',
                     'engine' => '',
@@ -924,8 +925,8 @@ class StructureController extends AbstractController
                 ];
             }
 
-            $partition =& $partitionDetails['partitions'][$i];
-            $partition['prefix'] = 'partitions[' . $i . ']';
+            $partition = &$partitionDetails['partitions'][$i];
+            $partition['prefix'] = 'partitions['.$i.']';
 
             if ($partitionDetails['subpartition_count'] <= 1) {
                 continue;
@@ -937,7 +938,7 @@ class StructureController extends AbstractController
             for ($j = 0, $jMax = (int) $partitionDetails['subpartition_count']; $j < $jMax; $j++) {
                 if (! isset($stmt->partitions[$i]->subpartitions[$j])) {
                     $partition['subpartitions'][$j] = [
-                        'name' => $partition['name'] . '_s' . $j,
+                        'name' => $partition['name'].'_s'.$j,
                         'engine' => '',
                         'comment' => '',
                         'data_directory' => '',
@@ -962,9 +963,9 @@ class StructureController extends AbstractController
                     ];
                 }
 
-                $subpartition =& $partition['subpartitions'][$j];
-                $subpartition['prefix'] = 'partitions[' . $i . ']'
-                    . '[subpartitions][' . $j . ']';
+                $subpartition = &$partition['subpartitions'][$j];
+                $subpartition['prefix'] = 'partitions['.$i.']'
+                    .'[subpartitions]['.$j.']';
             }
         }
 
@@ -973,8 +974,8 @@ class StructureController extends AbstractController
 
     private function updatePartitioning(): void
     {
-        $sql_query = 'ALTER TABLE ' . Util::backquote($this->table) . ' '
-            . $this->createAddField->getPartitionsDefinition();
+        $sql_query = 'ALTER TABLE '.Util::backquote($this->table).' '
+            .$this->createAddField->getPartitionsDefinition();
 
         // Execute alter query
         $result = $this->dbi->tryQuery($sql_query);
@@ -984,7 +985,7 @@ class StructureController extends AbstractController
             $this->response->addJSON(
                 'message',
                 Message::rawError(
-                    __('Query error') . ':<br>' . $this->dbi->getError()
+                    __('Query error').':<br>'.$this->dbi->getError()
                 )
             );
 
@@ -1003,9 +1004,8 @@ class StructureController extends AbstractController
     /**
      * Function to display table browse for selected columns
      *
-     * @param string $goto           goto page url
-     * @param string $themeImagePath URI of the pma theme image
-     *
+     * @param  string  $goto  goto page url
+     * @param  string  $themeImagePath  URI of the pma theme image
      * @return void
      */
     protected function displayTableBrowseForSelectedColumns($goto, $themeImagePath)
@@ -1084,7 +1084,7 @@ class StructureController extends AbstractController
                 continue;
             }
 
-            $changes[] = 'CHANGE ' . Table::generateAlter(
+            $changes[] = 'CHANGE '.Table::generateAlter(
                 Util::getValueByKey($_POST, "field_orig.${i}", ''),
                 $_POST['field_name'][$i],
                 $_POST['field_type'][$i],
@@ -1142,14 +1142,14 @@ class StructureController extends AbstractController
             if (! $this->dbi->selectDb($this->db)) {
                 Generator::mysqlDie(
                     $this->dbi->getError(),
-                    'USE ' . Util::backquote($this->db) . ';',
+                    'USE '.Util::backquote($this->db).';',
                     false,
                     $err_url
                 );
             }
 
-            $sql_query = 'ALTER TABLE ' . Util::backquote($this->table) . ' ';
-            $sql_query .= implode(', ', $changes) . $key_query;
+            $sql_query = 'ALTER TABLE '.Util::backquote($this->table).' ';
+            $sql_query .= implode(', ', $changes).$key_query;
             if (isset($_POST['online_transaction'])) {
                 $sql_query .= ', ALGORITHM=INPLACE, LOCK=NONE';
             }
@@ -1177,19 +1177,19 @@ class StructureController extends AbstractController
                     && $_POST['field_collation'][$i] !== $_POST['field_collation_orig'][$i]
                     && ! in_array($_POST['field_orig'][$i], $columns_with_index)
                 ) {
-                    $secondary_query = 'ALTER TABLE ' . Util::backquote(
+                    $secondary_query = 'ALTER TABLE '.Util::backquote(
                         $this->table
                     )
-                    . ' CHANGE ' . Util::backquote(
+                    .' CHANGE '.Util::backquote(
                         $_POST['field_orig'][$i]
                     )
-                    . ' ' . Util::backquote($_POST['field_orig'][$i])
-                    . ' BLOB';
+                    .' '.Util::backquote($_POST['field_orig'][$i])
+                    .' BLOB';
 
                     if (isset($_POST['field_virtuality'][$i], $_POST['field_expression'][$i])) {
                         if ($_POST['field_virtuality'][$i]) {
-                            $secondary_query .= ' AS (' . $_POST['field_expression'][$i] . ') '
-                                . $_POST['field_virtuality'][$i];
+                            $secondary_query .= ' AS ('.$_POST['field_expression'][$i].') '
+                                .$_POST['field_virtuality'][$i];
                         }
                     }
 
@@ -1213,7 +1213,7 @@ class StructureController extends AbstractController
                 if ($changed_privileges) {
                     $message = Message::success(
                         __(
-                            'Table %1$s has been altered successfully. Privileges ' .
+                            'Table %1$s has been altered successfully. Privileges '.
                             'have been adjusted.'
                         )
                     );
@@ -1240,7 +1240,7 @@ class StructureController extends AbstractController
                         continue;
                     }
 
-                    $changes_revert[] = 'CHANGE ' . Table::generateAlter(
+                    $changes_revert[] = 'CHANGE '.Table::generateAlter(
                         Util::getValueByKey($_POST, "field_orig.${i}", ''),
                         $_POST['field_name'][$i],
                         $_POST['field_type_orig'][$i],
@@ -1258,9 +1258,9 @@ class StructureController extends AbstractController
                     );
                 }
 
-                $revert_query = 'ALTER TABLE ' . Util::backquote($this->table)
-                    . ' ';
-                $revert_query .= implode(', ', $changes_revert) . '';
+                $revert_query = 'ALTER TABLE '.Util::backquote($this->table)
+                    .' ';
+                $revert_query .= implode(', ', $changes_revert).'';
                 $revert_query .= ';';
 
                 // Column reverted back to original
@@ -1270,7 +1270,7 @@ class StructureController extends AbstractController
                 $this->response->addJSON(
                     'message',
                     Message::rawError(
-                        __('Query error') . ':<br>' . $orig_error
+                        __('Query error').':<br>'.$orig_error
                     )
                 );
                 $regenerate = true;
@@ -1324,11 +1324,10 @@ class StructureController extends AbstractController
     /**
      * Adjusts the Privileges for all the columns whose names have changed
      *
-     * @param array $adjust_privileges assoc array of old col names mapped to new
-     *                                 cols
-     *
+     * @param  array  $adjust_privileges  assoc array of old col names mapped to new
+     *                                    cols
      * @return bool boolean whether at least one column privileges
-     * adjusted
+     *              adjusted
      */
     protected function adjustColumnPrivileges(array $adjust_privileges)
     {
@@ -1371,8 +1370,7 @@ class StructureController extends AbstractController
     /**
      * Verifies if some elements of a column have changed
      *
-     * @param int $i column index in the request
-     *
+     * @param  int  $i  column index in the request
      * @return bool true if we need to generate ALTER TABLE
      */
     protected function columnNeedsAlterTable($i)
@@ -1403,7 +1401,7 @@ class StructureController extends AbstractController
             'field_type',
         ];
         foreach ($fields as $field) {
-            if ($_POST[$field][$i] != $_POST[$field . '_orig'][$i]) {
+            if ($_POST[$field][$i] != $_POST[$field.'_orig'][$i]) {
                 return true;
             }
         }
@@ -1414,13 +1412,12 @@ class StructureController extends AbstractController
     /**
      * Displays the table structure ('show table' works correct since 3.23.03)
      *
-     * @param array       $cfgRelation               current relation parameters
-     * @param array       $columns_with_unique_index Columns with unique index
-     * @param Index|false $primary_index             primary index or false if
-     *                                               no one exists
-     * @param array       $fields                    Fields
-     * @param array       $columns_with_index        Columns with index
-     *
+     * @param  array  $cfgRelation  current relation parameters
+     * @param  array  $columns_with_unique_index  Columns with unique index
+     * @param  Index|false  $primary_index  primary index or false if
+     *                                      no one exists
+     * @param  array  $fields  Fields
+     * @param  array  $columns_with_index  Columns with index
      * @return string
      */
     protected function displayStructure(
@@ -1476,7 +1473,7 @@ class StructureController extends AbstractController
         $extracted_columnspecs = [];
         $collations = [];
         foreach ($fields as &$field) {
-            ++$rownum;
+            $rownum++;
             $columns_list[] = $field['Field'];
 
             $extracted_columnspecs[$rownum] = Util::extractColumnSpec($field['Type']);
@@ -1485,7 +1482,7 @@ class StructureController extends AbstractController
                 $attributes[$rownum] = 'on update CURRENT_TIMESTAMP';
             }
 
-            $displayed_fields[$rownum] = new stdClass();
+            $displayed_fields[$rownum] = new stdClass;
             $displayed_fields[$rownum]->text = $field['Field'];
             $displayed_fields[$rownum]->icon = '';
             $row_comments[$rownum] = '';
@@ -1708,7 +1705,7 @@ class StructureController extends AbstractController
     {
         $this->dbi->selectDb($this->db);
         $result = $this->dbi->query(
-            'SHOW KEYS FROM ' . Util::backquote($this->table) . ';'
+            'SHOW KEYS FROM '.Util::backquote($this->table).';'
         );
         $primary = '';
         while ($row = $this->dbi->fetchAssoc($result)) {
@@ -1717,7 +1714,7 @@ class StructureController extends AbstractController
                 continue;
             }
 
-            $primary .= $row['Column_name'] . ', ';
+            $primary .= $row['Column_name'].', ';
         }
         $this->dbi->freeResult($result);
 

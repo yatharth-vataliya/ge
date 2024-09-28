@@ -10,6 +10,4 @@ namespace PhpMyAdmin\Engines;
 /**
  * This is same as BDB
  */
-class Berkeleydb extends Bdb
-{
-}
+class Berkeleydb extends Bdb {}

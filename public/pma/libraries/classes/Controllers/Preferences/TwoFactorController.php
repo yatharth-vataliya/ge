@@ -10,6 +10,7 @@ use PhpMyAdmin\Relation;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\TwoFactor;
+
 use function count;
 
 class TwoFactorController extends AbstractController
@@ -18,7 +19,7 @@ class TwoFactorController extends AbstractController
     private $relation;
 
     /**
-     * @param Response $response
+     * @param  Response  $response
      */
     public function __construct($response, Template $template, Relation $relation)
     {

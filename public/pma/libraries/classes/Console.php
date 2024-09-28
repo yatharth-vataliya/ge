@@ -18,7 +18,6 @@ class Console
     /**
      * Whether to display anything
      *
-     * @access private
      * @var bool
      */
     private $isEnabled;
@@ -26,7 +25,6 @@ class Console
     /**
      * Whether we are servicing an ajax request.
      *
-     * @access private
      * @var bool
      */
     private $isAjax;
@@ -46,14 +44,14 @@ class Console
 
         $this->isEnabled = true;
         $this->relation = new Relation($dbi);
-        $this->template = new Template();
+        $this->template = new Template;
     }
 
     /**
      * Set the ajax flag to indicate whether
      * we are servicing an ajax request
      *
-     * @param bool $isAjax Whether we are servicing an ajax request
+     * @param  bool  $isAjax  Whether we are servicing an ajax request
      */
     public function setAjax(bool $isAjax): void
     {
@@ -70,14 +68,12 @@ class Console
 
     /**
      * Renders the bookmark content
-     *
-     * @access public
      */
     public static function getBookmarkContent(): string
     {
         global $dbi;
 
-        $template = new Template();
+        $template = new Template;
         $cfgBookmark = Bookmark::getParams($GLOBALS['cfg']['Server']['user']);
         if ($cfgBookmark) {
             $bookmarks = Bookmark::getList(
@@ -119,8 +115,6 @@ class Console
 
     /**
      * Renders the console
-     *
-     * @access public
      */
     public function getDisplay(): string
     {

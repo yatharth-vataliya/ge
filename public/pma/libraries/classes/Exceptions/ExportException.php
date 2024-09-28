@@ -12,6 +12,4 @@ use Exception;
 /**
  * Export exception
  */
-class ExportException extends Exception
-{
-}
+class ExportException extends Exception {}

@@ -27,7 +27,7 @@ class ExportExcel extends ExportCsv
      */
     protected function setProperties()
     {
-        $exportPluginProperties = new ExportPluginProperties();
+        $exportPluginProperties = new ExportPluginProperties;
         $exportPluginProperties->setText('CSV for MS Excel');
         $exportPluginProperties->setExtension('csv');
         $exportPluginProperties->setMimeType('text/comma-separated-values');
@@ -64,7 +64,7 @@ class ExportExcel extends ExportCsv
         );
         $leaf->setValues(
             [
-                'win'           => 'Windows',
+                'win' => 'Windows',
                 'mac_excel2003' => 'Excel 2003 / Macintosh',
                 'mac_excel2008' => 'Excel 2008 / Macintosh',
             ]

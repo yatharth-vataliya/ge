@@ -32,7 +32,7 @@ class MainForm extends BaseForm
             'TableStructure' => [
                 'HideStructureActions',
                 'ShowColumnComments',
-                ':group:' . __('Default transformations'),
+                ':group:'.__('Default transformations'),
                 'DefaultTransformations/Hex',
                 'DefaultTransformations/Substring',
                 'DefaultTransformations/Bool2Text',

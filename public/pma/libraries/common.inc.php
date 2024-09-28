@@ -55,7 +55,7 @@ global $url_params, $goto, $back, $db, $table, $sql_query, $token_mismatch;
  * block attempts to directly run this script
  */
 if (getcwd() == __DIR__) {
-    die('Attack stopped');
+    exit('Attack stopped');
 }
 
 /**
@@ -63,9 +63,9 @@ if (getcwd() == __DIR__) {
  * PHP 5 function, so cannot easily localize this message.
  */
 if (PHP_VERSION_ID < 70103) {
-    die(
+    exit(
         '<p>PHP 7.1.3+ is required.</p>'
-        . '<p>Currently installed version is: ' . PHP_VERSION . '</p>'
+        .'<p>Currently installed version is: '.PHP_VERSION.'</p>'
     );
 }
 
@@ -79,17 +79,17 @@ define('PHPMYADMIN', true);
 /**
  * Load vendor configuration.
  */
-require_once ROOT_PATH . 'libraries/vendor_config.php';
+require_once ROOT_PATH.'libraries/vendor_config.php';
 
 /**
  * Activate autoloader
  */
 if (! @is_readable(AUTOLOAD_FILE)) {
-    die(
-        '<p>File <samp>' . AUTOLOAD_FILE . '</samp> missing or not readable.</p>'
-        . '<p>Most likely you did not run Composer to '
-        . '<a href="https://docs.phpmyadmin.net/en/latest/setup.html#installing-from-git">'
-        . 'install library files</a>.</p>'
+    exit(
+        '<p>File <samp>'.AUTOLOAD_FILE.'</samp> missing or not readable.</p>'
+        .'<p>Most likely you did not run Composer to '
+        .'<a href="https://docs.phpmyadmin.net/en/latest/setup.html#installing-from-git">'
+        .'install library files</a>.</p>'
     );
 }
 require_once AUTOLOAD_FILE;

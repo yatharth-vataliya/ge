@@ -21,8 +21,7 @@ class FormProcessing
     /**
      * Processes forms registered in $form_display, handles error correction
      *
-     * @param FormDisplay $form_display Form to display
-     *
+     * @param  FormDisplay  $form_display  Form to display
      * @return void
      */
     public static function process(FormDisplay $form_display)
@@ -32,7 +31,7 @@ class FormProcessing
             $form_display->fixErrors();
             $response = Response::getInstance();
             $response->disable();
-            $response->generateHeader303('index.php' . Url::getCommonRaw());
+            $response->generateHeader303('index.php'.Url::getCommonRaw());
         }
 
         if (! $form_display->process(false)) {
@@ -46,7 +45,7 @@ class FormProcessing
         if (! $form_display->hasErrors()) {
             $response = Response::getInstance();
             $response->disable();
-            $response->generateHeader303('index.php' . Url::getCommonRaw());
+            $response->generateHeader303('index.php'.Url::getCommonRaw());
 
             return;
         }
@@ -66,7 +65,7 @@ class FormProcessing
             'id' => $formId,
         ];
 
-        $template = new Template();
+        $template = new Template;
         echo $template->render('setup/error', [
             'url_params' => $urlParams,
             'errors' => $form_display->displayErrors(),

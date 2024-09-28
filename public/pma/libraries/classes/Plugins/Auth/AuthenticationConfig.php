@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Plugins\Auth;
 
+use const E_USER_NOTICE;
+use const E_USER_WARNING;
+
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Plugins\AuthenticationPlugin;
 use PhpMyAdmin\Response;
 use PhpMyAdmin\Server\Select;
 use PhpMyAdmin\Util;
-use const E_USER_NOTICE;
-use const E_USER_WARNING;
+
 use function count;
 use function defined;
 use function sprintf;
@@ -66,8 +68,7 @@ class AuthenticationConfig extends AuthenticationPlugin
     /**
      * User is not allowed to login to MySQL -> authentication failed
      *
-     * @param string $failure String describing why authentication has failed
-     *
+     * @param  string  $failure  String describing why authentication has failed
      * @return void
      */
     public function showFailure($failure)
@@ -108,8 +109,8 @@ class AuthenticationConfig extends AuthenticationPlugin
                 echo '<p>' , sprintf(
                     __(
                         'You probably did not create a configuration file.'
-                        . ' You might want to use the %1$ssetup script%2$s to'
-                        . ' create one.'
+                        .' You might want to use the %1$ssetup script%2$s to'
+                        .' create one.'
                     ),
                     '<a href="setup/">',
                     '</a>'
@@ -128,10 +129,10 @@ class AuthenticationConfig extends AuthenticationPlugin
                 trigger_error(
                     __(
                         'phpMyAdmin tried to connect to the MySQL server, and the'
-                        . ' server rejected the connection. You should check the'
-                        . ' host, username and password in your configuration and'
-                        . ' make sure that they correspond to the information given'
-                        . ' by the administrator of the MySQL server.'
+                        .' server rejected the connection. You should check the'
+                        .' host, username and password in your configuration and'
+                        .' make sure that they correspond to the information given'
+                        .' by the administrator of the MySQL server.'
                     ),
                     E_USER_WARNING
                 );
@@ -150,13 +151,13 @@ class AuthenticationConfig extends AuthenticationPlugin
         <tr>
             <td>' , "\n";
         echo '<a href="'
-            , Util::getScriptNameForOption(
-                $GLOBALS['cfg']['DefaultTabServer'],
-                'server'
-            )
-            , '" class="btn button mt-1 disableAjax">'
-            , __('Retry to connect')
-            , '</a>' , "\n";
+        , Util::getScriptNameForOption(
+            $GLOBALS['cfg']['DefaultTabServer'],
+            'server'
+        )
+        , '" class="btn button mt-1 disableAjax">'
+        , __('Retry to connect')
+        , '</a>' , "\n";
         echo '</td>
         </tr>' , "\n";
         if (count($GLOBALS['cfg']['Servers']) > 1) {

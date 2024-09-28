@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpMyAdmin\Controllers;
 
+use const ENT_COMPAT;
+
 use PhpMyAdmin\Bookmark;
 use PhpMyAdmin\CheckUserPrivileges;
 use PhpMyAdmin\Config\PageSettings;
@@ -17,7 +19,7 @@ use PhpMyAdmin\Sql;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
-use const ENT_COMPAT;
+
 use function htmlentities;
 use function mb_strpos;
 use function strlen;
@@ -36,8 +38,8 @@ class SqlController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct(
         $response,
@@ -84,7 +86,7 @@ class SqlController extends AbstractController
         /**
          * Defines the url to return to in case of error in a sql statement
          */
-        $is_gotofile  = true;
+        $is_gotofile = true;
         if (empty($goto)) {
             if (empty($table)) {
                 $goto = Util::getScriptNameForOption(
@@ -105,10 +107,10 @@ class SqlController extends AbstractController
                 ['db' => $GLOBALS['db']],
                 strpos($err_url, '?') === false ? '?' : '&'
             );
-            if ((mb_strpos(' ' . $err_url, 'db_') !== 1 || mb_strpos($err_url, '?route=/database/') === false)
+            if ((mb_strpos(' '.$err_url, 'db_') !== 1 || mb_strpos($err_url, '?route=/database/') === false)
                 && strlen($table) > 0
             ) {
-                $err_url .= '&amp;table=' . urlencode($table);
+                $err_url .= '&amp;table='.urlencode($table);
             }
         }
 
@@ -362,7 +364,7 @@ class SqlController extends AbstractController
         }
 
         if (! $this->response->isAjax()) {
-            Core::sendHeaderLocation('./' . $goto . '&label=' . $_POST['bkm_fields']['bkm_label']);
+            Core::sendHeaderLocation('./'.$goto.'&label='.$_POST['bkm_fields']['bkm_label']);
 
             return;
         }

@@ -24,17 +24,16 @@ abstract class Bool2TextTransformationsPlugin extends TransformationsPlugin
     {
         return __(
             'Converts Boolean values to text (default \'T\' and \'F\').'
-            . ' First option is for TRUE, second for FALSE. Nonzero=true.'
+            .' First option is for TRUE, second for FALSE. Nonzero=true.'
         );
     }
 
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)

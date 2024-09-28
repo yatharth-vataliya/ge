@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin\Server\SysInfo;
 
 use const PHP_OS;
+
 use function in_array;
 use function ucfirst;
 
@@ -22,8 +23,7 @@ class SysInfo
     /**
      * Returns OS type used for sysinfo class
      *
-     * @param string $php_os PHP_OS constant
-     *
+     * @param  string  $php_os  PHP_OS constant
      * @return string
      */
     public static function getOs($php_os = PHP_OS)
@@ -51,25 +51,25 @@ class SysInfo
 
         switch ($php_os) {
             case 'Linux':
-                $sysInfo = new Linux();
+                $sysInfo = new Linux;
                 if ($sysInfo->supported()) {
                     return $sysInfo;
                 }
                 break;
             case 'WINNT':
-                $sysInfo = new WindowsNt();
+                $sysInfo = new WindowsNt;
                 if ($sysInfo->supported()) {
                     return $sysInfo;
                 }
                 break;
             case 'SunOS':
-                $sysInfo = new SunOs();
+                $sysInfo = new SunOs;
                 if ($sysInfo->supported()) {
                     return $sysInfo;
                 }
                 break;
         }
 
-        return new Base();
+        return new Base;
     }
 }

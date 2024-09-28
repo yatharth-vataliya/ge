@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Plugins\Transformations\Output;
 use PhpMyAdmin\Plugins\TransformationsPlugin;
 use PhpMyAdmin\Utils\FormatConverter;
 use stdClass;
+
 use function stripos;
 
 /**
@@ -27,19 +28,18 @@ class Text_Plain_Binarytoip extends TransformationsPlugin
     {
         return __(
             'Converts an Internet network address stored as a binary string'
-            . ' into a string in Internet standard (IPv4/IPv6) format.'
+            .' into a string in Internet standard (IPv4/IPv6) format.'
         );
     }
 
     /**
      * Does the actual work of each specific transformations plugin.
      *
-     * @param string        $buffer  text to be transformed. a binary string containing
-     *                               an IP address, as returned from MySQL's INET6_ATON
-     *                               function
-     * @param array         $options transformation options
-     * @param stdClass|null $meta    meta information
-     *
+     * @param  string  $buffer  text to be transformed. a binary string containing
+     *                          an IP address, as returned from MySQL's INET6_ATON
+     *                          function
+     * @param  array  $options  transformation options
+     * @param  stdClass|null  $meta  meta information
      * @return string IP address
      */
     public function applyTransformation($buffer, array $options = [], ?stdClass $meta = null)

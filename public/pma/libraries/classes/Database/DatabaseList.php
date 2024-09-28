@@ -20,8 +20,7 @@ class DatabaseList
      *
      * @see https://www.php.net/language.oop5.overloading
      *
-     * @param string $param parameter name
-     *
+     * @param  string  $param  parameter name
      * @return mixed
      */
     public function __get($param)
@@ -40,7 +39,7 @@ class DatabaseList
     public function getDatabaseList(): ListDatabase
     {
         if ($this->databases === null) {
-            $this->databases = new ListDatabase();
+            $this->databases = new ListDatabase;
         }
 
         return $this->databases;

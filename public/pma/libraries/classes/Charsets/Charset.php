@@ -41,10 +41,10 @@ final class Charset
     private $maxLength;
 
     /**
-     * @param string $name             Charset name
-     * @param string $description      Description
-     * @param string $defaultCollation Default collation
-     * @param int    $maxLength        Maximum length
+     * @param  string  $name  Charset name
+     * @param  string  $description  Description
+     * @param  string  $defaultCollation  Default collation
+     * @param  int  $maxLength  Maximum length
      */
     private function __construct(
         string $name,
@@ -59,9 +59,7 @@ final class Charset
     }
 
     /**
-     * @param array $state State obtained from the database server
-     *
-     * @return Charset
+     * @param  array  $state  State obtained from the database server
      */
     public static function fromServer(array $state): self
     {

@@ -6,23 +6,23 @@ namespace PhpMyAdmin;
 
 use ArrayObject;
 use PhpMyAdmin\Query\Utilities;
+
 use function in_array;
 
 /**
  * Generic list class
  *
  * @todo add caching
- * @abstract
  */
 abstract class ListAbstract extends ArrayObject
 {
-    /** @var mixed   empty item */
+    /** @var mixed empty item */
     protected $itemEmpty = '';
 
     /**
      * defines what is an empty item (0, '', false or null)
      *
-     * @return mixed   an empty item
+     * @return mixed an empty item
      */
     public function getEmpty()
     {
@@ -33,8 +33,7 @@ abstract class ListAbstract extends ArrayObject
      * checks if the given db names exists in the current list, if there is
      * missing at least one item it returns false otherwise true
      *
-     * @param mixed[] ...$params params
-     *
+     * @param  mixed[]  ...$params  params
      * @return bool true if all items exists, otherwise false
      */
     public function exists(...$params)
@@ -74,7 +73,7 @@ abstract class ListAbstract extends ArrayObject
     /**
      * returns default item
      *
-     * @return string  default item
+     * @return string default item
      */
     public function getDefault()
     {

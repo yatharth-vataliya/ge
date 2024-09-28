@@ -7,6 +7,7 @@ namespace PhpMyAdmin\Table;
 use PhpMyAdmin\DatabaseInterface;
 use PhpMyAdmin\Index;
 use PhpMyAdmin\Util;
+
 use function implode;
 use function sprintf;
 
@@ -21,14 +22,12 @@ final class Maintenance
     }
 
     /**
-     * @param string[] $tables
-     *
-     * @return array
+     * @param  string[]  $tables
      */
     public function getAnalyzeTableRows(string $db, array $tables): array
     {
         $backQuotedTables = Util::backquote($tables);
-        $query = 'ANALYZE TABLE ' . implode(', ', $backQuotedTables) . ';';
+        $query = 'ANALYZE TABLE '.implode(', ', $backQuotedTables).';';
 
         $this->dbi->selectDb($db);
         $result = $this->dbi->fetchResult($query);
@@ -42,14 +41,12 @@ final class Maintenance
     }
 
     /**
-     * @param string[] $tables
-     *
-     * @return array
+     * @param  string[]  $tables
      */
     public function getCheckTableRows(string $db, array $tables): array
     {
         $backQuotedTables = Util::backquote($tables);
-        $query = 'CHECK TABLE ' . implode(', ', $backQuotedTables) . ';';
+        $query = 'CHECK TABLE '.implode(', ', $backQuotedTables).';';
 
         $this->dbi->selectDb($db);
         $result = $this->dbi->fetchResult($query);
@@ -63,14 +60,12 @@ final class Maintenance
     }
 
     /**
-     * @param string[] $tables
-     *
-     * @return array
+     * @param  string[]  $tables
      */
     public function getChecksumTableRows(string $db, array $tables): array
     {
         $backQuotedTables = Util::backquote($tables);
-        $query = 'CHECKSUM TABLE ' . implode(', ', $backQuotedTables) . ';';
+        $query = 'CHECKSUM TABLE '.implode(', ', $backQuotedTables).';';
 
         $this->dbi->selectDb($db);
         $rows = $this->dbi->fetchResult($query);
@@ -99,14 +94,12 @@ final class Maintenance
     }
 
     /**
-     * @param string[] $tables
-     *
-     * @return array
+     * @param  string[]  $tables
      */
     public function getOptimizeTableRows(string $db, array $tables): array
     {
         $backQuotedTables = Util::backquote($tables);
-        $query = 'OPTIMIZE TABLE ' . implode(', ', $backQuotedTables) . ';';
+        $query = 'OPTIMIZE TABLE '.implode(', ', $backQuotedTables).';';
 
         $this->dbi->selectDb($db);
         $result = $this->dbi->fetchResult($query);
@@ -120,14 +113,12 @@ final class Maintenance
     }
 
     /**
-     * @param string[] $tables
-     *
-     * @return array
+     * @param  string[]  $tables
      */
     public function getRepairTableRows(string $db, array $tables): array
     {
         $backQuotedTables = Util::backquote($tables);
-        $query = 'REPAIR TABLE ' . implode(', ', $backQuotedTables) . ';';
+        $query = 'REPAIR TABLE '.implode(', ', $backQuotedTables).';';
 
         $this->dbi->selectDb($db);
         $result = $this->dbi->fetchResult($query);

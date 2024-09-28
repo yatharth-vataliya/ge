@@ -10,6 +10,7 @@ use PhpMyAdmin\SqlQueryForm;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function htmlspecialchars;
 
 /**
@@ -21,8 +22,8 @@ class SqlController extends AbstractController
     private $sqlQueryForm;
 
     /**
-     * @param Response $response
-     * @param string   $db       Database name
+     * @param  Response  $response
+     * @param  string  $db  Database name
      */
     public function __construct($response, Template $template, $db, SqlQueryForm $sqlQueryForm)
     {

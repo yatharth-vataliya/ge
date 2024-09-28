@@ -9,6 +9,7 @@ namespace PhpMyAdmin;
 
 use PhpMyAdmin\Html\Generator;
 use PhpMyAdmin\Navigation\Navigation;
+
 use function defined;
 use function gmdate;
 use function header;
@@ -28,85 +29,84 @@ class Header
     /**
      * Scripts instance
      *
-     * @access private
      * @var Scripts
      */
     private $scripts;
+
     /**
      * PhpMyAdmin\Console instance
      *
-     * @access private
      * @var Console
      */
     private $console;
+
     /**
      * Menu instance
      *
-     * @access private
      * @var Menu
      */
     private $menu;
+
     /**
      * Whether to offer the option of importing user settings
      *
-     * @access private
      * @var bool
      */
     private $userprefsOfferImport;
+
     /**
      * The page title
      *
-     * @access private
      * @var string
      */
     private $title;
+
     /**
      * The value for the id attribute for the body tag
      *
-     * @access private
      * @var string
      */
     private $bodyId;
+
     /**
      * Whether to show the top menu
      *
-     * @access private
      * @var bool
      */
     private $menuEnabled;
+
     /**
      * Whether to show the warnings
      *
-     * @access private
      * @var bool
      */
     private $warningsEnabled;
+
     /**
      * Whether the page is in 'print view' mode
      *
-     * @access private
      * @var bool
      */
     private $isPrintView;
+
     /**
      * Whether we are servicing an ajax request.
      *
-     * @access private
      * @var bool
      */
     private $isAjax;
+
     /**
      * Whether to display anything
      *
-     * @access private
      * @var bool
      */
     private $isEnabled;
+
     /**
      * Whether the HTTP headers (and possibly some HTML)
      * have already been sent to the browser
      *
-     * @access private
      * @var bool
      */
     private $headerIsSent;
@@ -124,13 +124,13 @@ class Header
     {
         global $db, $table;
 
-        $this->template = new Template();
+        $this->template = new Template;
 
         $this->isEnabled = true;
         $this->isAjax = false;
         $this->bodyId = '';
         $this->title = '';
-        $this->console = new Console();
+        $this->console = new Console;
         $this->menu = new Menu(
             $db ?? '',
             $table ?? ''
@@ -138,7 +138,7 @@ class Header
         $this->menuEnabled = true;
         $this->warningsEnabled = true;
         $this->isPrintView = false;
-        $this->scripts = new Scripts();
+        $this->scripts = new Scripts;
         $this->addDefaultScripts();
         $this->headerIsSent = false;
         // if database storage for user preferences is transient,
@@ -151,7 +151,7 @@ class Header
             $this->userprefsOfferImport = true;
         }
 
-        $this->userPreferences = new UserPreferences();
+        $this->userPreferences = new UserPreferences;
     }
 
     /**
@@ -210,8 +210,6 @@ class Header
     /**
      * Returns, as an array, a list of parameters
      * used on the client side
-     *
-     * @return array
      */
     public function getJsParams(): array
     {
@@ -272,13 +270,13 @@ class Header
         $params = $this->getJsParams();
         foreach ($params as $key => $value) {
             if (is_bool($value)) {
-                $params[$key] = $key . ':' . ($value ? 'true' : 'false') . '';
+                $params[$key] = $key.':'.($value ? 'true' : 'false').'';
             } else {
-                $params[$key] = $key . ':"' . Sanitize::escapeJsString($value) . '"';
+                $params[$key] = $key.':"'.Sanitize::escapeJsString($value).'"';
             }
         }
 
-        return 'CommonParams.setAll({' . implode(',', $params) . '});';
+        return 'CommonParams.setAll({'.implode(',', $params).'});';
     }
 
     /**
@@ -293,7 +291,7 @@ class Header
      * Set the ajax flag to indicate whether
      * we are servicing an ajax request
      *
-     * @param bool $isAjax Whether we are servicing an ajax request
+     * @param  bool  $isAjax  Whether we are servicing an ajax request
      */
     public function setAjax(bool $isAjax): void
     {
@@ -324,7 +322,7 @@ class Header
     /**
      * Setter for the ID attribute in the BODY tag
      *
-     * @param string $id Value for the ID attribute
+     * @param  string  $id  Value for the ID attribute
      */
     public function setBodyId(string $id): void
     {
@@ -334,7 +332,7 @@ class Header
     /**
      * Setter for the title of the page
      *
-     * @param string $title New title
+     * @param  string  $title  New title
      */
     public function setTitle(string $title): void
     {
@@ -364,7 +362,7 @@ class Header
     public function enablePrintView(): void
     {
         $this->disableMenuAndConsole();
-        $this->setTitle(__('Print view') . ' - phpMyAdmin ' . PMA_VERSION);
+        $this->setTitle(__('Print view').' - phpMyAdmin '.PMA_VERSION);
         $this->isPrintView = true;
     }
 
@@ -415,7 +413,7 @@ class Header
 
         $this->scripts->addCode(
             'ConsoleEnterExecutes='
-            . ($GLOBALS['cfg']['ConsoleEnterExecutes'] ? 'true' : 'false')
+            .($GLOBALS['cfg']['ConsoleEnterExecutes'] ? 'true' : 'false')
         );
         $this->scripts->addFiles($this->console->getScripts());
 
@@ -511,7 +509,7 @@ class Header
         /**
          * Sends http headers
          */
-        $GLOBALS['now'] = gmdate('D, d M Y H:i:s') . ' GMT';
+        $GLOBALS['now'] = gmdate('D, d M Y H:i:s').' GMT';
 
         /* Prevent against ClickJacking by disabling framing */
         if (strtolower((string) $GLOBALS['cfg']['AllowThirdPartyFraming']) === 'sameorigin') {
@@ -608,65 +606,65 @@ class Header
             && ! empty($cfg['CaptchaLoginPrivateKey'])
             && ! empty($cfg['CaptchaLoginPublicKey'])
         ) {
-            $captchaUrl = ' ' . $cfg['CaptchaCsp'] . ' ';
+            $captchaUrl = ' '.$cfg['CaptchaCsp'].' ';
         }
 
         return [
 
             "Content-Security-Policy: default-src 'self' "
-                . $captchaUrl
-                . $cspAllow . ';'
-                . "script-src 'self' 'unsafe-inline' 'unsafe-eval' "
-                . $captchaUrl
-                . $cspAllow . ';'
-                . "style-src 'self' 'unsafe-inline' "
-                . $captchaUrl
-                . $cspAllow
-                . ';'
-                . "img-src 'self' data: "
-                . $cspAllow
-                . $mapTileUrls
-                . $captchaUrl
-                . ';'
-                . "object-src 'none';",
+                .$captchaUrl
+                .$cspAllow.';'
+                ."script-src 'self' 'unsafe-inline' 'unsafe-eval' "
+                .$captchaUrl
+                .$cspAllow.';'
+                ."style-src 'self' 'unsafe-inline' "
+                .$captchaUrl
+                .$cspAllow
+                .';'
+                ."img-src 'self' data: "
+                .$cspAllow
+                .$mapTileUrls
+                .$captchaUrl
+                .';'
+                ."object-src 'none';",
 
             "X-Content-Security-Policy: default-src 'self' "
-                . $captchaUrl
-                . $cspAllow . ';'
-                . 'options inline-script eval-script;'
-                . 'referrer no-referrer;'
-                . "img-src 'self' data: "
-                . $cspAllow
-                . $mapTileUrls
-                . $captchaUrl
-                . ';'
-                . "object-src 'none';",
+                .$captchaUrl
+                .$cspAllow.';'
+                .'options inline-script eval-script;'
+                .'referrer no-referrer;'
+                ."img-src 'self' data: "
+                .$cspAllow
+                .$mapTileUrls
+                .$captchaUrl
+                .';'
+                ."object-src 'none';",
 
             "X-WebKit-CSP: default-src 'self' "
-                . $captchaUrl
-                . $cspAllow . ';'
-                . "script-src 'self' "
-                . $captchaUrl
-                . $cspAllow
-                . " 'unsafe-inline' 'unsafe-eval';"
-                . 'referrer no-referrer;'
-                . "style-src 'self' 'unsafe-inline' "
-                . $captchaUrl
-                . ';'
-                . "img-src 'self' data: "
-                . $cspAllow
-                . $mapTileUrls
-                . $captchaUrl
-                . ';'
-                . "object-src 'none';",
+                .$captchaUrl
+                .$cspAllow.';'
+                ."script-src 'self' "
+                .$captchaUrl
+                .$cspAllow
+                ." 'unsafe-inline' 'unsafe-eval';"
+                .'referrer no-referrer;'
+                ."style-src 'self' 'unsafe-inline' "
+                .$captchaUrl
+                .';'
+                ."img-src 'self' data: "
+                .$cspAllow
+                .$mapTileUrls
+                .$captchaUrl
+                .';'
+                ."object-src 'none';",
         ];
     }
 
     /**
      * Add recently used table and reload the navigation.
      *
-     * @param string $db    Database name where the table is located.
-     * @param string $table The table name
+     * @param  string  $db  Database name where the table is located.
+     * @param  string  $table  The table name
      */
     private function addRecentTable(string $db, string $table): string
     {
@@ -682,7 +680,7 @@ class Header
             if ($tmp_result === true) {
                 $retval = RecentFavoriteTable::getHtmlUpdateRecentTables();
             } else {
-                $error  = $tmp_result;
+                $error = $tmp_result;
                 $retval = $error->getDisplay();
             }
         }
@@ -698,7 +696,7 @@ class Header
      */
     public static function getVersionParameter(): string
     {
-        return 'v=' . urlencode(PMA_VERSION);
+        return 'v='.urlencode(PMA_VERSION);
     }
 
     private function getVariablesForJavaScript(): string

@@ -10,6 +10,7 @@ namespace PhpMyAdmin;
 use const DIRECTORY_SEPARATOR;
 use const E_USER_ERROR;
 use const E_USER_WARNING;
+
 use function array_key_exists;
 use function closedir;
 use function htmlspecialchars;
@@ -29,22 +30,21 @@ class ThemeManager
     /**
      * ThemeManager instance
      *
-     * @access private
      * @static
+     *
      * @var ThemeManager
      */
     private static $instance;
 
     /**
      * @var string path to theme folder
-     * @access protected
      */
     private $themesPath = './themes/';
 
     /** @var array available themes */
     public $themes = [];
 
-    /** @var string  cookie name */
+    /** @var string cookie name */
     public $cookieName = 'pma_theme';
 
     /** @var bool */
@@ -78,7 +78,7 @@ class ThemeManager
 
         $this->loadThemes();
 
-        $this->theme = new Theme();
+        $this->theme = new Theme;
 
         $config_theme_exists = true;
 
@@ -118,7 +118,7 @@ class ThemeManager
     public static function getInstance(): ThemeManager
     {
         if (empty(self::$instance)) {
-            self::$instance = new ThemeManager();
+            self::$instance = new ThemeManager;
         }
 
         return self::$instance;
@@ -127,11 +127,8 @@ class ThemeManager
     /**
      * sets path to folder containing the themes
      *
-     * @param string $path path to themes folder
-     *
+     * @param  string  $path  path to themes folder
      * @return bool success
-     *
-     * @access public
      */
     public function setThemesPath($path): bool
     {
@@ -147,9 +144,7 @@ class ThemeManager
     /**
      * sets if there are different themes per server
      *
-     * @param bool $per_server Whether to enable per server flag
-     *
-     * @access public
+     * @param  bool  $per_server  Whether to enable per server flag
      */
     public function setThemePerServer($per_server): void
     {
@@ -159,11 +154,8 @@ class ThemeManager
     /**
      * Sets active theme
      *
-     * @param string|null $theme theme name
-     *
+     * @param  string|null  $theme  theme name
      * @return bool true on success
-     *
-     * @access public
      */
     public function setActiveTheme(?string $theme): bool
     {
@@ -192,14 +184,12 @@ class ThemeManager
      * Returns name for storing theme
      *
      * @return string cookie name
-     *
-     * @access public
      */
     public function getThemeCookieName()
     {
         // Allow different theme per server
         if (isset($GLOBALS['server']) && $this->perServer) {
-            return $this->cookieName . '-' . $GLOBALS['server'];
+            return $this->cookieName.'-'.$GLOBALS['server'];
         }
 
         return $this->cookieName;
@@ -209,8 +199,6 @@ class ThemeManager
      * returns name of theme stored in the cookie
      *
      * @return string|false theme name from cookie or false
-     *
-     * @access public
      */
     public function getThemeCookie()
     {
@@ -228,8 +216,6 @@ class ThemeManager
      * save theme in cookie
      *
      * @return true
-     *
-     * @access public
      */
     public function setThemeCookie(): bool
     {
@@ -249,9 +235,7 @@ class ThemeManager
     /**
      * Checks whether folder is valid for storing themes
      *
-     * @param string $folder Folder name to test
-     *
-     * @access private
+     * @param  string  $folder  Folder name to test
      */
     private function checkThemeFolder($folder): bool
     {
@@ -272,8 +256,6 @@ class ThemeManager
 
     /**
      * read all themes
-     *
-     * @access public
      */
     public function loadThemes(): bool
     {
@@ -283,7 +265,7 @@ class ThemeManager
         if ($handleThemes === false) {
             trigger_error(
                 'phpMyAdmin-ERROR: cannot open themes folder: '
-                . $this->themesPath,
+                .$this->themesPath,
                 E_USER_WARNING
             );
 
@@ -295,7 +277,7 @@ class ThemeManager
             // Skip non dirs, . and ..
             if ($PMA_Theme === '.'
                 || $PMA_Theme === '..'
-                || ! @is_dir(ROOT_PATH . $this->themesPath . $PMA_Theme)
+                || ! @is_dir(ROOT_PATH.$this->themesPath.$PMA_Theme)
             ) {
                 continue;
             }
@@ -303,8 +285,8 @@ class ThemeManager
                 continue;
             }
             $new_theme = Theme::load(
-                $this->themesPath . $PMA_Theme,
-                ROOT_PATH . $this->themesPath . $PMA_Theme . '/'
+                $this->themesPath.$PMA_Theme,
+                ROOT_PATH.$this->themesPath.$PMA_Theme.'/'
             );
             if (! $new_theme) {
                 continue;
@@ -323,9 +305,7 @@ class ThemeManager
     /**
      * checks if given theme name is a known theme
      *
-     * @param string|null $theme name fo theme to check for
-     *
-     * @access public
+     * @param  string|null  $theme  name fo theme to check for
      */
     public function checkTheme(?string $theme): bool
     {
@@ -334,8 +314,6 @@ class ThemeManager
 
     /**
      * returns HTML selectbox
-     *
-     * @access public
      */
     public function getHtmlSelectBox(): string
     {
@@ -346,18 +324,18 @@ class ThemeManager
         $select_box .= Url::getHiddenInputs();
 
         $theme_preview_href = '<a href="'
-            . Url::getFromRoute('/themes') . '" target="themes" class="themeselect">';
-        $select_box .=  $theme_preview_href . __('Theme:') . '</a>' . "\n";
+            .Url::getFromRoute('/themes').'" target="themes" class="themeselect">';
+        $select_box .= $theme_preview_href.__('Theme:').'</a>'."\n";
 
-        $select_box .=  '<select name="set_theme" lang="en" dir="ltr"'
-            . ' class="autosubmit">';
+        $select_box .= '<select name="set_theme" lang="en" dir="ltr"'
+            .' class="autosubmit">';
         foreach ($this->themes as $each_theme_id => $each_theme) {
-            $select_box .=  '<option value="' . $each_theme_id . '"';
+            $select_box .= '<option value="'.$each_theme_id.'"';
             if ($this->activeTheme === $each_theme_id) {
-                $select_box .=  ' selected="selected"';
+                $select_box .= ' selected="selected"';
             }
-            $select_box .=  '>' . htmlspecialchars($each_theme->getName())
-                . '</option>';
+            $select_box .= '>'.htmlspecialchars($each_theme->getName())
+                .'</option>';
         }
         $select_box .= '</select>';
         $select_box .= '</form>';
@@ -367,8 +345,6 @@ class ThemeManager
 
     /**
      * Renders the previews for all themes
-     *
-     * @access public
      */
     public function getPrintPreviews(): string
     {
@@ -392,7 +368,7 @@ class ThemeManager
      */
     public static function getThemesFsDir(): string
     {
-        return ROOT_PATH . 'themes' . DIRECTORY_SEPARATOR;
+        return ROOT_PATH.'themes'.DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -400,6 +376,6 @@ class ThemeManager
      */
     public static function getThemesDir(): string
     {
-        return './themes' . DIRECTORY_SEPARATOR;
+        return './themes'.DIRECTORY_SEPARATOR;
     }
 }

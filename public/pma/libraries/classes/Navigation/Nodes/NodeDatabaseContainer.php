@@ -20,7 +20,7 @@ class NodeDatabaseContainer extends Node
     /**
      * Initialises the class
      *
-     * @param string $name An identifier for the new node
+     * @param  string  $name  An identifier for the new node
      */
     public function __construct($name)
     {

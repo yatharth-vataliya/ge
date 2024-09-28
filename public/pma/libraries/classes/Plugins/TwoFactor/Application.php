@@ -14,6 +14,7 @@ use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FAQRCode\Google2FA;
+
 use function extension_loaded;
 
 /**
@@ -32,15 +33,15 @@ class Application extends TwoFactorPlugin
     /**
      * Creates object
      *
-     * @param TwoFactor $twofactor TwoFactor instance
+     * @param  TwoFactor  $twofactor  TwoFactor instance
      */
     public function __construct(TwoFactor $twofactor)
     {
         parent::__construct($twofactor);
         if (extension_loaded('imagick')) {
-            $this->google2fa = new Google2FA();
+            $this->google2fa = new Google2FA;
         } else {
-            $this->google2fa = new Google2FA(new SvgImageBackEnd());
+            $this->google2fa = new Google2FA(new SvgImageBackEnd);
         }
         $this->google2fa->setWindow(8);
         if (isset($this->twofactor->config['settings']['secret'])) {
@@ -97,7 +98,7 @@ class Application extends TwoFactorPlugin
     {
         $secret = $this->twofactor->config['settings']['secret'];
         $inlineUrl = $this->google2fa->getQRCodeInline(
-            'phpMyAdmin (' . $this->getAppId(false) . ')',
+            'phpMyAdmin ('.$this->getAppId(false).')',
             $this->twofactor->user,
             $secret
         );

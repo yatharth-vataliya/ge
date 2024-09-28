@@ -10,6 +10,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Server\Plugins;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
+
 use function array_keys;
 use function ksort;
 use function mb_strtolower;
@@ -27,8 +28,8 @@ class PluginsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, Plugins $plugins, $dbi)
     {

@@ -10,6 +10,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function strlen;
 
 final class EventsController extends AbstractController
@@ -21,9 +22,9 @@ final class EventsController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name.
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name.
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, Events $events, $dbi)
     {
@@ -74,7 +75,7 @@ final class EventsController extends AbstractController
         $this->render('database/events/index', [
             'db' => $db,
             'items' => $items,
-            'select_all_arrow_src' => $PMA_Theme->getImgPath() . 'arrow_' . $text_dir . '.png',
+            'select_all_arrow_src' => $PMA_Theme->getImgPath().'arrow_'.$text_dir.'.png',
             'has_privilege' => Util::currentUserHasPrivilege('EVENT', $db),
             'scheduler_state' => $this->events->getEventSchedulerStatus(),
             'text_dir' => $text_dir,

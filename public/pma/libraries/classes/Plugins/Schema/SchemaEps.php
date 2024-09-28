@@ -32,7 +32,7 @@ class SchemaEps extends SchemaPlugin
      */
     protected function setProperties()
     {
-        $schemaPluginProperties = new SchemaPluginProperties();
+        $schemaPluginProperties = new SchemaPluginProperties;
         $schemaPluginProperties->setText('EPS');
         $schemaPluginProperties->setExtension('eps');
         $schemaPluginProperties->setMimeType('application/eps');
@@ -79,8 +79,7 @@ class SchemaEps extends SchemaPlugin
     /**
      * Exports the schema into EPS format.
      *
-     * @param string $db database name
-     *
+     * @param  string  $db  database name
      * @return bool Whether it succeeded
      */
     public function exportSchema($db)

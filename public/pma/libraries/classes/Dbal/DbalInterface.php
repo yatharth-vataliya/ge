@@ -17,11 +17,10 @@ interface DbalInterface
     /**
      * runs a query
      *
-     * @param string $query               SQL query to execute
-     * @param mixed  $link                optional database link to use
-     * @param int    $options             optional query options
-     * @param bool   $cache_affected_rows whether to cache affected rows
-     *
+     * @param  string  $query  SQL query to execute
+     * @param  mixed  $link  optional database link to use
+     * @param  int  $options  optional query options
+     * @param  bool  $cache_affected_rows  whether to cache affected rows
      * @return mixed
      */
     public function query(
@@ -34,11 +33,10 @@ interface DbalInterface
     /**
      * runs a query and returns the result
      *
-     * @param string $query               query to run
-     * @param mixed  $link                link type
-     * @param int    $options             query options
-     * @param bool   $cache_affected_rows whether to cache affected row
-     *
+     * @param  string  $query  query to run
+     * @param  mixed  $link  link type
+     * @param  int  $options  query options
+     * @param  bool  $cache_affected_rows  whether to cache affected row
      * @return mixed
      */
     public function tryQuery(
@@ -51,9 +49,8 @@ interface DbalInterface
     /**
      * Run multi query statement and return results
      *
-     * @param string $multiQuery multi query statement to execute
-     * @param int    $linkIndex  index of the opened database link
-     *
+     * @param  string  $multiQuery  multi query statement to execute
+     * @param  int  $linkIndex  index of the opened database link
      * @return mysqli_result[]|bool (false)
      */
     public function tryMultiQuery(string $multiQuery = '', $linkIndex = DatabaseInterface::CONNECT_USER);
@@ -61,21 +58,19 @@ interface DbalInterface
     /**
      * returns array with table names for given db
      *
-     * @param string $database name of database
-     * @param mixed  $link     mysql link resource|object
-     *
-     * @return array   tables names
+     * @param  string  $database  name of database
+     * @param  mixed  $link  mysql link resource|object
+     * @return array tables names
      */
     public function getTables(string $database, $link = DatabaseInterface::CONNECT_USER): array;
 
     /**
      * returns
      *
-     * @param string $database name of database
-     * @param array  $tables   list of tables to search for for relations
-     * @param int    $link     mysql link resource|object
-     *
-     * @return array           array of found foreign keys
+     * @param  string  $database  name of database
+     * @param  array  $tables  list of tables to search for for relations
+     * @param  int  $link  mysql link resource|object
+     * @return array array of found foreign keys
      */
     public function getForeignKeyConstrains(
         string $database,
@@ -97,17 +92,16 @@ interface DbalInterface
      * $dbi->getTablesFull('my_database', 'my_tables_', true));
      * </code>
      *
-     * @param string       $database     database
-     * @param string|array $table        table name(s)
-     * @param bool         $tbl_is_group $table is a table group
-     * @param int          $limit_offset zero-based offset for the count
-     * @param bool|int     $limit_count  number of tables to return
-     * @param string       $sort_by      table attribute to sort by
-     * @param string       $sort_order   direction to sort (ASC or DESC)
-     * @param string       $table_type   whether table or view
-     * @param mixed        $link         link type
-     *
-     * @return array           list of tables in given db(s)
+     * @param  string  $database  database
+     * @param  string|array  $table  table name(s)
+     * @param  bool  $tbl_is_group  $table is a table group
+     * @param  int  $limit_offset  zero-based offset for the count
+     * @param  bool|int  $limit_count  number of tables to return
+     * @param  string  $sort_by  table attribute to sort by
+     * @param  string  $sort_order  direction to sort (ASC or DESC)
+     * @param  string  $table_type  whether table or view
+     * @param  mixed  $link  link type
+     * @return array list of tables in given db(s)
      *
      * @todo    move into Table
      */
@@ -126,8 +120,7 @@ interface DbalInterface
     /**
      * Get VIEWs in a particular database
      *
-     * @param string $db Database name to look in
-     *
+     * @param  string  $db  Database name to look in
      * @return array Set of VIEWs inside the database
      */
     public function getVirtualTables(string $db): array;
@@ -135,17 +128,15 @@ interface DbalInterface
     /**
      * returns array with databases containing extended infos about them
      *
-     * @param string   $database     database
-     * @param bool     $force_stats  retrieve stats also for MySQL < 5
-     * @param int      $link         link type
-     * @param string   $sort_by      column to order by
-     * @param string   $sort_order   ASC or DESC
-     * @param int      $limit_offset starting offset for LIMIT
-     * @param bool|int $limit_count  row count for LIMIT or true
-     *                               for
-     *                               $GLOBALS['cfg']['MaxDbList']
-     *
-     * @return array
+     * @param  string  $database  database
+     * @param  bool  $force_stats  retrieve stats also for MySQL < 5
+     * @param  int  $link  link type
+     * @param  string  $sort_by  column to order by
+     * @param  string  $sort_order  ASC or DESC
+     * @param  int  $limit_offset  starting offset for LIMIT
+     * @param  bool|int  $limit_count  row count for LIMIT or true
+     *                                 for
+     *                                 $GLOBALS['cfg']['MaxDbList']
      *
      * @todo    move into ListDatabase?
      */
@@ -162,10 +153,8 @@ interface DbalInterface
     /**
      * returns detailed array with all columns for sql
      *
-     * @param string $sql_query    target SQL query to get columns
-     * @param array  $view_columns alias for columns
-     *
-     * @return array
+     * @param  string  $sql_query  target SQL query to get columns
+     * @param  array  $view_columns  alias for columns
      */
     public function getColumnMapFromSql(string $sql_query, array $view_columns = []): array;
 
@@ -173,12 +162,10 @@ interface DbalInterface
      * returns detailed array with all columns for given table in database,
      * or all tables/databases
      *
-     * @param string $database name of database
-     * @param string $table    name of table to retrieve columns from
-     * @param string $column   name of specific column
-     * @param mixed  $link     mysql link resource
-     *
-     * @return array
+     * @param  string  $database  name of database
+     * @param  string  $table  name of table to retrieve columns from
+     * @param  string  $column  name of specific column
+     * @param  mixed  $link  mysql link resource
      */
     public function getColumnsFull(
         ?string $database = null,
@@ -190,12 +177,11 @@ interface DbalInterface
     /**
      * Returns descriptions of columns in given table (all or given by $column)
      *
-     * @param string $database name of database
-     * @param string $table    name of table to retrieve columns from
-     * @param string $column   name of column, null to show all columns
-     * @param bool   $full     whether to return full info or only column names
-     * @param int    $link     link type
-     *
+     * @param  string  $database  name of database
+     * @param  string  $table  name of table to retrieve columns from
+     * @param  string  $column  name of column, null to show all columns
+     * @param  bool  $full  whether to return full info or only column names
+     * @param  int  $link  link type
      * @return array array indexed by column names or,
      *               if $column is given, flat array description
      */
@@ -210,11 +196,9 @@ interface DbalInterface
     /**
      * Returns all column names in given table
      *
-     * @param string $database name of database
-     * @param string $table    name of table to retrieve columns from
-     * @param mixed  $link     mysql link resource
-     *
-     * @return array|null
+     * @param  string  $database  name of database
+     * @param  string  $table  name of table to retrieve columns from
+     * @param  mixed  $link  mysql link resource
      */
     public function getColumnNames(
         string $database,
@@ -225,11 +209,9 @@ interface DbalInterface
     /**
      * Returns indexes of a table
      *
-     * @param string $database name of database
-     * @param string $table    name of the table whose indexes are to be retrieved
-     * @param mixed  $link     mysql link resource
-     *
-     * @return array
+     * @param  string  $database  name of database
+     * @param  string  $table  name of the table whose indexes are to be retrieved
+     * @param  mixed  $link  mysql link resource
      */
     public function getTableIndexes(
         string $database,
@@ -240,12 +222,11 @@ interface DbalInterface
     /**
      * returns value of given mysql server variable
      *
-     * @param string $var  mysql server variable name
-     * @param int    $type DatabaseInterface::GETVAR_SESSION |
+     * @param  string  $var  mysql server variable name
+     * @param  int  $type  DatabaseInterface::GETVAR_SESSION |
      *                     DatabaseInterface::GETVAR_GLOBAL
-     * @param mixed  $link mysql link resource|object
-     *
-     * @return mixed   value for mysql server variable
+     * @param  mixed  $link  mysql link resource|object
+     * @return mixed value for mysql server variable
      */
     public function getVariable(
         string $var,
@@ -256,10 +237,9 @@ interface DbalInterface
     /**
      * Sets new value for a variable if it is different from the current value
      *
-     * @param string $var   variable name
-     * @param string $value value to set
-     * @param mixed  $link  mysql link resource|object
-     *
+     * @param  string  $var  variable name
+     * @param  string  $value  value to set
+     * @param  mixed  $link  mysql link resource|object
      * @return bool whether query was a successful
      */
     public function setVariable(string $var, string $value, $link = DatabaseInterface::CONNECT_USER): bool;
@@ -274,7 +254,7 @@ interface DbalInterface
     /**
      * Sets collation connection for user link
      *
-     * @param string $collation collation to set
+     * @param  string  $collation  collation to set
      */
     public function setCollation(string $collation): void;
 
@@ -297,15 +277,14 @@ interface DbalInterface
      * // $user_name = 'John Doe'
      * </code>
      *
-     * @param string     $query      The query to execute
-     * @param int        $row_number row to fetch the value from,
-     *                               starting at 0, with 0 being
-     *                               default
-     * @param int|string $field      field to fetch the value from,
-     *                               starting at 0, with 0 being
-     *                               default
-     * @param int        $link       link type
-     *
+     * @param  string  $query  The query to execute
+     * @param  int  $row_number  row to fetch the value from,
+     *                           starting at 0, with 0 being
+     *                           default
+     * @param  int|string  $field  field to fetch the value from,
+     *                             starting at 0, with 0 being
+     *                             default
+     * @param  int  $link  link type
      * @return mixed value of first field in first row from result
      *               or false if not found
      */
@@ -326,10 +305,10 @@ interface DbalInterface
      * // $user = array('id' => 123, 'name' => 'John Doe')
      * </code>
      *
-     * @param string $query The query to execute
-     * @param string $type  NUM|ASSOC|BOTH returned array should either numeric
-     *                      associative or both
-     * @param int    $link  link type
+     * @param  string  $query  The query to execute
+     * @param  string  $type  NUM|ASSOC|BOTH returned array should either numeric
+     *                        associative or both
+     * @param  int  $link  link type
      */
     public function fetchSingleRow(
         string $query,
@@ -379,17 +358,16 @@ interface DbalInterface
      * // $users['admin']['John Doe'] = '123'
      * </code>
      *
-     * @param string           $query   query to execute
-     * @param string|int|array $key     field-name or offset
-     *                                  used as key for
-     *                                  array or array of
-     *                                  those
-     * @param string|int       $value   value-name or offset
-     *                                  used as value for
-     *                                  array
-     * @param int              $link    link type
-     * @param int              $options query options
-     *
+     * @param  string  $query  query to execute
+     * @param  string|int|array  $key  field-name or offset
+     *                                 used as key for
+     *                                 array or array of
+     *                                 those
+     * @param  string|int  $value  value-name or offset
+     *                             used as value for
+     *                             array
+     * @param  int  $link  link type
+     * @param  int  $options  query options
      * @return array resultrows or values indexed by $key
      */
     public function fetchResult(
@@ -410,8 +388,7 @@ interface DbalInterface
     /**
      * returns warnings for last query
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return array warnings
      */
     public function getWarnings($link = DatabaseInterface::CONNECT_USER): array;
@@ -419,10 +396,9 @@ interface DbalInterface
     /**
      * returns an array of PROCEDURE or FUNCTION names for a db
      *
-     * @param string $db    db name
-     * @param string $which PROCEDURE | FUNCTION
-     * @param int    $link  link type
-     *
+     * @param  string  $db  db name
+     * @param  string  $which  PROCEDURE | FUNCTION
+     * @param  int  $link  link type
      * @return array the procedure names or function names
      */
     public function getProceduresOrFunctions(
@@ -434,11 +410,10 @@ interface DbalInterface
     /**
      * returns the definition of a specific PROCEDURE, FUNCTION, EVENT or VIEW
      *
-     * @param string $db    db name
-     * @param string $which PROCEDURE | FUNCTION | EVENT | VIEW
-     * @param string $name  the procedure|function|event|view name
-     * @param int    $link  link type
-     *
+     * @param  string  $db  db name
+     * @param  string  $which  PROCEDURE | FUNCTION | EVENT | VIEW
+     * @param  string  $name  the procedure|function|event|view name
+     * @param  int  $link  link type
      * @return string|null the definition
      */
     public function getDefinition(
@@ -452,10 +427,9 @@ interface DbalInterface
      * returns details about the PROCEDUREs or FUNCTIONs for a specific database
      * or details about a specific routine
      *
-     * @param string $db    db name
-     * @param string $which PROCEDURE | FUNCTION or null for both
-     * @param string $name  name of the routine (to fetch a specific routine)
-     *
+     * @param  string  $db  db name
+     * @param  string  $which  PROCEDURE | FUNCTION or null for both
+     * @param  string  $name  name of the routine (to fetch a specific routine)
      * @return array information about ROCEDUREs or FUNCTIONs
      */
     public function getRoutines(string $db, ?string $which = null, string $name = ''): array;
@@ -463,9 +437,8 @@ interface DbalInterface
     /**
      * returns details about the EVENTs for a specific database
      *
-     * @param string $db   db name
-     * @param string $name event name
-     *
+     * @param  string  $db  db name
+     * @param  string  $name  event name
      * @return array information about EVENTs
      */
     public function getEvents(string $db, string $name = ''): array;
@@ -473,10 +446,9 @@ interface DbalInterface
     /**
      * returns details about the TRIGGERs for a specific table or database
      *
-     * @param string $db        db name
-     * @param string $table     table name
-     * @param string $delimiter the delimiter to use (may be empty)
-     *
+     * @param  string  $db  db name
+     * @param  string  $table  table name
+     * @param  string  $delimiter  the delimiter to use (may be empty)
      * @return array information about triggers (may be empty)
      */
     public function getTriggers(string $db, string $table = '', $delimiter = '//');
@@ -518,11 +490,10 @@ interface DbalInterface
     /**
      * connects to the database server
      *
-     * @param int        $mode   Connection mode on of CONNECT_USER, CONNECT_CONTROL
-     *                           or CONNECT_AUXILIARY.
-     * @param array|null $server Server information like host/port/socket/persistent
-     * @param int        $target How to store connection link, defaults to $mode
-     *
+     * @param  int  $mode  Connection mode on of CONNECT_USER, CONNECT_CONTROL
+     *                     or CONNECT_AUXILIARY.
+     * @param  array|null  $server  Server information like host/port/socket/persistent
+     * @param  int  $target  How to store connection link, defaults to $mode
      * @return mixed false on error or a connection object on success
      */
     public function connect(int $mode, ?array $server = null, ?int $target = null);
@@ -530,38 +501,37 @@ interface DbalInterface
     /**
      * selects given database
      *
-     * @param string $dbname database name to select
-     * @param int    $link   link type
+     * @param  string  $dbname  database name to select
+     * @param  int  $link  link type
      */
     public function selectDb(string $dbname, $link = DatabaseInterface::CONNECT_USER): bool;
 
     /**
      * returns array of rows with associative and numeric keys from $result
      *
-     * @param object $result result set identifier
+     * @param  object  $result  result set identifier
      */
     public function fetchArray($result): ?array;
 
     /**
      * returns array of rows with associative keys from $result
      *
-     * @param object $result result set identifier
+     * @param  object  $result  result set identifier
      */
     public function fetchAssoc($result): ?array;
 
     /**
      * returns array of rows with numeric keys from $result
      *
-     * @param object $result result set identifier
+     * @param  object  $result  result set identifier
      */
     public function fetchRow($result): ?array;
 
     /**
      * Adjusts the result pointer to an arbitrary row in the result
      *
-     * @param object $result database result
-     * @param int    $offset offset to seek
-     *
+     * @param  object  $result  database result
+     * @param  int  $offset  offset to seek
      * @return bool true on success, false on failure
      */
     public function dataSeek($result, int $offset): bool;
@@ -569,15 +539,14 @@ interface DbalInterface
     /**
      * Frees memory associated with the result
      *
-     * @param object $result database result
+     * @param  object  $result  database result
      */
     public function freeResult($result): void;
 
     /**
      * Check if there are any more query results from a multi query
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return bool true or false
      */
     public function moreResults($link = DatabaseInterface::CONNECT_USER): bool;
@@ -585,8 +554,7 @@ interface DbalInterface
     /**
      * Prepare next result from multi_query
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return bool true or false
      */
     public function nextResult($link = DatabaseInterface::CONNECT_USER): bool;
@@ -594,8 +562,7 @@ interface DbalInterface
     /**
      * Store the result returned from multi query
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return mixed false when empty results / result set when not empty
      */
     public function storeResult($link = DatabaseInterface::CONNECT_USER);
@@ -603,8 +570,7 @@ interface DbalInterface
     /**
      * Returns a string representing the type of connection used
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return string|bool type of connection used
      */
     public function getHostInfo($link = DatabaseInterface::CONNECT_USER);
@@ -612,8 +578,7 @@ interface DbalInterface
     /**
      * Returns the version of the MySQL protocol used
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return int|bool version of the MySQL protocol used
      */
     public function getProtoInfo($link = DatabaseInterface::CONNECT_USER);
@@ -621,8 +586,7 @@ interface DbalInterface
     /**
      * returns a string that represents the client library version
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return string MySQL client library version
      */
     public function getClientInfo($link = DatabaseInterface::CONNECT_USER): string;
@@ -630,8 +594,7 @@ interface DbalInterface
     /**
      * returns last error message or false if no errors occurred
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return string|bool error or false
      */
     public function getError($link = DatabaseInterface::CONNECT_USER);
@@ -639,8 +602,7 @@ interface DbalInterface
     /**
      * returns the number of rows returned by last query
      *
-     * @param object $result result set identifier
-     *
+     * @param  object  $result  result set identifier
      * @return string|int
      */
     public function numRows($result);
@@ -649,8 +611,7 @@ interface DbalInterface
      * returns last inserted auto_increment id for given $link
      * or $GLOBALS['userlink']
      *
-     * @param int $link link type
-     *
+     * @param  int  $link  link type
      * @return int|bool
      */
     public function insertId($link = DatabaseInterface::CONNECT_USER);
@@ -658,9 +619,8 @@ interface DbalInterface
     /**
      * returns the number of rows affected by last query
      *
-     * @param int  $link           link type
-     * @param bool $get_from_cache whether to retrieve from cache
-     *
+     * @param  int  $link  link type
+     * @param  bool  $get_from_cache  whether to retrieve from cache
      * @return int|bool
      */
     public function affectedRows($link = DatabaseInterface::CONNECT_USER, bool $get_from_cache = true);
@@ -668,8 +628,7 @@ interface DbalInterface
     /**
      * returns metainfo for fields in $result
      *
-     * @param object $result result set identifier
-     *
+     * @param  object  $result  result set identifier
      * @return mixed meta info for fields in $result
      */
     public function getFieldsMeta($result);
@@ -677,8 +636,7 @@ interface DbalInterface
     /**
      * return number of fields in given $result
      *
-     * @param object $result result set identifier
-     *
+     * @param  object  $result  result set identifier
      * @return int field count
      */
     public function numFields($result): int;
@@ -686,9 +644,8 @@ interface DbalInterface
     /**
      * returns the length of the given field $i in $result
      *
-     * @param object $result result set identifier
-     * @param int    $i      field
-     *
+     * @param  object  $result  result set identifier
+     * @param  int  $i  field
      * @return int|bool length of field
      */
     public function fieldLen($result, int $i);
@@ -696,9 +653,8 @@ interface DbalInterface
     /**
      * returns name of $i. field in $result
      *
-     * @param object $result result set identifier
-     * @param int    $i      field
-     *
+     * @param  object  $result  result set identifier
+     * @param  int  $i  field
      * @return string name of $i. field in $result
      */
     public function fieldName($result, int $i): string;
@@ -706,9 +662,8 @@ interface DbalInterface
     /**
      * returns concatenated string of human readable field flags
      *
-     * @param object $result result set identifier
-     * @param int    $i      field
-     *
+     * @param  object  $result  result set identifier
+     * @param  int  $i  field
      * @return string field flags
      */
     public function fieldFlags($result, $i): string;
@@ -716,9 +671,8 @@ interface DbalInterface
     /**
      * returns properly escaped string for use in MySQL queries
      *
-     * @param string $str  string to be escaped
-     * @param mixed  $link optional database link to use
-     *
+     * @param  string  $str  string to be escaped
+     * @param  mixed  $link  optional database link to use
      * @return string a MySQL escaped string
      */
     public function escapeString(string $str, $link = DatabaseInterface::CONNECT_USER);
@@ -731,7 +685,7 @@ interface DbalInterface
     /**
      * Gets SQL for killing a process.
      *
-     * @param int $process Process ID
+     * @param  int  $process  Process ID
      */
     public function getKillQuery(int $process): string;
 
@@ -743,17 +697,16 @@ interface DbalInterface
     /**
      * Get a table with database name and table name
      *
-     * @param string $db_name    DB name
-     * @param string $table_name Table name
+     * @param  string  $db_name  DB name
+     * @param  string  $table_name  Table name
      */
     public function getTable(string $db_name, string $table_name): Table;
 
     /**
      * returns collation of given db
      *
-     * @param string $db name of db
-     *
-     * @return string  collation of $db
+     * @param  string  $db  name of db
+     * @return string collation of $db
      */
     public function getDbCollation(string $db): string;
 
@@ -790,9 +743,8 @@ interface DbalInterface
     /**
      * Prepare an SQL statement for execution.
      *
-     * @param string $query The query, as a string.
-     * @param int    $link  Link type.
-     *
+     * @param  string  $query  The query, as a string.
+     * @param  int  $link  Link type.
      * @return object|false A statement object or false.
      */
     public function prepare(string $query, $link = DatabaseInterface::CONNECT_USER);

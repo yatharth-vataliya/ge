@@ -27,14 +27,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Cache\CacheInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+
 use function fclose;
 use function fopen;
 use function fwrite;
+use function is_file;
 use function json_encode;
+use function sprintf;
 use function str_replace;
 use function strpos;
-use function is_file;
-use function sprintf;
 
 final class CacheWarmupCommand extends Command
 {
@@ -112,9 +113,9 @@ final class CacheWarmupCommand extends Command
         $cfg['environment'] = 'production';
         $PMA_Config = new Config(CONFIG_FILE);
         $PMA_Config->set('environment', $cfg['environment']);
-        $dbi = new DatabaseInterface(new DbiDummy());
-        $tplDir = ROOT_PATH . 'templates';
-        $tmpDir = ROOT_PATH . 'twig-templates';
+        $dbi = new DatabaseInterface(new DbiDummy);
+        $tplDir = ROOT_PATH.'templates';
+        $tmpDir = ROOT_PATH.'twig-templates';
 
         $loader = new FilesystemLoader($tplDir);
         $twig = new Environment($loader, [
@@ -122,17 +123,17 @@ final class CacheWarmupCommand extends Command
             'cache' => $tmpDir,
         ]);
         $twig->setExtensions([
-            new CoreExtension(),
-            new I18nExtension(),
-            new MessageExtension(),
-            new PluginsExtension(),
-            new RelationExtension(),
-            new SanitizeExtension(),
-            new TableExtension(),
-            new TrackerExtension(),
-            new TransformationsExtension(),
-            new UrlExtension(),
-            new UtilExtension(),
+            new CoreExtension,
+            new I18nExtension,
+            new MessageExtension,
+            new PluginsExtension,
+            new RelationExtension,
+            new SanitizeExtension,
+            new TableExtension,
+            new TrackerExtension,
+            new TransformationsExtension,
+            new UrlExtension,
+            new UtilExtension,
         ]);
 
         /** @var CacheInterface $twigCache */
@@ -157,24 +158,24 @@ final class CacheWarmupCommand extends Command
                 continue;
             }
 
-            $name = str_replace($tplDir . '/', '', $file->getPathname());
-            $output->writeln('Loading: ' . $name, OutputInterface::VERBOSITY_DEBUG);
+            $name = str_replace($tplDir.'/', '', $file->getPathname());
+            $output->writeln('Loading: '.$name, OutputInterface::VERBOSITY_DEBUG);
             if (Environment::MAJOR_VERSION === 3) {
                 $template = $twig->loadTemplate($twig->getTemplateClass($name), $name);
             } else {// @phpstan-ignore-line Twig 2
-                $template = $twig->loadTemplate($name);// @phpstan-ignore-line Twig 2
+                $template = $twig->loadTemplate($name); // @phpstan-ignore-line Twig 2
             }
 
             // Generate line map
             $cacheFilename = $twigCache->generateKey($name, $twig->getTemplateClass($name));
-            $template_file = 'templates/' . $name;
+            $template_file = 'templates/'.$name;
             $cache_file = str_replace($tmpDir, 'twig-templates', $cacheFilename);
             $replacements[$cache_file] = [$template_file, $template->getDebugInfo()];
         }
 
         $output->writeln('Writing replacements...', OutputInterface::VERBOSITY_VERY_VERBOSE);
         // Store replacements in JSON
-        $handle = fopen($tmpDir . '/replace.json', 'w');
+        $handle = fopen($tmpDir.'/replace.json', 'w');
         if ($handle === false) {
             return 1;
         }

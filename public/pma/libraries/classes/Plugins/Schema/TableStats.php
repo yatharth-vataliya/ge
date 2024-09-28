@@ -12,6 +12,7 @@ use PhpMyAdmin\Font;
 use PhpMyAdmin\Index;
 use PhpMyAdmin\Relation;
 use PhpMyAdmin\Util;
+
 use function array_flip;
 use function array_keys;
 use function array_merge;
@@ -23,8 +24,6 @@ use function sprintf;
  *
  * This class preserves the table co-ordinates,fields
  * and helps in drawing/generating the tables.
- *
- * @abstract
  */
 abstract class TableStats
 {
@@ -77,15 +76,15 @@ abstract class TableStats
     protected $font;
 
     /**
-     * @param Pdf\Pdf|Svg\Svg|Eps\Eps|Dia\Dia|Pdf\Pdf $diagram        schema diagram
-     * @param string                                  $db             current db name
-     * @param int                                     $pageNumber     current page number (from the
-     *                                                                $cfg['Servers'][$i]['table_coords'] table)
-     * @param string                                  $tableName      table name
-     * @param bool                                    $showKeys       whether to display keys or not
-     * @param bool                                    $tableDimension whether to display table position or not
-     * @param bool                                    $offline        whether the coordinates are sent
-     *                                                                from the browser
+     * @param  Pdf\Pdf|Svg\Svg|Eps\Eps|Dia\Dia|Pdf\Pdf  $diagram  schema diagram
+     * @param  string  $db  current db name
+     * @param  int  $pageNumber  current page number (from the
+     *                           $cfg['Servers'][$i]['table_coords'] table)
+     * @param  string  $tableName  table name
+     * @param  bool  $showKeys  whether to display keys or not
+     * @param  bool  $tableDimension  whether to display table position or not
+     * @param  bool  $offline  whether the coordinates are sent
+     *                         from the browser
      */
     public function __construct(
         $diagram,
@@ -98,18 +97,18 @@ abstract class TableStats
     ) {
         global $dbi;
 
-        $this->diagram    = $diagram;
-        $this->db         = $db;
+        $this->diagram = $diagram;
+        $this->db = $db;
         $this->pageNumber = $pageNumber;
-        $this->tableName  = $tableName;
+        $this->tableName = $tableName;
 
-        $this->showKeys   = $showKeys;
-        $this->tableDimension   = $tableDimension;
+        $this->showKeys = $showKeys;
+        $this->tableDimension = $tableDimension;
 
-        $this->offline    = $offline;
+        $this->offline = $offline;
 
         $this->relation = new Relation($dbi);
-        $this->font = new Font();
+        $this->font = new Font;
 
         // checks whether the table exists
         // and loads fields
@@ -131,7 +130,7 @@ abstract class TableStats
     {
         global $dbi;
 
-        $sql = 'DESCRIBE ' . Util::backquote($this->tableName);
+        $sql = 'DESCRIBE '.Util::backquote($this->tableName);
         $result = $dbi->tryQuery(
             $sql,
             DatabaseInterface::CONNECT_USER,
@@ -162,8 +161,6 @@ abstract class TableStats
      * Displays an error when the table cannot be found.
      *
      * @return void
-     *
-     * @abstract
      */
     abstract protected function showMissingTableError();
 
@@ -181,7 +178,7 @@ abstract class TableStats
         foreach ($_POST['t_h'] as $key => $value) {
             $db = rawurldecode($_POST['t_db'][$key]);
             $tbl = rawurldecode($_POST['t_tbl'][$key]);
-            if ($this->db . '.' . $this->tableName === $db . '.' . $tbl) {
+            if ($this->db.'.'.$this->tableName === $db.'.'.$tbl) {
                 $this->x = (float) $_POST['t_x'][$key];
                 $this->y = (float) $_POST['t_y'][$key];
                 break;
@@ -209,7 +206,7 @@ abstract class TableStats
         global $dbi;
 
         $result = $dbi->query(
-            'SHOW INDEX FROM ' . Util::backquote($this->tableName) . ';',
+            'SHOW INDEX FROM '.Util::backquote($this->tableName).';',
             DatabaseInterface::CONNECT_USER,
             DatabaseInterface::QUERY_STORE
         );
@@ -238,6 +235,6 @@ abstract class TableStats
             ? sprintf('%.0fx%0.f', $this->width, $this->heightCell)
             : ''
         )
-        . ' ' . $this->tableName;
+        .' '.$this->tableName;
     }
 }

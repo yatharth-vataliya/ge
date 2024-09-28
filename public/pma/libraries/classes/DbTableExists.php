@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpMyAdmin;
 
 use PhpMyAdmin\Controllers\Database\SqlController;
+
 use function defined;
 use function strlen;
 
@@ -62,7 +63,7 @@ final class DbTableExists
             $url_params['show_as_php'] = $show_as_php;
         }
 
-        Core::sendHeaderLocation('./index.php?route=/' . Url::getCommonRaw($url_params, '&'));
+        Core::sendHeaderLocation('./index.php?route=/'.Url::getCommonRaw($url_params, '&'));
 
         exit;
     }
@@ -86,7 +87,7 @@ final class DbTableExists
             }
 
             $_result = $dbi->tryQuery(
-                'SHOW TABLES LIKE \'' . $dbi->escapeString($table) . '\';',
+                'SHOW TABLES LIKE \''.$dbi->escapeString($table).'\';',
                 DatabaseInterface::CONNECT_USER,
                 DatabaseInterface::QUERY_STORE
             );
@@ -108,7 +109,7 @@ final class DbTableExists
              * (as it can happen just in case temporary table, it should be fast):
              */
             $_result = $dbi->tryQuery(
-                'SELECT COUNT(*) FROM ' . Util::backquote($table) . ';',
+                'SELECT COUNT(*) FROM '.Util::backquote($table).';',
                 DatabaseInterface::CONNECT_USER,
                 DatabaseInterface::QUERY_STORE
             );

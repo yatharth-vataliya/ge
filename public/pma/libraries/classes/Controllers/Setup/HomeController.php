@@ -11,14 +11,14 @@ use PhpMyAdmin\Core;
 use PhpMyAdmin\LanguageManager;
 use PhpMyAdmin\Sanitize;
 use PhpMyAdmin\Setup\Index;
+
 use function preg_replace;
 use function uniqid;
 
 class HomeController extends AbstractController
 {
     /**
-     * @param array $params Request parameters
-     *
+     * @param  array  $params  Request parameters
      * @return string HTML
      */
     public function index(array $params): string
@@ -43,12 +43,12 @@ class HomeController extends AbstractController
 
         $text = __(
             'You are not using a secure connection; all data (including potentially '
-            . 'sensitive information, like passwords) is transferred unencrypted!'
+            .'sensitive information, like passwords) is transferred unencrypted!'
         );
         $text .= ' <a href="#">';
         $text .= __(
             'If your server is also configured to accept HTTPS requests '
-            . 'follow this link to use a secure connection.'
+            .'follow this link to use a secure connection.'
         );
         $text .= '</a>';
         Index::messagesSet('notice', 'no_https', __('Insecure connection'), $text);
@@ -64,8 +64,8 @@ class HomeController extends AbstractController
                     Sanitize::sanitizeMessage(
                         __(
                             'Configuration saved to file config/config.inc.php in phpMyAdmin '
-                            . 'top level directory, copy it to top level one and delete '
-                            . 'directory config to use it.'
+                            .'top level directory, copy it to top level one and delete '
+                            .'directory config to use it.'
                         )
                     )
                 );
@@ -79,9 +79,9 @@ class HomeController extends AbstractController
                     Sanitize::sanitizeMessage(
                         __(
                             'Please create web server writable folder [em]config[/em] in '
-                            . 'phpMyAdmin top level directory as described in '
-                            . '[doc@setup_script]documentation[/doc]. Otherwise you will be '
-                            . 'only able to download or display it.'
+                            .'phpMyAdmin top level directory as described in '
+                            .'[doc@setup_script]documentation[/doc]. Otherwise you will be '
+                            .'only able to download or display it.'
                         )
                     )
                 );
@@ -132,7 +132,7 @@ class HomeController extends AbstractController
                 $servers[$id] = [
                     'id' => $id,
                     'name' => $this->config->getServerName($id),
-                    'auth_type' => $this->config->getValue('Servers/' . $id . '/auth_type'),
+                    'auth_type' => $this->config->getValue('Servers/'.$id.'/auth_type'),
                     'dsn' => $this->config->getServerDSN($id),
                     'params' => [
                         'token' => $_SESSION[' PMA_token '],
@@ -148,7 +148,7 @@ class HomeController extends AbstractController
                         ],
                     ],
                 ];
-                $serverDefaultOptions['values'][(string) $id] = $this->config->getServerName($id) . ' [' . $id . ']';
+                $serverDefaultOptions['values'][(string) $id] = $this->config->getServerName($id).' ['.$id.']';
             }
         } else {
             $serverDefaultOptions['values']['1'] = __('- none -');

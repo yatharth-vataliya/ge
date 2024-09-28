@@ -25,10 +25,10 @@ class PrivilegesController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param string            $db       Database name
-     * @param string            $table    Table name
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  string  $db  Database name
+     * @param  string  $table  Table name
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $db, $table, Privileges $privileges, $dbi)
     {
@@ -38,7 +38,7 @@ class PrivilegesController extends AbstractController
     }
 
     /**
-     * @param array $params Request parameters
+     * @param  array  $params  Request parameters
      */
     public function index(array $params): string
     {

@@ -17,6 +17,7 @@ use PhpMyAdmin\Session;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\TwoFactor;
 use PhpMyAdmin\Url;
+
 use function defined;
 use function htmlspecialchars;
 use function intval;
@@ -55,8 +56,8 @@ abstract class AuthenticationPlugin
 
     public function __construct()
     {
-        $this->ipAllowDeny = new IpAllowDeny();
-        $this->template = new Template();
+        $this->ipAllowDeny = new IpAllowDeny;
+        $this->template = new Template;
     }
 
     /**
@@ -84,7 +85,7 @@ abstract class AuthenticationPlugin
 
         $this->setSessionAccessTime();
 
-        $cfg['Server']['user']     = $this->user;
+        $cfg['Server']['user'] = $this->user;
         $cfg['Server']['password'] = $this->password;
 
         return true;
@@ -95,15 +96,12 @@ abstract class AuthenticationPlugin
      *
      * @return void
      */
-    public function rememberCredentials()
-    {
-    }
+    public function rememberCredentials() {}
 
     /**
      * User is not allowed to login to MySQL -> authentication failed
      *
-     * @param string $failure String describing why authentication has failed
-     *
+     * @param  string  $failure  String describing why authentication has failed
      * @return void
      */
     public function showFailure($failure)
@@ -139,7 +137,7 @@ abstract class AuthenticationPlugin
             && $GLOBALS['cfg']['Server']['auth_type'] === 'cookie'
         ) {
             foreach ($GLOBALS['cfg']['Servers'] as $key => $val) {
-                if (! $PMA_Config->issetCookie('pmaAuth-' . $key)) {
+                if (! $PMA_Config->issetCookie('pmaAuth-'.$key)) {
                     continue;
                 }
 
@@ -160,7 +158,7 @@ abstract class AuthenticationPlugin
             /* Redirect to other authenticated server */
             $_SESSION['partial_logout'] = true;
             Core::sendHeaderLocation(
-                './index.php?route=/' . Url::getCommonRaw(['server' => $server], '&')
+                './index.php?route=/'.Url::getCommonRaw(['server' => $server], '&')
             );
         }
     }
@@ -178,8 +176,7 @@ abstract class AuthenticationPlugin
     /**
      * Returns error message for failed authentication.
      *
-     * @param string $failure String describing why authentication has failed
-     *
+     * @param  string  $failure  String describing why authentication has failed
      * @return string
      */
     public function getErrorMessage($failure)
@@ -189,7 +186,7 @@ abstract class AuthenticationPlugin
         if ($failure === 'empty-denied') {
             return __(
                 'Login without a password is forbidden by configuration'
-                . ' (see AllowNoPassword)'
+                .' (see AllowNoPassword)'
             );
         }
 
@@ -200,7 +197,7 @@ abstract class AuthenticationPlugin
         if ($failure === 'no-activity') {
             return sprintf(
                 __('You have been automatically logged out due to inactivity of %s seconds.'
-                . ' Once you log in again, you should be able to resume the work where you left off.'),
+                .' Once you log in again, you should be able to resume the work where you left off.'),
                 intval($GLOBALS['cfg']['LoginCookieValidity'])
             );
         }
@@ -211,8 +208,8 @@ abstract class AuthenticationPlugin
         }
 
         if (isset($GLOBALS['errno'])) {
-            return '#' . $GLOBALS['errno'] . ' '
-            . __('Cannot log in to the MySQL server');
+            return '#'.$GLOBALS['errno'].' '
+            .__('Cannot log in to the MySQL server');
         }
 
         return __('Cannot log in to the MySQL server');
@@ -221,13 +218,10 @@ abstract class AuthenticationPlugin
     /**
      * Callback when user changes password.
      *
-     * @param string $password New password to set
-     *
+     * @param  string  $password  New password to set
      * @return void
      */
-    public function handlePasswordChange($password)
-    {
-    }
+    public function handlePasswordChange($password) {}
 
     /**
      * Store session access time in session.
@@ -293,9 +287,9 @@ abstract class AuthenticationPlugin
         // Check IP-based Allow/Deny rules as soon as possible to reject the
         // user based on mod_access in Apache
         if (isset($cfg['Server']['AllowDeny']['order'])) {
-            $allowDeny_forbidden         = false; // default
+            $allowDeny_forbidden = false; // default
             if ($cfg['Server']['AllowDeny']['order'] === 'allow,deny') {
-                $allowDeny_forbidden     = true;
+                $allowDeny_forbidden = true;
                 if ($this->ipAllowDeny->allow()) {
                     $allowDeny_forbidden = false;
                 }

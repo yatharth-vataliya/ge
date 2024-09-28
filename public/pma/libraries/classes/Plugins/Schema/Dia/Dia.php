@@ -10,6 +10,7 @@ namespace PhpMyAdmin\Plugins\Schema\Dia;
 use PhpMyAdmin\Core;
 use PhpMyAdmin\Response;
 use XMLWriter;
+
 use function ob_end_clean;
 use function ob_get_clean;
 use function strlen;
@@ -19,8 +20,6 @@ use function strlen;
  * helps in developing structure of DIA Schema Export
  *
  * @see     https://www.php.net/manual/en/book.xmlwriter.php
- *
- * @access  public
  */
 class Dia extends XMLWriter
 {
@@ -58,16 +57,13 @@ class Dia extends XMLWriter
      * @see XMLWriter::writeAttribute()
      * @see XMLWriter::writeRaw()
      *
-     * @param string $paper        the size of the paper/document
-     * @param float  $topMargin    top margin of the paper/document in cm
-     * @param float  $bottomMargin bottom margin of the paper/document in cm
-     * @param float  $leftMargin   left margin of the paper/document in cm
-     * @param float  $rightMargin  right margin of the paper/document in cm
-     * @param string $orientation  orientation of the document, portrait or landscape
-     *
+     * @param  string  $paper  the size of the paper/document
+     * @param  float  $topMargin  top margin of the paper/document in cm
+     * @param  float  $bottomMargin  bottom margin of the paper/document in cm
+     * @param  float  $leftMargin  left margin of the paper/document in cm
+     * @param  float  $rightMargin  right margin of the paper/document in cm
+     * @param  string  $orientation  orientation of the document, portrait or landscape
      * @return void
-     *
-     * @access public
      */
     public function startDiaDoc(
         $paper,
@@ -95,22 +91,22 @@ class Dia extends XMLWriter
             <dia:attribute name="paper">
               <dia:composite type="paper">
                 <dia:attribute name="name">
-                  <dia:string>#' . $paper . '#</dia:string>
+                  <dia:string>#'.$paper.'#</dia:string>
                 </dia:attribute>
                 <dia:attribute name="tmargin">
-                  <dia:real val="' . $topMargin . '"/>
+                  <dia:real val="'.$topMargin.'"/>
                 </dia:attribute>
                 <dia:attribute name="bmargin">
-                  <dia:real val="' . $bottomMargin . '"/>
+                  <dia:real val="'.$bottomMargin.'"/>
                 </dia:attribute>
                 <dia:attribute name="lmargin">
-                  <dia:real val="' . $leftMargin . '"/>
+                  <dia:real val="'.$leftMargin.'"/>
                 </dia:attribute>
                 <dia:attribute name="rmargin">
-                  <dia:real val="' . $rightMargin . '"/>
+                  <dia:real val="'.$rightMargin.'"/>
                 </dia:attribute>
                 <dia:attribute name="is_portrait">
-                  <dia:boolean val="' . $isPortrait . '"/>
+                  <dia:boolean val="'.$isPortrait.'"/>
                 </dia:attribute>
                 <dia:attribute name="scaling">
                   <dia:real val="1"/>
@@ -161,8 +157,6 @@ class Dia extends XMLWriter
      * @see XMLWriter::endDocument()
      *
      * @return void
-     *
-     * @access public
      */
     public function endDiaDoc()
     {
@@ -175,11 +169,8 @@ class Dia extends XMLWriter
      *
      * @see    XMLWriter::flush()
      *
-     * @param string $fileName name of the dia document
-     *
+     * @param  string  $fileName  name of the dia document
      * @return void
-     *
-     * @access public
      */
     public function showOutput($fileName)
     {
@@ -193,6 +184,6 @@ class Dia extends XMLWriter
             'application/x-dia-diagram',
             strlen($output)
         );
-        print $output;
+        echo $output;
     }
 }

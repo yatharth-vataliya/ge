@@ -12,6 +12,7 @@ use PhpMyAdmin\Response;
 use PhpMyAdmin\Template;
 use PhpMyAdmin\Url;
 use PhpMyAdmin\Util;
+
 use function array_key_exists;
 
 /**
@@ -30,8 +31,8 @@ class BinlogController extends AbstractController
     private $dbi;
 
     /**
-     * @param Response          $response
-     * @param DatabaseInterface $dbi
+     * @param  Response  $response
+     * @param  DatabaseInterface  $dbi
      */
     public function __construct($response, Template $template, $dbi)
     {
@@ -129,9 +130,9 @@ class BinlogController extends AbstractController
     }
 
     /**
-     * @param string $log      Binary log file name
-     * @param int    $position Position to display
-     * @param int    $maxRows  Maximum number of rows
+     * @param  string  $log  Binary log file name
+     * @param  int  $position  Position to display
+     * @param  int  $maxRows  Maximum number of rows
      */
     private function getSqlQuery(
         string $log,
@@ -140,9 +141,9 @@ class BinlogController extends AbstractController
     ): string {
         $sqlQuery = 'SHOW BINLOG EVENTS';
         if (! empty($log)) {
-            $sqlQuery .= ' IN \'' . $log . '\'';
+            $sqlQuery .= ' IN \''.$log.'\'';
         }
-        $sqlQuery .= ' LIMIT ' . $position . ', ' . $maxRows;
+        $sqlQuery .= ' LIMIT '.$position.', '.$maxRows;
 
         return $sqlQuery;
     }

@@ -17,11 +17,9 @@ class GisFactory
     /**
      * Returns the singleton instance of geometric class of the given type.
      *
-     * @param string $type type of the geometric object
-     *
+     * @param  string  $type  type of the geometric object
      * @return GisGeometry|false the singleton instance of geometric class of the given type
      *
-     * @access public
      * @static
      */
     public static function factory($type)

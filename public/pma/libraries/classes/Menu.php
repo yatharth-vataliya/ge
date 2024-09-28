@@ -9,6 +9,7 @@ namespace PhpMyAdmin;
 
 use PhpMyAdmin\Query\Utilities;
 use PhpMyAdmin\Utils\SessionCache;
+
 use function array_key_exists;
 use function count;
 use function in_array;
@@ -28,14 +29,13 @@ class Menu
     /**
      * Database name
      *
-     * @access private
      * @var string
      */
     private $db;
+
     /**
      * Table name
      *
-     * @access private
      * @var string
      */
     private $table;
@@ -49,8 +49,8 @@ class Menu
     /**
      * Creates a new instance of Menu
      *
-     * @param string $db    Database name
-     * @param string $table Table name
+     * @param  string  $db  Database name
+     * @param  string  $table  Table name
      */
     public function __construct($db, $table)
     {
@@ -59,7 +59,7 @@ class Menu
         $this->db = $db;
         $this->table = $table;
         $this->relation = new Relation($dbi);
-        $this->template = new Template();
+        $this->template = new Template;
     }
 
     /**
@@ -69,7 +69,7 @@ class Menu
      */
     public function getDisplay()
     {
-        $retval  = $this->getBreadcrumbs();
+        $retval = $this->getBreadcrumbs();
         $retval .= $this->getMenu();
 
         return $retval;
@@ -83,7 +83,7 @@ class Menu
     public function getHash()
     {
         return substr(
-            md5($this->getMenu() . $this->getBreadcrumbs()),
+            md5($this->getMenu().$this->getBreadcrumbs()),
             0,
             8
         );
@@ -133,8 +133,7 @@ class Menu
     /**
      * Returns a list of allowed tabs for the current user for the given level
      *
-     * @param string $level 'server', 'db' or 'table' level
-     *
+     * @param  string  $level  'server', 'db' or 'table' level
      * @return array list of allowed tabs
      */
     private function getAllowedTabs($level)
@@ -142,7 +141,7 @@ class Menu
         /** @var DatabaseInterface $dbi */
         global $dbi;
 
-        $cache_key = 'menu-levels-' . $level;
+        $cache_key = 'menu-levels-'.$level;
         if (SessionCache::has($cache_key)) {
             return SessionCache::get($cache_key);
         }
@@ -150,17 +149,17 @@ class Menu
         $cfgRelation = $this->relation->getRelationsParam();
         if ($cfgRelation['menuswork']) {
             $groupTable = Util::backquote($cfgRelation['db'])
-                . '.'
-                . Util::backquote($cfgRelation['usergroups']);
+                .'.'
+                .Util::backquote($cfgRelation['usergroups']);
             $userTable = Util::backquote($cfgRelation['db'])
-                . '.' . Util::backquote($cfgRelation['users']);
+                .'.'.Util::backquote($cfgRelation['users']);
 
-            $sql_query = 'SELECT `tab` FROM ' . $groupTable
-                . " WHERE `allowed` = 'N'"
-                . " AND `tab` LIKE '" . $level . "%'"
-                . ' AND `usergroup` = (SELECT usergroup FROM '
-                . $userTable . " WHERE `username` = '"
-                . $dbi->escapeString($GLOBALS['cfg']['Server']['user']) . "')";
+            $sql_query = 'SELECT `tab` FROM '.$groupTable
+                ." WHERE `allowed` = 'N'"
+                ." AND `tab` LIKE '".$level."%'"
+                .' AND `usergroup` = (SELECT usergroup FROM '
+                .$userTable." WHERE `username` = '"
+                .$dbi->escapeString($GLOBALS['cfg']['Server']['user'])."')";
 
             $result = $this->relation->queryAsControlUser($sql_query, false);
             if ($result) {
@@ -197,7 +196,7 @@ class Menu
         $server['name'] = ! empty($cfg['Server']['verbose'])
             ? $cfg['Server']['verbose'] : $cfg['Server']['host'];
         $server['name'] .= empty($cfg['Server']['port'])
-            ? '' : ':' . $cfg['Server']['port'];
+            ? '' : ':'.$cfg['Server']['port'];
         $server['url'] = Util::getUrlForOption(
             $cfg['DefaultTabServer'],
             'server'
@@ -622,8 +621,7 @@ class Menu
     /**
      * Set current table
      *
-     * @param string $table Current table
-     *
+     * @param  string  $table  Current table
      * @return Menu
      */
     public function setTable($table)
